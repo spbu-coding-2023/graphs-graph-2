@@ -1,5 +1,4 @@
 package model.graph
 
-class Vertex<V>(val id: Int, val data: V) {
-}
+class Vertex<D>(val id: ULong, val data: D)
 
