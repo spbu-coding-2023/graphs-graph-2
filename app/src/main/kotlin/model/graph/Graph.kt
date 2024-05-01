@@ -1,21 +1,21 @@
 package model.graph
 
 abstract class Graph<D> {
-    val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
-    val edges: MutableSet<Edge<D>> = mutableSetOf()
-    var currentId = 0uL
-    // TODO("add visibility modifiers for properties")
+    protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
+    protected val edges: MutableSet<Edge<D>> = mutableSetOf()
+    private var currentId = 0uL
+
     fun addVertex(data: D) {
         val newVertex = Vertex(currentId++, data)
         adjacencyMap[newVertex] = ArrayList()
     }
 
-    fun deleteVertex(vertexToDelete: Vertex<D>): D? {
+    fun deleteVertex(vertexToDelete: Vertex<D>): Vertex<D>? {
         val adjacentVertices = adjacencyMap[vertexToDelete] ?: return null
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToDelete)
         adjacencyMap.remove(vertexToDelete)
 
-        return vertexToDelete.data
+        return vertexToDelete
     }
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>?

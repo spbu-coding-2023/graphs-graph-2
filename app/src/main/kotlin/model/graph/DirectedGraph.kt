@@ -11,6 +11,7 @@ open class DirectedGraph<D>: Graph<D>() {
         ) return null
 
         val newEdge = DirectedEdge(vertex1, vertex2)
+        edges.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
 
         return newEdge

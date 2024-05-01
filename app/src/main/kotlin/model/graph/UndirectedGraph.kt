@@ -11,6 +11,7 @@ open class UndirectedGraph<D> : Graph<D>() {
         ) return null
 
         val newEdge = UndirectedEdge(vertex1, vertex2)
+        edges.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
         adjacencyMap[vertex2]?.add(vertex1)
 

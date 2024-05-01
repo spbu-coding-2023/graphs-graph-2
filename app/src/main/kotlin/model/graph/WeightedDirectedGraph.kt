@@ -11,6 +11,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         ) return null
 
         val newEdge = WeightedDirectedEdge(vertex1, vertex2, weight)
+        edges.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
 
         return newEdge

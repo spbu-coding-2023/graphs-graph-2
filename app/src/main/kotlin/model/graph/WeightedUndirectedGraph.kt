@@ -11,6 +11,7 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         ) return null
 
         val newEdge = WeightedUndirectedEdge(vertex1, vertex2, weight)
+        edges.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
         adjacencyMap[vertex2]?.add(vertex1)
 
