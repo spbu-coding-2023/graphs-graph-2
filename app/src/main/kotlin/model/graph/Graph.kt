@@ -18,7 +18,7 @@ abstract class Graph<D> {
         return vertexToDelete.data
     }
 
-    abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>)
+    abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>?
 
     fun deleteEdge(edgeToDelete: Edge<D>): Edge<D>? {
         if (edgeToDelete !in edges) return null
