@@ -29,4 +29,4 @@ open class DirectedGraph<D> : Graph<D>() {
 
         return edgeToRemove
     }
-}
+  }
