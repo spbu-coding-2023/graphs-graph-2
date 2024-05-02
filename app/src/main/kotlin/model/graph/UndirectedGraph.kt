@@ -1,6 +1,6 @@
 package model.graph
 
-open class UndirectedEdge<D>(override val vertex1: Vertex<D>, override val vertex2: Vertex<D>, override val weight: Int = 0) :
+open class UndirectedEdge<D>(override val vertex1: Vertex<D>, override val vertex2: Vertex<D>) :
     Edge<D>
 
 open class UndirectedGraph<D> : Graph<D>() {

@@ -1,6 +1,6 @@
 package model.graph
 
-class WeightedDirectedEdge<D>(vertex1: Vertex<D>, vertex2: Vertex<D>, override val weight: Int) :
+class WeightedDirectedEdge<D>(vertex1: Vertex<D>, vertex2: Vertex<D>, val weight: Int) :
     DirectedEdge<D>(vertex1, vertex2)
 
 class WeightedDirectedGraph<D> : DirectedGraph<D>() {
@@ -16,4 +16,9 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
 
         return newEdge
     }
+
+    /*
+     * In case weight is not passed, set it to default value = 1
+     */
+    override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 }
