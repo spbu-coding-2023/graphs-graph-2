@@ -1,6 +1,6 @@
 package model.graph
 
-class WeightedDirectedEdge<D>(vertex1: Vertex<D>, vertex2: Vertex<D>, val weight: Int) :
+class WeightedDirectedEdge<D>(vertex1: Vertex<D>, vertex2: Vertex<D>, override val weight: Int) :
     DirectedEdge<D>(vertex1, vertex2)
 
 class WeightedDirectedGraph<D> : DirectedGraph<D>() {
