@@ -20,19 +20,7 @@ abstract class Graph<D> {
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>?
 
-    fun deleteEdge(edgeToDelete: Edge<D>): Edge<D>? {
-        if (edgeToDelete !in edges) return null
-
-        val vertex1 = edgeToDelete.vertex1
-        val vertex2 = edgeToDelete.vertex2
-
-        adjacencyMap[vertex1]?.remove(vertex2)
-        adjacencyMap[vertex2]?.remove(vertex1)
-        edges.remove(edgeToDelete)
-
-        return edgeToDelete
-    }
-
+    abstract fun deleteEdge(edgeToDelete: Edge<D>): Edge<D>?
     fun getVertices() = adjacencyMap.keys.toList()
 
     fun getEdges() = edges.toList()

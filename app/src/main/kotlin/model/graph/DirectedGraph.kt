@@ -16,4 +16,16 @@ open class DirectedGraph<D>: Graph<D>() {
 
         return newEdge
     }
+
+    override fun deleteEdge(edgeToDelete: Edge<D>): Edge<D>? {
+        if (edgeToDelete !in edges) return null
+
+        val vertex1 = edgeToDelete.vertex1
+        val vertex2 = edgeToDelete.vertex2
+
+        adjacencyMap[vertex1]?.remove(vertex2)
+        edges.remove(edgeToDelete)
+
+        return edgeToDelete
+    }
 }
