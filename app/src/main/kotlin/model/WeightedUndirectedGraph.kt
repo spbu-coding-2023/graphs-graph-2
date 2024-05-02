@@ -4,11 +4,11 @@ import model.abstractGraph.Vertex
 import model.edges.WeightedUndirectedEdge
 
 class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
-    fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): WeightedUndirectedEdge<D>? {
-        if (vertex1 == vertex2 ||
-            vertex1 !in adjacencyMap.keys ||
-            vertex2 !in adjacencyMap.keys
-        ) return null
+    fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): WeightedUndirectedEdge<D> {
+        if (vertex1 == vertex2)
+            throw IllegalArgumentException("Vertices are the same")
+        if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
+            throw IllegalArgumentException("Vertex1 or vertex2 are not in the graph")
 
         val newEdge = WeightedUndirectedEdge(vertex1, vertex2, weight)
         edges.add(newEdge)
