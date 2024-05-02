@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
 
     alias(libs.plugins.compose)
+
+    id("com.ncorti.ktfmt.gradle") version "0.18.0"
 }
 
 dependencies {
@@ -13,4 +15,9 @@ compose.desktop {
     application {
         mainClass = "MainKt"
     }
+}
+
+ktfmt {
+    dropboxStyle()
+    maxWidth.set(120)
 }
