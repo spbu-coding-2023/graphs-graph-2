@@ -1,7 +1,9 @@
-package model.graph
+package model
 
-open class DirectedEdge<D>(override val vertex1: Vertex<D>, override val vertex2: Vertex<D>) :
-    Edge<D>
+import model.abstractGraph.Edge
+import model.abstractGraph.Graph
+import model.abstractGraph.Vertex
+import model.edges.DirectedEdge
 
 open class DirectedGraph<D>: Graph<D>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): DirectedEdge<D>? {

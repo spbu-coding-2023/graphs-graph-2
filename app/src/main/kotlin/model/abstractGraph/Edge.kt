@@ -1,4 +1,4 @@
-package model.graph
+package model.abstractGraph
 
 interface Edge<D> {
     val vertex1: Vertex<D>

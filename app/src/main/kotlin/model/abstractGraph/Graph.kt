@@ -1,4 +1,4 @@
-package model.graph
+package model.abstractGraph
 
 abstract class Graph<D> {
     protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
