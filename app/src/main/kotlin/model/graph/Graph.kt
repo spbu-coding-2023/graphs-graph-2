@@ -20,7 +20,8 @@ abstract class Graph<D> {
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>?
 
-    abstract fun deleteEdge(edgeToDelete: Edge<D>): Edge<D>?
+    abstract fun removeEdge(edgeToRemove: Edge<D>): Edge<D>?
+
     fun getVertices() = adjacencyMap.keys.toList()
 
     fun getEdges() = edges.toList()

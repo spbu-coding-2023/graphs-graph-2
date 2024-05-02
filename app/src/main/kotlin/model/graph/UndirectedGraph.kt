@@ -18,16 +18,16 @@ open class UndirectedGraph<D> : Graph<D>() {
         return newEdge
     }
 
-    override fun deleteEdge(edgeToDelete: Edge<D>): Edge<D>? {
-        if (edgeToDelete !in edges) return null
+    override fun removeEdge(edgeToRemove: Edge<D>): Edge<D>? {
+        if (edgeToRemove !in edges) return null
 
-        val vertex1 = edgeToDelete.vertex1
-        val vertex2 = edgeToDelete.vertex2
+        val vertex1 = edgeToRemove.vertex1
+        val vertex2 = edgeToRemove.vertex2
 
         adjacencyMap[vertex1]?.remove(vertex2)
         adjacencyMap[vertex2]?.remove(vertex1)
-        edges.remove(edgeToDelete)
+        edges.remove(edgeToRemove)
 
-        return edgeToDelete
+        return edgeToRemove
     }
 }
