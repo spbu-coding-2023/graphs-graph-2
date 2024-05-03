@@ -21,3 +21,7 @@ ktfmt {
     dropboxStyle()
     maxWidth.set(120)
 }
+
+tasks.named("ktfmtCheckMain") {
+    dependsOn("generateComposeResClass")
+}

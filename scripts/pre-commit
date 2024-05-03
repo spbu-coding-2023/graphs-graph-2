@@ -12,7 +12,7 @@ checkStatus=$?
 if [ $checkStatus -ne 0 ]
 then
   echo "To apply formatter run ${bold}./gradlew ktfmtFormat${normal}"
-  echo "Don't forget to ${bold}git add${normal} all formatted files"
+  echo "Don't forget to ${bold}git add${normal} all formatted files (java gnomik is watching you)"
   exit 1
 else
   exit 0
