@@ -13,8 +13,8 @@ abstract class Graph<D> {
     }
 
     fun deleteVertex(vertexToDelete: Vertex<D>): Vertex<D> {
-        val adjacentVertices = adjacencyMap[vertexToDelete]
-            ?: throw IllegalArgumentException("Vertex is not in the graph")
+        val adjacentVertices =
+            adjacencyMap[vertexToDelete] ?: throw IllegalArgumentException("Vertex is not in the graph")
 
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToDelete)
         adjacencyMap.remove(vertexToDelete)
