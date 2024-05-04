@@ -22,9 +22,10 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
      */
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
-    fun findShortestPath(srcVertex: Vertex<D>, destVertex: Vertex<D>): Map<Vertex<D>, Int> {
+    fun findShortestPath(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, E>> {
         val vertices = getVertices()
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault{ Int.MAX_VALUE }
+        val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(destVertex to 0) }
         val visited = mutableSetOf<Pair<Vertex<D>, Int>>()
 
@@ -36,15 +37,33 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
                 adjacencyMap[node]?.forEach{ adjacent ->
                     val currentEdge = edges.find { it.vertex1 == adjacent }
                     currentEdge?.let {
-                        val totalDist = currentDistance + currentEdge.weight
+                        val totalDist = currentDistance + it.weight
                         if (totalDist < distanceMap.getValue(adjacent)) {
                             distanceMap[adjacent] = totalDist
+                            predecessorMap[adjacent] = node // Update predecessor
                             priorityQueue.add(adjacent to totalDist)
                         }
                     }
                 }
             }
         }
-        return distanceMap;
+
+        // Reconstruct the path from srcVertex to destVertex
+        val path: MutableList<Pair<Vertex<D>, E>> = mutableListOf()
+        var currentVertex = destVertex
+            while (currentVertex != srcVertex) {
+                val predecessor = predecessorMap[currentVertex]
+                if (predecessor == null) {
+                    // If no path exists
+                    return emptyList()
+                }
+                if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex } == null) {
+                    throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
+                }
+                path.add(Pair(currentVertex, edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex })
+                        as Pair<Vertex<D>, E>)
+            currentVertex = predecessor
+        }
+        return path.reversed()
     }
 }
