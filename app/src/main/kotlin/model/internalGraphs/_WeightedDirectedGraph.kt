@@ -22,7 +22,7 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
      */
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
-    fun findShortestPath(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, E>> {
+    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, E>> {
         val vertices = getVertices()
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault{ Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
