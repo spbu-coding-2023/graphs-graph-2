@@ -2,6 +2,7 @@ package model.internalGraphs
 
 import model.abstractGraph.Vertex
 import model.edges.WeightedUndirectedEdge
+import java.util.*
 
 abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _UndirectedGraph<D, E>() {
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): E {
@@ -21,4 +22,51 @@ abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _Und
      * In case weight is not passed, set it to default value = 1
      */
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
+
+    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, E>> {
+        val vertices = getVertices()
+        val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
+        val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
+        val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(destVertex to 0) }
+        val visited = mutableSetOf<Pair<Vertex<D>, Int>>()
+
+        distanceMap[srcVertex] = 0
+
+        while (priorityQueue.isNotEmpty()) {
+            val (node, currentDistance) = priorityQueue.poll()
+            if (visited.add(node to currentDistance)) {
+                adjacencyMap[node]?.forEach { adjacent ->
+                    val currentEdge = edges.find { (it.vertex1 == adjacent && it.vertex2 == node) ||
+                            (it.vertex1 == node && it.vertex2 == adjacent) }
+                    currentEdge?.let {
+                        val totalDist = currentDistance + currentEdge.weight
+                        if (totalDist < distanceMap.getValue(adjacent)) {
+                            distanceMap[adjacent] = totalDist
+                            predecessorMap[adjacent] = node // Update predecessor
+                            priorityQueue.add(adjacent to totalDist)
+                        }
+                    }
+                }
+            }
+        }
+
+        // Reconstruct the path from srcVertex to destVertex
+        val path: MutableList<Pair<Vertex<D>, E>> = mutableListOf()
+        var currentVertex = destVertex
+        while (currentVertex != srcVertex) {
+            val predecessor = predecessorMap[currentVertex]
+            if (predecessor == null) {
+                // If no path exists
+                return emptyList()
+            }
+            if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex ||
+                        it.vertex2 == predecessor && it.vertex1 == currentVertex } == null) {
+                throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
+            }
+            path.add(Pair(currentVertex, edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex  ||
+                    it.vertex2 == predecessor && it.vertex1 == currentVertex}) as Pair<Vertex<D>, E>)
+            currentVertex = predecessor
+        }
+        return path.reversed()
+    }
 }
