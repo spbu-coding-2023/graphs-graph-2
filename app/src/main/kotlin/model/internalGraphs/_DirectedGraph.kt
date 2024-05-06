@@ -29,12 +29,13 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
         return edgeToRemove
     }
 
-    fun findSCC() { // SCC - Strongly Connected Components (by Kosaraju)
+    fun findSCC(): ArrayList<ArrayList<Vertex<D>>> { // SCC - Strongly Connected Components (by Kosaraju)
         val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
         val stack = mutableListOf<Vertex<D>>()
-        val component = mutableListOf<Vertex<D>>()
+        val component = arrayListOf<Vertex<D>>()
+        val sccList: ArrayList<ArrayList<Vertex<D>>> = arrayListOf()
 
-        fun auxuiliaryDFS(srcVertex: Vertex<D>, componentList:MutableList<Vertex<D>>) {
+        fun auxuiliaryDFS(srcVertex: Vertex<D>, componentList:ArrayList<Vertex<D>>) {
             visited[srcVertex] = true
             componentList.add(srcVertex)
             adjacencyMap[srcVertex]?.forEach { vertex2 ->
@@ -58,11 +59,12 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
         while(stack.isNotEmpty()) {
             val vertex = stack.removeAt(stack.size - 1)
             if (visited[vertex] != null && visited[vertex] != true) {
-                val currentComponent = mutableListOf<Vertex<D>>()
+                val currentComponent = arrayListOf<Vertex<D>>()
                 auxuiliaryDFS(vertex, currentComponent)
-                println("Component: $currentComponent")
+                sccList.add(currentComponent)
             }
         }
+        return sccList
     }
 
     private fun reverseGraph() {
