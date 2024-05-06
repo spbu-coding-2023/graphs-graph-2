@@ -3,7 +3,7 @@ package model.abstractGraph
 abstract class Graph<D, E : Edge<D>> {
     protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
     protected val edges: MutableSet<E> = mutableSetOf()
-    private var currentId = 0uL
+    private var currentId = 0
 
     fun addVertex(data: D): Vertex<D> {
         val newVertex = Vertex(currentId++, data)
