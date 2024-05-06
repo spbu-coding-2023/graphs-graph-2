@@ -31,7 +31,7 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
 
     fun findSCC(): ArrayList<ArrayList<Vertex<D>>> { // SCC - Strongly Connected Components (by Kosaraju)
         val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
-        val stack = mutableListOf<Vertex<D>>()
+        val stack = ArrayDeque<Vertex<D>>()
         val component = arrayListOf<Vertex<D>>()
         val sccList: ArrayList<ArrayList<Vertex<D>>> = arrayListOf()
 
@@ -57,7 +57,7 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
         component.clear()
 
         while(stack.isNotEmpty()) {
-            val vertex = stack.removeAt(stack.size - 1)
+            val vertex = stack.removeLast()
             if (visited[vertex] != null && visited[vertex] != true) {
                 val currentComponent = arrayListOf<Vertex<D>>()
                 auxuiliaryDFS(vertex, currentComponent)
