@@ -28,4 +28,52 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
 
         return edgeToRemove
     }
+
+    fun findSCC(): ArrayList<ArrayList<Vertex<D>>> { // SCC - Strongly Connected Components (by Kosaraju)
+        val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
+        val stack = ArrayDeque<Vertex<D>>()
+        val component = arrayListOf<Vertex<D>>()
+        val sccList: ArrayList<ArrayList<Vertex<D>>> = arrayListOf()
+
+        fun auxuiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
+            visited[srcVertex] = true
+            componentList.add(srcVertex)
+            adjacencyMap[srcVertex]?.forEach { vertex2 ->
+                if (visited[vertex2] != null && visited[vertex2] != true) {
+                    auxuiliaryDFS(vertex2, componentList)
+                }
+            }
+            stack.add(srcVertex)
+        }
+
+        for (vertex in adjacencyMap.keys) {
+            if (visited[vertex] != null && visited[vertex] != true) auxuiliaryDFS(vertex, component)
+        }
+
+        reverseGraph()
+        visited.clear()
+        component.clear()
+
+        while (stack.isNotEmpty()) {
+            val vertex = stack.removeLast()
+            if (visited[vertex] != null && visited[vertex] != true) {
+                val currentComponent = arrayListOf<Vertex<D>>()
+                auxuiliaryDFS(vertex, currentComponent)
+                sccList.add(currentComponent)
+            }
+        }
+        return sccList
+    }
+
+    private fun reverseGraph() {
+        val reversedAdjacencyMap = mutableMapOf<Vertex<D>, ArrayList<Vertex<D>>>()
+        for (vertex in adjacencyMap.keys) {
+            adjacencyMap[vertex]?.forEach { vertex2 ->
+                reversedAdjacencyMap[vertex2] = reversedAdjacencyMap[vertex2] ?: ArrayList()
+                reversedAdjacencyMap[vertex2]?.add(vertex)
+            }
+        }
+        adjacencyMap.clear()
+        adjacencyMap.putAll(reversedAdjacencyMap)
+    }
 }
