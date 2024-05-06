@@ -35,7 +35,7 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
         val component = arrayListOf<Vertex<D>>()
         val sccList: ArrayList<ArrayList<Vertex<D>>> = arrayListOf()
 
-        fun auxuiliaryDFS(srcVertex: Vertex<D>, componentList:ArrayList<Vertex<D>>) {
+        fun auxuiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
             visited[srcVertex] = true
             componentList.add(srcVertex)
             adjacencyMap[srcVertex]?.forEach { vertex2 ->
@@ -47,16 +47,14 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
         }
 
         for (vertex in adjacencyMap.keys) {
-            if (visited[vertex] != null && visited[vertex] != true) {
-                auxuiliaryDFS(vertex, component)
-            }
+            if (visited[vertex] != null && visited[vertex] != true) auxuiliaryDFS(vertex, component)
         }
 
         reverseGraph()
         visited.clear()
         component.clear()
 
-        while(stack.isNotEmpty()) {
+        while (stack.isNotEmpty()) {
             val vertex = stack.removeLast()
             if (visited[vertex] != null && visited[vertex] != true) {
                 val currentComponent = arrayListOf<Vertex<D>>()
