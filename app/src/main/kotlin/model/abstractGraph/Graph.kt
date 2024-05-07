@@ -12,14 +12,13 @@ abstract class Graph<D, E : Edge<D>> {
         return newVertex
     }
 
-    fun deleteVertex(vertexToDelete: Vertex<D>): Vertex<D> {
-        val adjacentVertices =
-            adjacencyMap[vertexToDelete] ?: throw IllegalArgumentException("Vertex is not in the graph")
+    fun removeVertex(vertexToRemove: Vertex<D>): Vertex<D> {
+        removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(vertexToRemove)
+        fixIdFragmentation(vertexToRemove)
 
-        for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToDelete)
-        adjacencyMap.remove(vertexToDelete)
+        adjacencyMap.remove(vertexToRemove)
 
-        return vertexToDelete
+        return vertexToRemove
     }
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): E
@@ -29,4 +28,37 @@ abstract class Graph<D, E : Edge<D>> {
     fun getVertices() = adjacencyMap.keys.toList()
 
     fun getEdges() = edges.toList()
+
+    private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
+        currentId--
+        val lastAddedVertex =
+            getVertices().find { it.id == currentId } ?: throw NoSuchElementException("No vertex with id $currentId")
+
+        val copyOfLastAddedVertex = Vertex<D>(vertexToRemove.id, lastAddedVertex.data)
+        adjacencyMap[copyOfLastAddedVertex] =
+            adjacencyMap[lastAddedVertex] ?: throw NoSuchElementException("No vertex with id $currentId")
+
+        val adjacentVertices =
+            adjacencyMap[copyOfLastAddedVertex] ?: throw NoSuchElementException("No vertex with id $currentId")
+
+        for (adjacentVertex in adjacentVertices) {
+            if (adjacencyMap[adjacentVertex]?.remove(lastAddedVertex) ?: false) {
+                adjacencyMap[adjacentVertex]?.add(copyOfLastAddedVertex)
+            }
+        }
+
+        removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(lastAddedVertex)
+        adjacencyMap.remove(lastAddedVertex)
+    }
+
+    private fun removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(vertexToRemove: Vertex<D>) {
+        val adjacentVertices =
+            adjacencyMap[vertexToRemove] ?: throw NoSuchElementException("Vertex is not in the graph")
+
+        for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
+
+        for (edge in getEdges()) {
+            if (edge.isIncident(vertexToRemove)) edges.remove(edge)
+        }
+    }
 }

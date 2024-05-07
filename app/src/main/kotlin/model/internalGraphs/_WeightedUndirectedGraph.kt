@@ -1,8 +1,8 @@
 package model.internalGraphs
 
+import java.util.*
 import model.abstractGraph.Vertex
 import model.edges.WeightedUndirectedEdge
-import java.util.*
 
 abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _UndirectedGraph<D, E>() {
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): E {
@@ -36,8 +36,11 @@ abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _Und
             val (node, currentDistance) = priorityQueue.poll()
             if (visited.add(node to currentDistance)) {
                 adjacencyMap[node]?.forEach { adjacent ->
-                    val currentEdge = edges.find { (it.vertex1 == adjacent && it.vertex2 == node) ||
-                            (it.vertex1 == node && it.vertex2 == adjacent) }
+                    val currentEdge =
+                        edges.find {
+                            (it.vertex1 == adjacent && it.vertex2 == node) ||
+                                (it.vertex1 == node && it.vertex2 == adjacent)
+                        }
                     currentEdge?.let {
                         val totalDist = currentDistance + currentEdge.weight
                         if (totalDist < distanceMap.getValue(adjacent)) {
@@ -59,12 +62,20 @@ abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _Und
                 // If no path exists
                 return emptyList()
             }
-            if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex ||
-                        it.vertex2 == predecessor && it.vertex1 == currentVertex } == null) {
+            if (edges.find {
+                it.vertex1 == predecessor && it.vertex2 == currentVertex ||
+                    it.vertex2 == predecessor && it.vertex1 == currentVertex
+            } == null) {
                 throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
             }
-            path.add(Pair(currentVertex, edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex  ||
-                    it.vertex2 == predecessor && it.vertex1 == currentVertex}) as Pair<Vertex<D>, E>)
+            path.add(
+                Pair(
+                    currentVertex,
+                    edges.find {
+                        it.vertex1 == predecessor && it.vertex2 == currentVertex ||
+                            it.vertex2 == predecessor && it.vertex1 == currentVertex
+                    })
+                    as Pair<Vertex<D>, E>)
             currentVertex = predecessor
         }
         return path.reversed()
