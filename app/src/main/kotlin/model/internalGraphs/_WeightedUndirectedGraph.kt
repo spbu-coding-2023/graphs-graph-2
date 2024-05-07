@@ -69,4 +69,53 @@ abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _Und
         }
         return path.reversed()
     }
+
+    fun findMinSpanningTree(): List<E> {
+        val vertexIdList = mutableListOf<Int>()
+        for (v in getVertices()) vertexIdList.add(v.id)
+
+        val graphSize = vertexIdList.size
+
+        // set each vertex parent to be itself and each vertex rank to 0
+        val parentList = MutableList(graphSize) { index: Int -> vertexIdList[index] }
+        val rankList = MutableList(graphSize) { 0 }
+
+        fun findTreeRootId(vId: Int): Int {
+            if (parentList[vId] == vId) return vId
+
+            parentList[vId] = findTreeRootId(parentList[vId])
+
+            return parentList[vId]
+        }
+
+        fun uniteTwoTreesByVerticesIds(vId1: Int, vId2: Int) {
+            val rootId1 = findTreeRootId(vId1)
+            val rootId2 = findTreeRootId(vId2)
+
+            if (rootId1 == rootId2) return
+
+            if (rankList[rootId1] < rankList[rootId2]) {
+                parentList[rootId1] = rootId2
+            } else {
+                parentList[rootId2] = rootId1
+                if (rankList[rootId1] == rankList[rootId2]) rankList[rootId1]++
+            }
+        }
+
+        val sortedEdges = edges.sortedBy { it.weight }
+
+        val chosenEdges = mutableListOf<E>()
+
+        for (edge in sortedEdges) {
+            val id1 = edge.vertex1.id
+            val id2 = edge.vertex2.id
+
+            if (findTreeRootId(id1) != findTreeRootId(id2)) {
+                uniteTwoTreesByVerticesIds(id1, id2)
+                chosenEdges.add(edge)
+            }
+        }
+
+        return chosenEdges
+    }
 }
