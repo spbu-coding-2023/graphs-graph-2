@@ -19,6 +19,10 @@ abstract class Graph<D, E : Edge<D>> {
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToDelete)
         adjacencyMap.remove(vertexToDelete)
 
+        for (edge in getEdges()) {
+            if (edge.isIncident(vertexToDelete)) edges.remove(edge)
+        }
+
         return vertexToDelete
     }
 

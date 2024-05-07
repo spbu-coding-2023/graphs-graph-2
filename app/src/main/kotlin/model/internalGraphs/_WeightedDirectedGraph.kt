@@ -1,8 +1,8 @@
 package model.internalGraphs
 
+import java.util.*
 import model.abstractGraph.Vertex
 import model.edges.WeightedDirectedEdge
-import java.util.*
 
 abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _DirectedGraph<D, E>() {
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): E {
@@ -24,7 +24,7 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
 
     fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, E>> {
         val vertices = getVertices()
-        val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault{ Int.MAX_VALUE }
+        val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(destVertex to 0) }
         val visited = mutableSetOf<Pair<Vertex<D>, Int>>()
@@ -34,7 +34,7 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
         while (priorityQueue.isNotEmpty()) {
             val (node, currentDistance) = priorityQueue.poll()
             if (visited.add(node to currentDistance)) {
-                adjacencyMap[node]?.forEach{ adjacent ->
+                adjacencyMap[node]?.forEach { adjacent ->
                     val currentEdge = edges.find { it.vertex1 == adjacent }
                     currentEdge?.let {
                         val totalDist = currentDistance + it.weight
@@ -51,17 +51,18 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
         // Reconstruct the path from srcVertex to destVertex
         val path: MutableList<Pair<Vertex<D>, E>> = mutableListOf()
         var currentVertex = destVertex
-            while (currentVertex != srcVertex) {
-                val predecessor = predecessorMap[currentVertex]
-                if (predecessor == null) {
-                    // If no path exists
-                    return emptyList()
-                }
-                if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex } == null) {
-                    throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
-                }
-                path.add(Pair(currentVertex, edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex })
-                        as Pair<Vertex<D>, E>)
+        while (currentVertex != srcVertex) {
+            val predecessor = predecessorMap[currentVertex]
+            if (predecessor == null) {
+                // If no path exists
+                return emptyList()
+            }
+            if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex } == null) {
+                throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
+            }
+            path.add(
+                Pair(currentVertex, edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex })
+                    as Pair<Vertex<D>, E>)
             currentVertex = predecessor
         }
         return path.reversed()
