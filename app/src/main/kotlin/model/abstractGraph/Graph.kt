@@ -12,18 +12,18 @@ abstract class Graph<D, E : Edge<D>> {
         return newVertex
     }
 
-    fun deleteVertex(vertexToDelete: Vertex<D>): Vertex<D> {
+    fun removeVertex(vertexToRemove: Vertex<D>): Vertex<D> {
         val adjacentVertices =
-            adjacencyMap[vertexToDelete] ?: throw IllegalArgumentException("Vertex is not in the graph")
+            adjacencyMap[vertexToRemove] ?: throw IllegalArgumentException("Vertex is not in the graph")
 
-        for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToDelete)
-        adjacencyMap.remove(vertexToDelete)
+        for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
+        adjacencyMap.remove(vertexToRemove)
 
         for (edge in getEdges()) {
-            if (edge.isIncident(vertexToDelete)) edges.remove(edge)
+            if (edge.isIncident(vertexToRemove)) edges.remove(edge)
         }
 
-        return vertexToDelete
+        return vertexToRemove
     }
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): E
