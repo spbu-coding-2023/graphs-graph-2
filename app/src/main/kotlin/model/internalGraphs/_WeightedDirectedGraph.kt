@@ -3,6 +3,7 @@ package model.internalGraphs
 import java.util.*
 import model.abstractGraph.Vertex
 import model.edges.WeightedDirectedEdge
+import kotlin.NoSuchElementException
 
 abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _DirectedGraph<D, E>() {
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): E {
@@ -10,7 +11,7 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
         if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw IllegalArgumentException("Vertex1 or vertex2 is not in the adjacency map.")
+            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
 
         val newEdge = WeightedDirectedEdge(vertex1, vertex2, weight) as E
         edges.add(newEdge)
@@ -60,7 +61,7 @@ abstract class _WeightedDirectedGraph<D, E : WeightedDirectedEdge<D>> : _Directe
                 return emptyList()
             }
             if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex } == null) {
-                throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
+                throw NoSuchElementException("Edge is not in the graph, path cannot be reconstructed.")
             }
             path.add(
                 Pair(currentVertex, edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex })

@@ -10,7 +10,7 @@ abstract class _UndirectedGraph<D, E : UndirectedEdge<D>> : Graph<D, E>() {
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
         if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw IllegalArgumentException("Vertex1 or vertex2 is not in the adjacency map.")
+            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
 
         val newEdge = UndirectedEdge(vertex1, vertex2) as E
         edges.add(newEdge)
@@ -22,7 +22,7 @@ abstract class _UndirectedGraph<D, E : UndirectedEdge<D>> : Graph<D, E>() {
 
     override fun removeEdge(edgeToRemove: E): E {
         if (edgeToRemove !in edges)
-            throw IllegalArgumentException("Edge is not in the graph.")
+            throw NoSuchElementException("Edge is not in the graph.")
 
         val vertex1 = edgeToRemove.vertex1
         val vertex2 = edgeToRemove.vertex2
