@@ -6,9 +6,11 @@ import model.edges.DirectedEdge
 
 abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): E {
-        if (vertex1 == vertex2) throw IllegalArgumentException("Vertices are the same")
+        if (vertex1 == vertex2)
+            throw IllegalArgumentException("Can't add edge from vertex to itself.")
+
         if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw IllegalArgumentException("Vertex1 or vertex2 are not in the graph")
+            throw IllegalArgumentException("Vertex1 or vertex2 is not in the adjacency map.")
 
         val newEdge = DirectedEdge(vertex1, vertex2) as E
         edges.add(newEdge)
@@ -18,7 +20,8 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
     }
 
     override fun removeEdge(edgeToRemove: E): E {
-        if (edgeToRemove !in edges) throw IllegalArgumentException("Edge is not in the graph")
+        if (edgeToRemove !in edges)
+            throw IllegalArgumentException("Edge is not in the graph")
 
         val vertex1 = edgeToRemove.vertex1
         val vertex2 = edgeToRemove.vertex2
@@ -35,19 +38,19 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
         val component = arrayListOf<Vertex<D>>()
         val sccList: ArrayList<ArrayList<Vertex<D>>> = arrayListOf()
 
-        fun auxuiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
+        fun auxiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
             visited[srcVertex] = true
             componentList.add(srcVertex)
             adjacencyMap[srcVertex]?.forEach { vertex2 ->
                 if (visited[vertex2] != null && visited[vertex2] != true) {
-                    auxuiliaryDFS(vertex2, componentList)
+                    auxiliaryDFS(vertex2, componentList)
                 }
             }
             stack.add(srcVertex)
         }
 
         for (vertex in adjacencyMap.keys) {
-            if (visited[vertex] != null && visited[vertex] != true) auxuiliaryDFS(vertex, component)
+            if (visited[vertex] != null && visited[vertex] != true) auxiliaryDFS(vertex, component)
         }
 
         reverseGraph()
@@ -58,7 +61,7 @@ abstract class _DirectedGraph<D, E : DirectedEdge<D>> : Graph<D, E>() {
             val vertex = stack.removeLast()
             if (visited[vertex] != null && visited[vertex] != true) {
                 val currentComponent = arrayListOf<Vertex<D>>()
-                auxuiliaryDFS(vertex, currentComponent)
+                auxiliaryDFS(vertex, currentComponent)
                 sccList.add(currentComponent)
             }
         }
