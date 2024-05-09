@@ -32,11 +32,9 @@ abstract class Graph<D, E : Edge<D>> {
 
         val copyOfLastAddedVertex = Vertex(vertexToRemove.id, lastAddedVertex.data)
 
-        adjacencyMap[copyOfLastAddedVertex] = adjacencyMap[lastAddedVertex]
-            ?: throw NoSuchElementException("Vertex with id ${lastAddedVertex.id} is not present in the adjacency map.")
+        adjacencyMap[copyOfLastAddedVertex] = getNeighbours(lastAddedVertex)
 
-        val adjacentVertices = adjacencyMap[copyOfLastAddedVertex]
-            ?: throw NoSuchElementException("Vertex with id ${copyOfLastAddedVertex.id} is not present in the adjacency map.")
+        val adjacentVertices = getNeighbours(copyOfLastAddedVertex)
 
         for (adjacentVertex in adjacentVertices) {
             if (adjacencyMap[adjacentVertex]?.remove(lastAddedVertex) == true) {
@@ -49,8 +47,7 @@ abstract class Graph<D, E : Edge<D>> {
     }
 
     private fun removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(vertexToRemove: Vertex<D>) {
-        val adjacentVertices = adjacencyMap[vertexToRemove]
-            ?: throw NoSuchElementException("Vertex with id ${vertexToRemove.id} is not present in the adjacency map.")
+        val adjacentVertices = getNeighbours(vertexToRemove)
 
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
 
@@ -62,4 +59,11 @@ abstract class Graph<D, E : Edge<D>> {
     fun getVertices() = adjacencyMap.keys.toList()
 
     fun getEdges() = edges.toList()
+
+    protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
+        val neighbours = adjacencyMap[vertex]
+            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the adjacency map.")
+
+        return neighbours
+    }
 }
