@@ -3,6 +3,7 @@ package model
 import model.abstractGraph.Edge
 import model.abstractGraph.Graph
 import model.abstractGraph.Vertex
+import kotlin.math.min
 
 open class UndirectedGraph<D> : Graph<D>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
