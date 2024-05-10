@@ -24,6 +24,13 @@ abstract class Graph<D> {
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
 
     abstract fun removeEdge(edgeToRemove: Edge<D>): Edge<D>
+<<<<<<< HEAD
+=======
+
+    fun getVertices() = adjacencyMap.keys.toList()
+
+    fun getEdges() = edges.toList()
+>>>>>>> 1d4ad7c (fix: remove edge parametrization from abstract Graph)
 
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         currentId--
