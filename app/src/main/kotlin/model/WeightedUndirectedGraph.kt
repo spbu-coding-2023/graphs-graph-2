@@ -16,7 +16,7 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
             throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
 
-        val newEdge = Edge(vertex1, vertex2,)
+        val newEdge = Edge(vertex1, vertex2)
         weightMap[newEdge] = weight
         edges.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
@@ -48,7 +48,6 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
                             (it.vertex1 == adjacent && it.vertex2 == node) ||
                                     (it.vertex1 == node && it.vertex2 == adjacent)
                         }
-
                     currentEdge?.let {
                         var totalDist = currentDistance
                         totalDist += weightMap[it] ?: throw NoSuchElementException("Current edge doesn't have weight.")
