@@ -1,8 +1,8 @@
 package model.abstractGraph
 
-abstract class Graph<D, E : Edge<D>> {
+abstract class Graph<D> {
     protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
-    protected val edges: MutableSet<E> = mutableSetOf()
+    protected val edges: MutableSet<Edge<D>> = mutableSetOf()
     private var currentId = 0
 
     fun addVertex(data: D): Vertex<D> {
@@ -21,9 +21,9 @@ abstract class Graph<D, E : Edge<D>> {
         return vertexToRemove
     }
 
-    abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): E
+    abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
 
-    abstract fun removeEdge(edgeToRemove: E): E
+    abstract fun removeEdge(edgeToRemove: Edge<D>): Edge<D>
 
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         currentId--
