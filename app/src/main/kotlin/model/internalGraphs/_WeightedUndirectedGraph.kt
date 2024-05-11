@@ -3,12 +3,15 @@ package model.internalGraphs
 import java.util.*
 import model.abstractGraph.Vertex
 import model.edges.WeightedUndirectedEdge
+import kotlin.NoSuchElementException
 
 abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _UndirectedGraph<D, E>() {
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): E {
-        if (vertex1 == vertex2) throw IllegalArgumentException("Vertices are the same")
+        if (vertex1 == vertex2)
+            throw IllegalArgumentException("Can't add edge from vertex to itself.")
+
         if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw IllegalArgumentException("Vertex1 or vertex2 are not in the graph")
+            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
 
         val newEdge = WeightedUndirectedEdge(vertex1, vertex2, weight) as E
         edges.add(newEdge)
@@ -66,7 +69,7 @@ abstract class _WeightedUndirectedGraph<D, E : WeightedUndirectedEdge<D>> : _Und
                 it.vertex1 == predecessor && it.vertex2 == currentVertex ||
                     it.vertex2 == predecessor && it.vertex1 == currentVertex
             } == null) {
-                throw IllegalArgumentException("Edge is not in the graph, path cannot be reconstructed.")
+                throw NoSuchElementException("Edge is not in the graph, path cannot be reconstructed.")
             }
             path.add(
                 Pair(

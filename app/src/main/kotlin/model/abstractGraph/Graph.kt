@@ -25,24 +25,19 @@ abstract class Graph<D, E : Edge<D>> {
 
     abstract fun removeEdge(edgeToRemove: E): E
 
-    fun getVertices() = adjacencyMap.keys.toList()
-
-    fun getEdges() = edges.toList()
-
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         currentId--
-        val lastAddedVertex =
-            getVertices().find { it.id == currentId } ?: throw NoSuchElementException("No vertex with id $currentId")
+        val lastAddedVertex = getVertices().find { it.id == currentId }
+            ?: throw NoSuchElementException("Vertex with id $currentId is not present in the adjacency map.")
 
-        val copyOfLastAddedVertex = Vertex<D>(vertexToRemove.id, lastAddedVertex.data)
-        adjacencyMap[copyOfLastAddedVertex] =
-            adjacencyMap[lastAddedVertex] ?: throw NoSuchElementException("No vertex with id $currentId")
+        val copyOfLastAddedVertex = Vertex(vertexToRemove.id, lastAddedVertex.data)
 
-        val adjacentVertices =
-            adjacencyMap[copyOfLastAddedVertex] ?: throw NoSuchElementException("No vertex with id $currentId")
+        adjacencyMap[copyOfLastAddedVertex] = getNeighbours(lastAddedVertex)
+
+        val adjacentVertices = getNeighbours(copyOfLastAddedVertex)
 
         for (adjacentVertex in adjacentVertices) {
-            if (adjacencyMap[adjacentVertex]?.remove(lastAddedVertex) ?: false) {
+            if (adjacencyMap[adjacentVertex]?.remove(lastAddedVertex) == true) {
                 adjacencyMap[adjacentVertex]?.add(copyOfLastAddedVertex)
             }
         }
@@ -52,13 +47,23 @@ abstract class Graph<D, E : Edge<D>> {
     }
 
     private fun removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(vertexToRemove: Vertex<D>) {
-        val adjacentVertices =
-            adjacencyMap[vertexToRemove] ?: throw NoSuchElementException("Vertex is not in the graph")
+        val adjacentVertices = getNeighbours(vertexToRemove)
 
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
 
         for (edge in getEdges()) {
             if (edge.isIncident(vertexToRemove)) edges.remove(edge)
         }
+    }
+
+    fun getVertices() = adjacencyMap.keys.toList()
+
+    fun getEdges() = edges.toList()
+
+    protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
+        val neighbours = adjacencyMap[vertex]
+            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the adjacency map.")
+
+        return neighbours
     }
 }
