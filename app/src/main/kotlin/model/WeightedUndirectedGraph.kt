@@ -123,19 +123,21 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
             }
         }
 
-//        val sortedEdges = edges.sortedBy { it.weight }
+        val edgeWeightPairs = weightMap.toList()
+        val sortedEdgeWeightPairs = edgeWeightPairs.sortedBy { it.second }
 
         val chosenEdges = mutableListOf<Edge<D>>()
 
-//        for (edge in sortedEdges) {
-//            val id1 = edge.vertex1.id
-//            val id2 = edge.vertex2.id
-//
-//            if (findTreeRootId(id1) != findTreeRootId(id2)) {
-//                uniteTwoTreesByVerticesIds(id1, id2)
-//                chosenEdges.add(edge)
-//            }
-//        }
+        for ((edge, _) in sortedEdgeWeightPairs) {
+            val id1 = edge.vertex1.id
+            val id2 = edge.vertex2.id
+
+            if (findTreeRootId(id1) != findTreeRootId(id2)) {
+                uniteTwoTreesByVerticesIds(id1, id2)
+                chosenEdges.add(edge)
+            }
+        }
+
 
         return chosenEdges
     }
