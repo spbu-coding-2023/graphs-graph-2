@@ -92,26 +92,26 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
     }
 
     fun findMinSpanningTree(): List<Edge<D>> {
-        val vertexIdList = mutableListOf<Int>()
-        for (v in getVertices()) vertexIdList.add(v.id)
+        val vertexIds = mutableListOf<Int>()
+        for (v in getVertices()) vertexIds.add(v.id)
 
-        val graphSize = vertexIdList.size
+        val graphSize = vertexIds.size
 
         // set each vertex parent to be itself and each vertex rank to 0
-        val parentList = MutableList(graphSize) { index: Int -> vertexIdList[index] }
+        val parentList = MutableList(graphSize) { i: Int -> vertexIds[i] }
         val rankList = MutableList(graphSize) { 0 }
 
-        fun findTreeRootId(vId: Int): Int {
+        fun findRootIdByVertexId(vId: Int): Int {
             if (parentList[vId] == vId) return vId
 
-            parentList[vId] = findTreeRootId(parentList[vId])
+            parentList[vId] = findRootIdByVertexId(parentList[vId])
 
             return parentList[vId]
         }
 
         fun uniteTwoTreesByVerticesIds(vId1: Int, vId2: Int) {
-            val rootId1 = findTreeRootId(vId1)
-            val rootId2 = findTreeRootId(vId2)
+            val rootId1 = findRootIdByVertexId(vId1)
+            val rootId2 = findRootIdByVertexId(vId2)
 
             if (rootId1 == rootId2) return
 
@@ -132,12 +132,11 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
             val id1 = edge.vertex1.id
             val id2 = edge.vertex2.id
 
-            if (findTreeRootId(id1) != findTreeRootId(id2)) {
+            if (findRootIdByVertexId(id1) != findRootIdByVertexId(id2)) {
                 uniteTwoTreesByVerticesIds(id1, id2)
                 chosenEdges.add(edge)
             }
         }
-
 
         return chosenEdges
     }
