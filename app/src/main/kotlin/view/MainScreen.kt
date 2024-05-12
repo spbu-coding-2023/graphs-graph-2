@@ -7,13 +7,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import viewmodel.MainScreenViewModel
@@ -26,12 +34,15 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
     // here we will have layout type shit
     Row(horizontalArrangement = Arrangement.spacedBy(30.dp)) {
         Column(
-            modifier = Modifier.width(390.dp).background(color = Color.LightGray).fillMaxHeight()
+            modifier = Modifier.width(360.dp)
+                .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
+                .fillMaxHeight().clip(shape = RoundedCornerShape(20.dp))
+                // TODO: make it rounded only from right side
         ) {
 
             val pageState = rememberPagerState( pageCount = { 3 } )
             val coroutineScope = rememberCoroutineScope()
-            val tabs = listOf("General", "Analyze", "File Control")
+            val tabs = listOf("General", "Analyze", " File Control")
 
             TabRow(
                 selectedTabIndex = pageState.currentPage,
@@ -51,15 +62,19 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
                         selected = pageState.currentPage == index,
                         onClick = { coroutineScope.launch { pageState.animateScrollToPage(index) } },
                         modifier = Modifier.padding(0.dp),
+
                         content = {
                             Box(
-                                modifier = Modifier.background(
+                                modifier = Modifier
+                                    .background(
                                         if (pageState.currentPage == index) Color.Magenta
                                         else Color.Transparent
-                                    ).padding(10.dp).height(30.dp).width(110.dp).align(Alignment.CenterHorizontally)
+                                    ).padding(10.dp).height(30.dp).width(120.dp).align(Alignment.CenterHorizontally),
+                                contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = title,
+                                    textAlign = TextAlign.Center,
                                     color = if (pageState.currentPage == index) Color.White else Color.Black // Set text color for selected and unselected tabs
                                 )
                             }
