@@ -4,7 +4,7 @@ import model.abstractGraph.Edge
 import model.abstractGraph.Graph
 import model.abstractGraph.Vertex
 
-open class DirectedGraph<D> : Graph<D>() {
+open class DirectedGr1aph<D> : Graph<D>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
         if (vertex1 == vertex2)
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
@@ -15,7 +15,7 @@ open class DirectedGraph<D> : Graph<D>() {
         val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
 
-        outEdgesMap[vertex1]?.add(newEdge)
+        outgoingEdgesMap[vertex1]?.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
 
         return newEdge
@@ -30,7 +30,7 @@ open class DirectedGraph<D> : Graph<D>() {
 
         edges.remove(edgeToRemove)
 
-        outEdgesMap[vertex1]?.remove(edgeToRemove)
+        outgoingEdgesMap[vertex1]?.remove(edgeToRemove)
         adjacencyMap[vertex1]?.remove(vertex2)
 
         return edgeToRemove

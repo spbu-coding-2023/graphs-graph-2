@@ -5,14 +5,14 @@ abstract class Graph<D> {
     protected val edges: MutableSet<Edge<D>> = mutableSetOf()
 
     protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
-    protected val outEdgesMap: MutableMap<Vertex<D>, ArrayList<Edge<D>>> = mutableMapOf()
+    protected val outgoingEdgesMap: MutableMap<Vertex<D>, ArrayList<Edge<D>>> = mutableMapOf()
 
     private var nextId = 0
 
     fun addVertex(data: D): Vertex<D> {
         val newVertex = Vertex(nextId++, data)
 
-        outEdgesMap[newVertex] = ArrayList()
+        outgoingEdgesMap[newVertex] = ArrayList()
         adjacencyMap[newVertex] = ArrayList()
 
         vertices.add(newVertex)
@@ -27,7 +27,6 @@ abstract class Graph<D> {
         return vertexToRemove
     }
 
-    // TODO: RENAME PARAMETER NAME
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         if (vertexToRemove.id == --nextId) return
 

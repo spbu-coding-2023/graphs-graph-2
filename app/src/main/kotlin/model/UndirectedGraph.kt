@@ -16,8 +16,8 @@ open class UndirectedGraph<D> : Graph<D>() {
         val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
 
-        outEdgesMap[vertex1]?.add(newEdge)
-        outEdgesMap[vertex2]?.add(newEdge)
+        outgoingEdgesMap[vertex1]?.add(newEdge)
+        outgoingEdgesMap[vertex2]?.add(newEdge)
 
         adjacencyMap[vertex1]?.add(vertex2)
         adjacencyMap[vertex2]?.add(vertex1)
@@ -34,8 +34,8 @@ open class UndirectedGraph<D> : Graph<D>() {
 
         edges.remove(edgeToRemove)
 
-        outEdgesMap[vertex1]?.remove(edgeToRemove)
-        outEdgesMap[vertex2]?.remove(edgeToRemove)
+        outgoingEdgesMap[vertex1]?.remove(edgeToRemove)
+        outgoingEdgesMap[vertex2]?.remove(edgeToRemove)
 
         adjacencyMap[vertex1]?.remove(vertex2)
         adjacencyMap[vertex2]?.remove(vertex1)
@@ -81,7 +81,7 @@ open class UndirectedGraph<D> : Graph<D>() {
                     min(minDiscoveryTime[vertex.id], minDiscoveryTime[neighbour.id])
 
                 if (minDiscoveryTime[neighbour.id] > discoveryTime[vertex.id]) {
-                    val bridgeFound = outEdgesMap[vertex]?.find { it.isIncident(neighbour) }
+                    val bridgeFound = outgoingEdgesMap[vertex]?.find { it.isIncident(neighbour) }
                         ?: throw NoSuchElementException("Can't find edge between vertices with ids ${vertex.id} and ${neighbour.id}")
 
                     bridges.add(bridgeFound)
