@@ -1,19 +1,19 @@
 package model.abstractGraph
 
 abstract class Graph<D> {
-    protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
-    protected val outEdgesMap: MutableMap<Vertex<D>, ArrayList<Edge<D>>> = mutableMapOf()
-
     protected val vertices: ArrayList<Vertex<D>> = arrayListOf()
     protected val edges: MutableSet<Edge<D>> = mutableSetOf()
+
+    protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
+    protected val outEdgesMap: MutableMap<Vertex<D>, ArrayList<Edge<D>>> = mutableMapOf()
 
     private var currentId = 0
 
     fun addVertex(data: D): Vertex<D> {
         val newVertex = Vertex(currentId++, data)
 
-        adjacencyMap[newVertex] = ArrayList()
         outEdgesMap[newVertex] = ArrayList()
+        adjacencyMap[newVertex] = ArrayList()
 
         vertices.add(newVertex)
 
@@ -28,10 +28,6 @@ abstract class Graph<D> {
 
         return vertexToRemove
     }
-
-    abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
-
-    abstract fun removeEdge(edgeToRemove: Edge<D>): Edge<D>
 
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         currentId--
@@ -62,6 +58,10 @@ abstract class Graph<D> {
             if (edge.isIncident(vertexToRemove)) edges.remove(edge)
         }
     }
+
+    abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
+
+    abstract fun removeEdge(edgeToRemove: Edge<D>): Edge<D>
 
     fun getEdges() = edges.toList()
 

@@ -6,21 +6,10 @@ import java.util.*
 import kotlin.NoSuchElementException
 
 class WeightedDirectedGraph<D> : DirectedGraph<D>() {
-
     val weightMap: MutableMap<Edge<D>, Int> = mutableMapOf()
 
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): Edge<D> {
-        if (vertex1 == vertex2)
-            throw IllegalArgumentException("Can't add edge from vertex to itself.")
-
-        if (vertex1 !in vertices || vertex2 !in vertices)
-            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
-
-        val newEdge = Edge(vertex1, vertex2)
-        edges.add(newEdge)
-
-        outEdgesMap[vertex1]?.add(newEdge)
-        adjacencyMap[vertex1]?.add(vertex2)
+        val newEdge = super.addEdge(vertex1, vertex2)
 
         weightMap[newEdge] = weight
 
