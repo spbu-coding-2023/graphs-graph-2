@@ -9,11 +9,13 @@ open class DirectedGraph<D> : Graph<D>() {
         if (vertex1 == vertex2)
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
-        if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
+        if (vertex1 !in vertices || vertex2 !in vertices)
+            throw NoSuchElementException("Vertex1 or vertex2 is not in the vertices array.")
 
-        val newEdge = Edge(vertex1, vertex2) as Edge<D>
+        val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
+
+        outEdgesMap[vertex1]?.add(newEdge)
         adjacencyMap[vertex1]?.add(vertex2)
 
         return newEdge
@@ -26,13 +28,16 @@ open class DirectedGraph<D> : Graph<D>() {
         val vertex1 = edgeToRemove.vertex1
         val vertex2 = edgeToRemove.vertex2
 
-        adjacencyMap[vertex1]?.remove(vertex2)
         edges.remove(edgeToRemove)
+
+        outEdgesMap[vertex1]?.remove(edgeToRemove)
+        adjacencyMap[vertex1]?.remove(vertex2)
 
         return edgeToRemove
     }
 
-    fun findSCC(): ArrayList<ArrayList<Vertex<D>>> { // SCC - Strongly Connected Components (by Kosaraju)
+    // SCC - Strongly Connected Components (by Kosaraju)
+    fun findSCC(): ArrayList<ArrayList<Vertex<D>>> {
         val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
         val stack = ArrayDeque<Vertex<D>>()
         val component = arrayListOf<Vertex<D>>()
@@ -49,7 +54,7 @@ open class DirectedGraph<D> : Graph<D>() {
             stack.add(srcVertex)
         }
 
-        for (vertex in adjacencyMap.keys) {
+        for (vertex in vertices) {
             if (visited[vertex] != null && visited[vertex] != true) auxiliaryDFS(vertex, component)
         }
 
@@ -70,7 +75,7 @@ open class DirectedGraph<D> : Graph<D>() {
 
     private fun reverseGraph() {
         val reversedAdjacencyMap = mutableMapOf<Vertex<D>, ArrayList<Vertex<D>>>()
-        for (vertex in adjacencyMap.keys) {
+        for (vertex in vertices) {
             adjacencyMap[vertex]?.forEach { vertex2 ->
                 reversedAdjacencyMap[vertex2] = reversedAdjacencyMap[vertex2] ?: ArrayList()
                 reversedAdjacencyMap[vertex2]?.add(vertex)

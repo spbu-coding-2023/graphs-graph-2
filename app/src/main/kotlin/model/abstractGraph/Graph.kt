@@ -2,12 +2,20 @@ package model.abstractGraph
 
 abstract class Graph<D> {
     protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
+    protected val outEdgesMap: MutableMap<Vertex<D>, ArrayList<Edge<D>>> = mutableMapOf()
+
+    protected val vertices: ArrayList<Vertex<D>> = arrayListOf()
     protected val edges: MutableSet<Edge<D>> = mutableSetOf()
+
     private var currentId = 0
 
     fun addVertex(data: D): Vertex<D> {
         val newVertex = Vertex(currentId++, data)
+
         adjacencyMap[newVertex] = ArrayList()
+        outEdgesMap[newVertex] = ArrayList()
+
+        vertices.add(newVertex)
 
         return newVertex
     }
@@ -27,8 +35,7 @@ abstract class Graph<D> {
 
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         currentId--
-        val lastAddedVertex = getVertices().find { it.id == currentId }
-            ?: throw NoSuchElementException("Vertex with id $currentId is not present in the adjacency map.")
+        val lastAddedVertex = vertices[currentId]
 
         val copyOfLastAddedVertex = Vertex(vertexToRemove.id, lastAddedVertex.data)
 
@@ -55,8 +62,6 @@ abstract class Graph<D> {
             if (edge.isIncident(vertexToRemove)) edges.remove(edge)
         }
     }
-
-    fun getVertices() = adjacencyMap.keys.toList()
 
     fun getEdges() = edges.toList()
 

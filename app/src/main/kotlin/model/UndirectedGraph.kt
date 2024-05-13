@@ -10,11 +10,15 @@ open class UndirectedGraph<D> : Graph<D>() {
         if (vertex1 == vertex2)
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
-        if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
+        if (vertex1 !in vertices || vertex2 !in vertices)
+            throw NoSuchElementException("Vertex1 or vertex2 is not in the vertices array.")
 
-        val newEdge = Edge(vertex1, vertex2) as Edge<D>
+        val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
+
+        outEdgesMap[vertex1]?.add(newEdge)
+        outEdgesMap[vertex2]?.add(newEdge)
+
         adjacencyMap[vertex1]?.add(vertex2)
         adjacencyMap[vertex2]?.add(vertex1)
 
@@ -28,9 +32,13 @@ open class UndirectedGraph<D> : Graph<D>() {
         val vertex1 = edgeToRemove.vertex1
         val vertex2 = edgeToRemove.vertex2
 
+        edges.remove(edgeToRemove)
+
+        outEdgesMap[vertex1]?.remove(edgeToRemove)
+        outEdgesMap[vertex2]?.remove(edgeToRemove)
+
         adjacencyMap[vertex1]?.remove(vertex2)
         adjacencyMap[vertex2]?.remove(vertex1)
-        edges.remove(edgeToRemove)
 
         return edgeToRemove
     }
@@ -38,7 +46,6 @@ open class UndirectedGraph<D> : Graph<D>() {
     fun findBridges(): List<Edge<D>> {
         val bridges = mutableListOf<Edge<D>>()
 
-        val vertices = getVertices()
         val graphSize = vertices.size
 
         val discoveryTime = MutableList(graphSize) { -1 }
@@ -74,7 +81,7 @@ open class UndirectedGraph<D> : Graph<D>() {
                     min(minDiscoveryTime[vertex.id], minDiscoveryTime[neighbour.id])
 
                 if (minDiscoveryTime[neighbour.id] > discoveryTime[vertex.id]) {
-                    val bridgeFound = edges.find { it.isIncident(vertex) && it.isIncident(neighbour) }
+                    val bridgeFound = outEdgesMap[vertex]?.find { it.isIncident(neighbour) }
                         ?: throw NoSuchElementException("Can't find edge between vertices with ids ${vertex.id} and ${neighbour.id}")
 
                     bridges.add(bridgeFound)
