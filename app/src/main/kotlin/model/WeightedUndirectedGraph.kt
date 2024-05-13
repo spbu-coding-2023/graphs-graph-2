@@ -6,32 +6,29 @@ import java.util.*
 import kotlin.NoSuchElementException
 
 class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
-
-    val weightMap: MutableMap<Edge<D>, Int> = mutableMapOf()
+    private val weightMap: MutableMap<Edge<D>, Int> = mutableMapOf()
 
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): Edge<D> {
-        if (vertex1 == vertex2)
-            throw IllegalArgumentException("Can't add edge from vertex to itself.")
+        val newEdge = super.addEdge(vertex1, vertex2)
 
-        if (vertex1 !in adjacencyMap.keys || vertex2 !in adjacencyMap.keys)
-            throw NoSuchElementException("Vertex1 or vertex2 is not in the adjacency map.")
-
-        val newEdge = Edge(vertex1, vertex2)
         weightMap[newEdge] = weight
-        edges.add(newEdge)
-        adjacencyMap[vertex1]?.add(vertex2)
-        adjacencyMap[vertex2]?.add(vertex1)
 
         return newEdge
     }
 
-    /*
+    /**
      * In case weight is not passed, set it to default value = 1
      */
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
+    fun getWeight(edge: Edge<D>): Int {
+        val weight = weightMap[edge]
+            ?: throw NoSuchElementException("No weight found for edge $edge")
+
+        return weight
+    }
+
     fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>> {
-        val vertices = getVertices()
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(destVertex to 0) }
@@ -50,7 +47,7 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
                         }
                     currentEdge?.let {
                         var totalDist = currentDistance
-                        totalDist += weightMap[it] ?: throw NoSuchElementException("Current edge doesn't have weight.")
+                        totalDist += getWeight(it)
 
                         if (totalDist < distanceMap.getValue(adjacent)) {
                             distanceMap[adjacent] = totalDist
@@ -92,21 +89,18 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
     }
 
     fun findMinSpanningTree(): List<Edge<D>> {
-        val vertexIds = mutableListOf<Int>()
-        for (v in getVertices()) vertexIds.add(v.id)
-
-        val graphSize = vertexIds.size
+        val graphSize = vertices.size
 
         // set each vertex parent to be itself and each vertex rank to 0
-        val parentList = MutableList(graphSize) { i: Int -> vertexIds[i] }
-        val rankList = MutableList(graphSize) { 0 }
+        val parentIdList = Array(graphSize) { i: Int -> i }
+        val rankList = Array(graphSize) { 0 }
 
         fun findRootIdByVertexId(vId: Int): Int {
-            if (parentList[vId] == vId) return vId
+            if (parentIdList[vId] == vId) return vId
 
-            parentList[vId] = findRootIdByVertexId(parentList[vId])
+            parentIdList[vId] = findRootIdByVertexId(parentIdList[vId])
 
-            return parentList[vId]
+            return parentIdList[vId]
         }
 
         fun uniteTwoTreesByVerticesIds(vId1: Int, vId2: Int) {
@@ -116,9 +110,9 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
             if (rootId1 == rootId2) return
 
             if (rankList[rootId1] < rankList[rootId2]) {
-                parentList[rootId1] = rootId2
+                parentIdList[rootId1] = rootId2
             } else {
-                parentList[rootId2] = rootId1
+                parentIdList[rootId2] = rootId1
                 if (rankList[rootId1] == rankList[rootId2]) rankList[rootId1]++
             }
         }
