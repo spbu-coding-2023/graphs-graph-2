@@ -10,5 +10,5 @@ class UndirectedGraphTest {
     inner class RemoveEdgeTest {}
 
     @Nested
-    inner class FindBridges {}
+    inner class FindBridgesTest {}
 }
