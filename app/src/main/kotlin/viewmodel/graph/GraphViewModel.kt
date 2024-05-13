@@ -10,7 +10,7 @@ class GraphViewModel<D>(
     showVerticesData: State<Boolean>,
 ) {
     private val _verticesViewModels = graph.getVertices().associateWith { vertex ->
-        VertexViewModel(0.dp, 0.dp, showVerticesData, showIds, vertex)
+        VertexViewModel(dataVisible = showVerticesData, idVisible = showIds, vertex = vertex)
     }
 
     private val _edgeViewModels = graph.getEdges().associateWith { edge ->

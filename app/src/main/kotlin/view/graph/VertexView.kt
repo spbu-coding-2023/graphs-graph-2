@@ -32,9 +32,9 @@ fun <D> VertexView(viewModel: VertexViewModel<D>) {
     val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier
-        .offset { IntOffset(viewModel.x.roundToPx(), viewModel.y.roundToPx()) }
-        .size(viewModel.radius * 2, viewModel.radius * 2)
-        .background(if (viewModel.isSelected) Color.Yellow else Color.LightGray, shape = CircleShape)
+        .offset { IntOffset(viewModel.x.value.roundToPx(), viewModel.y.value.roundToPx()) }
+        .size(viewModel.radius * 2)
+        .background(if (viewModel.isSelected.value) Color.Yellow else Color.LightGray, shape = CircleShape)
         .clip(CircleShape)
         .pointerInput(Unit) {
             coroutineScope.launch {
@@ -43,7 +43,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>) {
                     change.consume()
                 }
                 detectTapGestures (
-                    onTap = {viewModel.isSelected = !viewModel.isSelected }
+                    onTap = {viewModel.isSelected.value = !viewModel.isSelected.value }
                 )
             }
         },

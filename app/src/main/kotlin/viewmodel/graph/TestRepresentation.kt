@@ -20,15 +20,15 @@ class TestRepresentation() {
         val sorted = vertices.sortedBy { it.getVertexData }
         val first = sorted.first()
         var point = Pair(center.first, center.second - min(width, height) / 2)
-        first.x = point.first.dp
-        first.y = point.second.dp
+        first.x.value = point.first.dp
+        first.y.value = point.second.dp
 
         sorted
             .drop(1)
             .onEach {
                 point = point.rotate(center, angle)
-                it.x = point.first.dp
-                it.y = point.second.dp
+                it.x.value = point.first.dp
+                it.y.value = point.second.dp
             }
     }
 

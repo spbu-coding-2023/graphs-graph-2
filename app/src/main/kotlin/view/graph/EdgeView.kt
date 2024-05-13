@@ -20,12 +20,12 @@ fun <D> EdgeView(
             color = Color.Red,
             strokeWidth = 10.0f,
             start = Offset(
-                viewModel.firstVertex.x.toPx() + viewModel.firstVertex.radius.toPx(),
-                viewModel.firstVertex.y.toPx() + viewModel.firstVertex.radius.toPx()
+                viewModel.firstVertex.x.value.toPx() + viewModel.firstVertex.radius.toPx(),
+                viewModel.firstVertex.y.value.toPx() + viewModel.firstVertex.radius.toPx()
             ),
             end = Offset(
-                viewModel.secondVertex.x.toPx() + viewModel.secondVertex.radius.toPx(),
-                viewModel.secondVertex.y.toPx() + viewModel.secondVertex.radius.toPx()
+                viewModel.secondVertex.x.value.toPx() + viewModel.secondVertex.radius.toPx(),
+                viewModel.secondVertex.y.value.toPx() + viewModel.secondVertex.radius.toPx()
             ),
             alpha = 1.0f
         )
