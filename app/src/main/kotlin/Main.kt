@@ -1,19 +1,16 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
-import model.DirectedGraph
+import androidx.compose.ui.window.rememberWindowState
 import model.UndirectedGraph
 import model.abstractGraph.Graph
 import view.MainScreen
 import viewmodel.MainScreenViewModel
+import java.awt.Dimension
 
 val testGraph: Graph<Int> = UndirectedGraph<Int>().apply {
     val v1 = addVertex(1)
@@ -37,7 +34,13 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "Graphs-2",
+        state = rememberWindowState(
+            position = WindowPosition(alignment = Alignment.Center),
+        ),) {
+        window.minimumSize = Dimension(1200, 700)
         App()
     }
 }
