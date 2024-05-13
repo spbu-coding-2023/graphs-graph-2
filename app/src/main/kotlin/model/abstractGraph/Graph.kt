@@ -27,6 +27,7 @@ abstract class Graph<D> {
         return vertexToRemove
     }
 
+    // TODO: RENAME PARAMETER NAME
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
         if (vertexToRemove.id == --nextId) return
 
@@ -52,7 +53,7 @@ abstract class Graph<D> {
 
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
 
-        for (edge in getEdges()) {
+        for (edge in edges) {
             if (edge.isIncident(vertexToRemove)) edges.remove(edge)
         }
 
@@ -64,6 +65,8 @@ abstract class Graph<D> {
     abstract fun removeEdge(edgeToRemove: Edge<D>): Edge<D>
 
     fun getEdges() = edges.toList()
+
+    fun getVertices() = vertices.toList()
 
     protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
