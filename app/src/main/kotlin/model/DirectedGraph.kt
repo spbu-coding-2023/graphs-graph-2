@@ -9,7 +9,7 @@ open class DirectedGraph<D> : Graph<D>() {
         if (vertex1 == vertex2)
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
-        if (vertex1 !in vertices || vertex2 !in vertices)
+        if (vertex1.id > vertices.size || vertex2.id > vertices.size)
             throw NoSuchElementException("Vertex1 or vertex2 is not in the vertices array.")
 
         val newEdge = Edge(vertex1, vertex2)
