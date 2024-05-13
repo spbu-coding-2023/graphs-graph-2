@@ -21,16 +21,15 @@ abstract class Graph<D> {
     }
 
     fun removeVertex(vertexToRemove: Vertex<D>): Vertex<D> {
-        removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(vertexToRemove)
+        removeVertexFromEverywhere(vertexToRemove)
         fixIdFragmentation(vertexToRemove)
-
-        adjacencyMap.remove(vertexToRemove)
 
         return vertexToRemove
     }
 
     private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
-        nextId--
+        if (vertexToRemove.id == --nextId) return
+
         val lastAddedVertex = vertices[nextId]
 
         val copyOfLastAddedVertex = Vertex(vertexToRemove.id, lastAddedVertex.data)
@@ -45,11 +44,10 @@ abstract class Graph<D> {
             }
         }
 
-        removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(lastAddedVertex)
-        adjacencyMap.remove(lastAddedVertex)
+        removeVertexFromEverywhere(lastAddedVertex)
     }
 
-    private fun removeVertexFromIncidentEdgesAndAdjacentVerticesMapValues(vertexToRemove: Vertex<D>) {
+    private fun removeVertexFromEverywhere(vertexToRemove: Vertex<D>) {
         val adjacentVertices = getNeighbours(vertexToRemove)
 
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
@@ -57,6 +55,8 @@ abstract class Graph<D> {
         for (edge in getEdges()) {
             if (edge.isIncident(vertexToRemove)) edges.remove(edge)
         }
+
+        adjacencyMap.remove(vertexToRemove)
     }
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
