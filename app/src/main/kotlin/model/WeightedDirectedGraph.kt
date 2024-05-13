@@ -6,7 +6,7 @@ import java.util.*
 import kotlin.NoSuchElementException
 
 class WeightedDirectedGraph<D> : DirectedGraph<D>() {
-    val weightMap: MutableMap<Edge<D>, Int> = mutableMapOf()
+    private val weightMap: MutableMap<Edge<D>, Int> = mutableMapOf()
 
     fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>, weight: Int): Edge<D> {
         val newEdge = super.addEdge(vertex1, vertex2)
@@ -16,10 +16,17 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         return newEdge
     }
 
-    /*
+    /**
      * In case weight is not passed, set it to default value = 1
      */
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
+
+    fun getWeight(edge: Edge<D>): Int {
+        val weight = weightMap[edge]
+            ?: throw NoSuchElementException("No weight found for edge $edge")
+
+        return weight
+    }
 
     fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>> {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
@@ -36,7 +43,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
                     val currentEdge = edges.find { it.vertex1 == adjacent }
                     currentEdge?.let {
                         var totalDist = currentDistance
-                        totalDist += weightMap[it] ?: throw NoSuchElementException("Current edge doesn't have weight.")
+                        totalDist += getWeight(it)
                         if (totalDist < distanceMap.getValue(adjacent)) {
                             distanceMap[adjacent] = totalDist
                             predecessorMap[adjacent] = node // Update predecessor
