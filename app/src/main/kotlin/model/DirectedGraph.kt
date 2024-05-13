@@ -4,7 +4,7 @@ import model.abstractGraph.Edge
 import model.abstractGraph.Graph
 import model.abstractGraph.Vertex
 
-open class DirectedGr1aph<D> : Graph<D>() {
+open class DirectedGraph<D> : Graph<D>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
         if (vertex1 == vertex2)
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
