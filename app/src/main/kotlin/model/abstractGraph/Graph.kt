@@ -80,6 +80,13 @@ abstract class Graph<D> {
 
     fun getVertices() = vertices.toList()
 
+    protected fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
+        val edge = outgoingEdgesMap[vertex1]?.find { it.isIncident(vertex2) }
+            ?: throw NoSuchElementException("Can't find edge between vertices with ids ${vertex1.id} and ${vertex2.id}")
+
+        return edge
+    }
+
     // This and next method are used to localize exceptions
     protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]

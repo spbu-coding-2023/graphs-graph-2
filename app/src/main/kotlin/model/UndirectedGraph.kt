@@ -81,9 +81,7 @@ open class UndirectedGraph<D> : Graph<D>() {
                     min(minDiscoveryTime[vertex.id], minDiscoveryTime[neighbour.id])
 
                 if (minDiscoveryTime[neighbour.id] > discoveryTime[vertex.id]) {
-                    val bridgeFound = outgoingEdgesMap[vertex]?.find { it.isIncident(neighbour) }
-                        ?: throw NoSuchElementException("Can't find edge between vertices with ids ${vertex.id} and ${neighbour.id}")
-
+                    val bridgeFound = getEdge(vertex, neighbour)
                     bridges.add(bridgeFound)
                 }
             }
