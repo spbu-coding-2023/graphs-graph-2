@@ -1,5 +1,6 @@
 package view
 
+import MyAppTheme
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,61 +25,62 @@ import viewmodel.MainScreenViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
-
-    Row {
-        Column(
-            modifier =
-            Modifier.width(360.dp)
-                .background(color = Color.White)
-                .fillMaxHeight()
-                .clip(shape = RoundedCornerShape(10.dp))
-            // TODO: make it rounded only from right side
-        ) {
-            val pageState = rememberPagerState(pageCount = { 3 })
-            val coroutineScope = rememberCoroutineScope()
-            val tabs = listOf("General", "Analyze", " File Control")
-
-            TabRow(
-                selectedTabIndex = pageState.currentPage,
-                contentColor = Color.Red,
-                backgroundColor = Color.Gray,
-                divider = {}, // to remove divider between
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        modifier = Modifier.tabIndicatorOffset(tabPositions[pageState.currentPage]),
-                        height = 0.dp
-                    )
-                },
-                modifier = Modifier.height(50.dp)
+    MyAppTheme {
+        Row {
+            Column(
+                modifier =
+                Modifier.width(360.dp)
+                    .background(color = MaterialTheme.colors.surface)
+                    .fillMaxHeight()
+                    .clip(shape = RoundedCornerShape(10.dp))
+                // TODO: make it rounded only from right side
             ) {
-                tabs.forEachIndexed { index, title ->
-                    SelectTabRow(pageState, index, coroutineScope, title)
-                }
-            }
+                val pageState = rememberPagerState(pageCount = { 3 })
+                val coroutineScope = rememberCoroutineScope()
+                val tabs = listOf("General", "Analyze", "File Control")
 
-            HorizontalPager(state = pageState, userScrollEnabled = true) {
-                Column(
-                    modifier = Modifier.width(360.dp).background(Color.LightGray).fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top,
+                TabRow(
+                    selectedTabIndex = pageState.currentPage,
+                    contentColor = MaterialTheme.colors.surface,
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    divider = {}, // to remove divider between
+                    indicator = { tabPositions ->
+                        TabRowDefaults.Indicator(
+                            modifier = Modifier.tabIndicatorOffset(tabPositions[pageState.currentPage]),
+                            height = 0.dp
+                        )
+                    },
+                    modifier = Modifier.height(50.dp)
                 ) {
-                    when (pageState.currentPage) {
-                        0 -> GeneralTab()
-                        1 -> AnalyzeTab()
-                        2 -> FileControlTab()
+                    tabs.forEachIndexed { index, title ->
+                        SelectTabRow(pageState, index, coroutineScope, title)
+                    }
+                }
+
+                HorizontalPager(state = pageState, userScrollEnabled = true) {
+                    Column(
+                        modifier = Modifier.width(360.dp).background(MaterialTheme.colors.background).fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top,
+                    ) {
+                        when (pageState.currentPage) {
+                            0 -> GeneralTab()
+                            1 -> AnalyzeTab()
+                            2 -> FileControlTab()
+                        }
                     }
                 }
             }
-        }
 
-        Surface(
-            modifier =
-            Modifier.fillMaxSize()
-                .border(2f.dp, Color.Transparent, RectangleShape)
-                .clipToBounds(),
-            color = Color.Transparent
-        ) {
-            GraphView(viewmodel.graphViewModel)
+            Surface(
+                modifier =
+                Modifier.fillMaxSize()
+                    .border(2f.dp, Color.Transparent, RectangleShape)
+                    .clipToBounds(),
+                color = Color.Transparent
+            ) {
+                GraphView(viewmodel.graphViewModel)
+            }
         }
     }
 }
