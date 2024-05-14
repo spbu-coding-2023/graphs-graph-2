@@ -79,12 +79,7 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
                 throw NoSuchElementException("Edge is not in the graph, path cannot be reconstructed.")
             }
             path.add(
-                Pair(
-                    currentVertex,
-                    edges.find {
-                        it.vertex1 == predecessor && it.vertex2 == currentVertex ||
-                                it.vertex2 == predecessor && it.vertex1 == currentVertex
-                    } ?: throw NoSuchElementException("There is no edge between these vertices") )
+                Pair(currentVertex, getEdge(predecessor, currentVertex))
             )
             currentVertex = predecessor
         }

@@ -13,7 +13,7 @@ open class UndirectedGraph<D> : Graph<D>() {
         if (vertex1.id > vertices.size || vertex2.id > vertices.size)
             throw NoSuchElementException(
                 "One of vertices (${vertex1.id}, ${vertex1.data}) and " +
-                        "(${vertex2.id}, ${vertex2.data}) is not in the vertices array."
+                    "(${vertex2.id}, ${vertex2.data}) is not in the vertices array."
             )
 
         val newEdge = Edge(vertex1, vertex2)
