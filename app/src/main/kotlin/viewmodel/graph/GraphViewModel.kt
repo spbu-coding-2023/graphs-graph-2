@@ -2,13 +2,11 @@ package viewmodel.graph
 
 import androidx.compose.runtime.State
 import model.abstractGraph.Graph
-import viewmodel.WindowViewModel
 
 class GraphViewModel<D>(
     private val graph: Graph<D>,
     showIds: State<Boolean>,
     showVerticesData: State<Boolean>,
-    WindowVM: WindowViewModel,
 ) {
     private val _verticesViewModels =
         graph.getVertices().associateWith { vertex ->
@@ -16,7 +14,6 @@ class GraphViewModel<D>(
                 dataVisible = showVerticesData,
                 idVisible = showIds,
                 vertex = vertex,
-                CurrentWindowVM = WindowVM
             )
         }
 
@@ -27,7 +24,7 @@ class GraphViewModel<D>(
                     ?: throw NoSuchElementException("No such View Model, with mentioned edges")
 
             val secondVertex: VertexViewModel<D> =
-                _verticesViewModels[edge.vertex1]
+                _verticesViewModels[edge.vertex2]
                     ?: throw NoSuchElementException("No such View Model, with mentioned edges")
 
             EdgeViewModel(firstVertex, secondVertex, edge)
