@@ -36,6 +36,13 @@ open class DirectedGraph<D> : Graph<D>() {
         return edgeToRemove
     }
 
+    override fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
+        val edge = outgoingEdgesMap[vertex1]?.find { it.isIncident(vertex2) }
+            ?: throw NoSuchElementException("No edge between vertices with ids ${vertex1.id} and ${vertex2.id}")
+
+        return edge
+    }
+
     // SCC - Strongly Connected Components (by Kosaraju)
     fun findSCC(): ArrayList<ArrayList<Vertex<D>>> {
         val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
