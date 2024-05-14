@@ -1,13 +1,11 @@
 package model.abstractGraph
 
-import model.abstractGraph.Graph
 import model.DirectedGraph
 import model.UndirectedGraph
 import model.WeightedDirectedGraph
 import model.WeightedUndirectedGraph
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -46,12 +44,108 @@ fun setup(graph: Graph<Int>): Graph<Int> {
     return graph
 }
 
+val v0 = Vertex(0, 0)
+val v1 = Vertex(1, 1)
+val v2 = Vertex(2, 2)
+val v3 = Vertex(3, 3)
+val v4 = Vertex(4, 4)
+
+val defaultVertices = listOf(v0, v1, v2, v3, v4)
+
+val defaultEdges = setOf(
+    Edge(v0, v1),
+    Edge(v1, v2),
+    Edge(v2, v3),
+    Edge(v3, v4),
+    Edge(v4, v1)
+)
+
 class GraphTest {
     @Nested
-    inner class GetVerticesTest {}
+    inner class GetVerticesTest {
+        inner class `Graph is not empty` {
+            @TestAllGraphTypes
+            fun `non-empty list of vertices should be returned`(graph: Graph<Int>) {
+                setup(graph)
+
+                val actualList = graph.getVertices()
+                val expectedList = defaultVertices
+
+                assertEquals(expectedList, actualList)
+            }
+
+            @TestAllGraphTypes
+            fun `graph should not change`(graph: Graph<Int>) {
+                setup(graph)
+
+                val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+                val expectedGraph = defaultVertices to defaultEdges
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+
+        inner class `Graph is empty` {
+            @TestAllGraphTypes
+            fun `empty list is should be returned`(graph: Graph<Int>) {
+                val actualList = graph.getVertices()
+                val expectedList: List<Int> = listOf()
+
+                assertEquals(expectedList, actualList)
+            }
+
+            @TestAllGraphTypes
+            fun `graph should not change`(graph: Graph<Int>) {
+                val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+                val expectedGraph = defaultVertices to defaultEdges
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+    }
 
     @Nested
-    inner class GetEdgesTest {}
+    inner class GetEdgesTest {
+        inner class `Graph is not empty` {
+            @TestAllGraphTypes
+            fun `non-empty list of edges should be returned`(graph: Graph<Int>) {
+                setup(graph)
+
+                val actualSet = graph.getEdges().toSet()
+                val expectedSet = defaultEdges
+
+                assertEquals(expectedSet, actualSet)
+            }
+
+            @TestAllGraphTypes
+            fun `graph should not change`(graph: Graph<Int>) {
+                setup(graph)
+
+                val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+                val expectedGraph = defaultVertices to defaultEdges
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+
+        inner class `Graph is empty` {
+            @TestAllGraphTypes
+            fun `empty list is should be returned`(graph: Graph<Int>) {
+                val actualSet = graph.getEdges().toSet()
+                val expectedSet = defaultEdges
+
+                assertEquals(expectedSet, actualSet)
+            }
+
+            @TestAllGraphTypes
+            fun `graph should not change`(graph: Graph<Int>) {
+                val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+                val expectedGraph = defaultVertices to defaultEdges
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+    }
 
     @Nested
     inner class AddVertexTest {}
