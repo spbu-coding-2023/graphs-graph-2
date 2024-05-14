@@ -43,6 +43,14 @@ open class UndirectedGraph<D> : Graph<D>() {
         return edgeToRemove
     }
 
+    override fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
+        val edge = outgoingEdgesMap[vertex1]?.find { it.isIncident(vertex2) }
+            ?: outgoingEdgesMap[vertex2]?.find { it.isIncident(vertex1) }
+            ?: throw NoSuchElementException("No edge between vertices with ids ${vertex1.id} and ${vertex2.id}")
+
+        return edge
+    }
+
     fun findBridges(): List<Edge<D>> {
         val bridges = mutableListOf<Edge<D>>()
 

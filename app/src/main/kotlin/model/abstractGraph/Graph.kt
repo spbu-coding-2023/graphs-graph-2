@@ -81,14 +81,6 @@ abstract class Graph<D> {
     fun getVertices() = vertices.toList()
 
     // This and next two methods are used to localize exceptions
-    protected fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
-        val edge = outgoingEdgesMap[vertex1]?.find { it.isIncident(vertex2) }
-            ?: outgoingEdgesMap[vertex2]?.find { it.isIncident(vertex1) }
-            ?: throw NoSuchElementException("No edge between vertices with ids ${vertex1.id} and ${vertex2.id}")
-
-        return edge
-    }
-
     protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
             ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the adjacency map.")
@@ -102,4 +94,6 @@ abstract class Graph<D> {
 
         return outgoingEdges
     }
+
+    protected abstract fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
 }
