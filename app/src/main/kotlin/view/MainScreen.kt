@@ -2,6 +2,7 @@ package view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -12,11 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import view.graph.GraphView
+import view.tabScreen.*
 import viewmodel.MainScreenViewModel
 
 
@@ -50,42 +52,28 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
                 modifier = Modifier.height(50.dp)
             ) {
                 tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = pageState.currentPage == index,
-                        onClick = { coroutineScope.launch { pageState.animateScrollToPage(index) } },
-                        modifier = Modifier,
-
-                        content = {
-                            Box(modifier = Modifier
-                                    .background(
-                                        if (pageState.currentPage == index) Color.Magenta
-                                        else Color.Transparent
-                                    ).padding(10.dp).height(30.dp).width(120.dp).align(Alignment.CenterHorizontally),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = title,
-                                    textAlign = TextAlign.Center,
-                                    color = if (pageState.currentPage == index) Color.White else Color.Black
-                                    // Set text color for selected and unselected tabs
-                                )
-                            }
-                        }
-                    )
+                    SelectTabRow(pageState, index, coroutineScope, title)
                 }
             }
+
             HorizontalPager(state = pageState, userScrollEnabled = true) {
-                page ->
                 Column(
                     modifier = Modifier.width(360.dp).background(Color.LightGray).fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top,
                 ) {
-                    Text(text = "Hello from page: $page")
+                    when (pageState.currentPage) {
+                        0 -> GeneralTab()
+                        1 -> AnalyzeTab()
+                        2 -> FileControlTab()
+                    }
                 }
             }
         }
-        Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
+
+        Surface(modifier = Modifier
+            .fillMaxSize().border(2f.dp, Color.LightGray, RectangleShape)
+            .clipToBounds(), color = Color.Transparent) {
             GraphView(viewmodel.graphViewModel)
         }
     }
