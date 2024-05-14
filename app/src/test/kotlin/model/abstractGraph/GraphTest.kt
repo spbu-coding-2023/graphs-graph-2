@@ -1,5 +1,6 @@
 package model.abstractGraph
 
+import model.abstractGraph.Graph
 import model.DirectedGraph
 import model.UndirectedGraph
 import model.WeightedDirectedGraph
@@ -25,6 +26,24 @@ fun provideAllGraphTypes(): Stream<Arguments> {
         Arguments.of(WeightedDirectedGraph<Int>()),
         Arguments.of(WeightedUndirectedGraph<Int>())
     )
+}
+
+fun setup(graph: Graph<Int>): Graph<Int> {
+    graph.apply {
+        val v0 = addVertex(0)
+        val v1 = addVertex(1)
+        val v2 = addVertex(2)
+        val v3 = addVertex(3)
+        val v4 = addVertex(4)
+
+        addEdge(v0, v1)
+        addEdge(v1, v2)
+        addEdge(v2, v3)
+        addEdge(v3, v4)
+        addEdge(v4, v1)
+    }
+
+    return graph
 }
 
 class GraphTest {
