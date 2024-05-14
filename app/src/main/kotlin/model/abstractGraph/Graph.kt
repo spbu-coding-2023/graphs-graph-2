@@ -21,6 +21,10 @@ abstract class Graph<D> {
     }
 
     fun removeVertex(vertexToRemove: Vertex<D>): Vertex<D> {
+        if (vertexToRemove !in vertices) {
+            throw NoSuchElementException("Vertex (${vertexToRemove.id}, ${vertexToRemove.data}) is not in the vertices list")
+        }
+
         nextId--
 
         removeVertexFromEverywhere(vertexToRemove)
