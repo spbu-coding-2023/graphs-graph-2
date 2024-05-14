@@ -8,7 +8,5 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun FileControlTab() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text("hahahhahh 3rd tab")
-    }
+    Column(modifier = Modifier.fillMaxSize()) { Text("hahahhahh 3rd tab") }
 }

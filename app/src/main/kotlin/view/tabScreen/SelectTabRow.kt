@@ -20,18 +20,27 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SelectTabRow(currentPageState: PagerState, index: Int, coroutineScope: CoroutineScope, title: String) {
+fun SelectTabRow(
+    currentPageState: PagerState,
+    index: Int,
+    coroutineScope: CoroutineScope,
+    title: String
+) {
     Tab(
         selected = currentPageState.currentPage == index,
         onClick = { coroutineScope.launch { currentPageState.animateScrollToPage(index) } },
         modifier = Modifier,
-
         content = {
-            Box(modifier = Modifier
-                .background(
-                    if (currentPageState.currentPage == index) Color.Magenta
-                    else Color.Transparent
-                ).padding(10.dp).height(30.dp).width(120.dp).align(Alignment.CenterHorizontally),
+            Box(
+                modifier =
+                    Modifier.background(
+                            if (currentPageState.currentPage == index) Color.Magenta
+                            else Color.Transparent
+                        )
+                        .padding(10.dp)
+                        .height(30.dp)
+                        .width(120.dp)
+                        .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

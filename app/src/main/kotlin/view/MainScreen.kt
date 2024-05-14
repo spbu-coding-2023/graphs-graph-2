@@ -21,20 +21,20 @@ import view.graph.GraphView
 import view.tabScreen.*
 import viewmodel.MainScreenViewModel
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
 
     Row {
         Column(
-            modifier = Modifier.width(360.dp)
-                .background(color = Color.White)
-                .fillMaxHeight().clip(shape = RoundedCornerShape(10.dp))
-                // TODO: make it rounded only from right side
+            modifier =
+                Modifier.width(360.dp)
+                    .background(color = Color.White)
+                    .fillMaxHeight()
+                    .clip(shape = RoundedCornerShape(10.dp))
+            // TODO: make it rounded only from right side
         ) {
-
-            val pageState = rememberPagerState( pageCount = { 3 } )
+            val pageState = rememberPagerState(pageCount = { 3 })
             val coroutineScope = rememberCoroutineScope()
             val tabs = listOf("General", "Analyze", " File Control")
 
@@ -44,8 +44,8 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
                 backgroundColor = Color.Gray,
                 divider = {}, // to remove divider between
                 indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(modifier = Modifier
-                        .tabIndicatorOffset(tabPositions[pageState.currentPage]),
+                    TabRowDefaults.Indicator(
+                        modifier = Modifier.tabIndicatorOffset(tabPositions[pageState.currentPage]),
                         height = 0.dp
                     )
                 },
@@ -71,9 +71,13 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
             }
         }
 
-        Surface(modifier = Modifier
-            .fillMaxSize().border(2f.dp, Color.LightGray, RectangleShape)
-            .clipToBounds(), color = Color.Transparent) {
+        Surface(
+            modifier =
+                Modifier.fillMaxSize()
+                    .border(2f.dp, Color.LightGray, RectangleShape)
+                    .clipToBounds(),
+            color = Color.Transparent
+        ) {
             GraphView(viewmodel.graphViewModel)
         }
     }

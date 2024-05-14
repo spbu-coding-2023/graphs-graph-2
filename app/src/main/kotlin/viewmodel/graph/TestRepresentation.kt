@@ -1,6 +1,5 @@
 package viewmodel.graph
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import kotlin.math.cos
 import kotlin.math.min
@@ -23,24 +22,26 @@ class TestRepresentation() {
         first.x.value = point.first.dp
         first.y.value = point.second.dp
 
-        sorted
-            .drop(1)
-            .onEach {
-                point = point.rotate(center, angle)
-                it.x.value = point.first.dp
-                it.y.value = point.second.dp
-            }
+        sorted.drop(1).onEach {
+            point = point.rotate(center, angle)
+            it.x.value = point.first.dp
+            it.y.value = point.second.dp
+        }
     }
 
-    private fun Pair<Double, Double>.rotate(pivot: Pair<Double, Double>, angle: Double): Pair<Double, Double> {
+    private fun Pair<Double, Double>.rotate(
+        pivot: Pair<Double, Double>,
+        angle: Double
+    ): Pair<Double, Double> {
         val sin = sin(angle)
         val cos = cos(angle)
 
         val diff = first - pivot.first to second - pivot.second
-        val rotated = Pair(
-            diff.first * cos - diff.second * sin,
-            diff.first * sin + diff.second * cos,
-        )
+        val rotated =
+            Pair(
+                diff.first * cos - diff.second * sin,
+                diff.first * sin + diff.second * cos,
+            )
         return rotated.first + pivot.first to rotated.second + pivot.second
     }
 }
