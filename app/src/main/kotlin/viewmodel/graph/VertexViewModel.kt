@@ -15,7 +15,6 @@ class VertexViewModel<D>(
     var dataVisible: State<Boolean>,
     var idVisible: State<Boolean>,
     private val vertex: Vertex<D>,
-    val CurrentWindowVM: WindowViewModel,
     val radius: Dp = 30.dp,
 ) {
     var isSelected = mutableStateOf(false)
@@ -23,14 +22,17 @@ class VertexViewModel<D>(
     val getVertexData
         get() = vertex.data.toString()
 
-    fun onDrag(dragAmount: DpOffset) {
+    fun onDrag(dragAmount: DpOffset, currentWindowVM: WindowViewModel) {
 
-        if (x.value + dragAmount.x > CurrentWindowVM.getWidth)
-            x.value = CurrentWindowVM.getWidth - radius
-        else x.value += dragAmount.x
+        val maxX = currentWindowVM.getWidth / 2 - 360.dp - radius * 2
+        val maxY = currentWindowVM.getHeight / 2  - radius * 2
 
-        if (y.value + dragAmount.y > CurrentWindowVM.getWidth)
-            y.value = CurrentWindowVM.getWidth - radius
-        else y.value += dragAmount.y
+        // calculate the new position after dragging
+        val newX = (x.value + dragAmount.x).coerceIn(0.dp, maxX)
+        val newY = (y.value + dragAmount.y).coerceIn(0.dp, maxY)
+
+        // update the position
+        x.value = newX
+        y.value = newY
     }
 }
