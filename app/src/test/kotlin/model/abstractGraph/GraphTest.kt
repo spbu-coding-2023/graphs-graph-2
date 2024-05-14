@@ -52,7 +52,7 @@ val v4 = Vertex(4, 4)
 
 val defaultVertices = listOf(v0, v1, v2, v3, v4)
 
-val defaultEdges = setOf(
+val defaultEdgesSet = setOf(
     Edge(v0, v1),
     Edge(v1, v2),
     Edge(v2, v3),
@@ -79,7 +79,7 @@ class GraphTest {
                 setup(graph)
 
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = defaultVertices to defaultEdges
+                val expectedGraph = defaultVertices to defaultEdgesSet
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -97,7 +97,7 @@ class GraphTest {
             @TestAllGraphTypes
             fun `graph should not change`(graph: Graph<Int>) {
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = defaultVertices to defaultEdges
+                val expectedGraph = defaultVertices to defaultEdgesSet
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -112,7 +112,7 @@ class GraphTest {
                 setup(graph)
 
                 val actualSet = graph.getEdges().toSet()
-                val expectedSet = defaultEdges
+                val expectedSet = defaultEdgesSet
 
                 assertEquals(expectedSet, actualSet)
             }
@@ -122,7 +122,7 @@ class GraphTest {
                 setup(graph)
 
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = defaultVertices to defaultEdges
+                val expectedGraph = defaultVertices to defaultEdgesSet
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -132,7 +132,7 @@ class GraphTest {
             @TestAllGraphTypes
             fun `empty list is should be returned`(graph: Graph<Int>) {
                 val actualSet = graph.getEdges().toSet()
-                val expectedSet = defaultEdges
+                val expectedSet = defaultEdgesSet
 
                 assertEquals(expectedSet, actualSet)
             }
@@ -140,7 +140,7 @@ class GraphTest {
             @TestAllGraphTypes
             fun `graph should not change`(graph: Graph<Int>) {
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = defaultVertices to defaultEdges
+                val expectedGraph = defaultVertices to defaultEdgesSet
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -148,7 +148,26 @@ class GraphTest {
     }
 
     @Nested
-    inner class AddVertexTest {}
+    inner class AddVertexTest {
+        @TestAllGraphTypes
+        fun `added vertex should be returned`(graph: Graph<Int>) {
+            val actualValue = graph.addVertex(0)
+            val expectedValue = Vertex(0, 0)
+
+            assertEquals(expectedValue, actualValue)
+        }
+
+        @TestAllGraphTypes
+        fun `vertex should be added to graph`(graph: Graph<Int>) {
+            setup(graph)
+            graph.addVertex(5)
+
+            val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+            val expectedGraph = (defaultVertices + Vertex(5, 5)) to defaultEdgesSet
+
+            assertEquals(expectedGraph, actualGraph)
+        }
+    }
 
     @Nested
     inner class RemoveVertexTest {}
