@@ -10,7 +10,10 @@ open class DirectedGraph<D> : Graph<D>() {
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
         if (vertex1.id > vertices.size || vertex2.id > vertices.size)
-            throw NoSuchElementException("Vertex1 or vertex2 is not in the vertices array.")
+            throw NoSuchElementException(
+                "One of vertices (${vertex1.id}, ${vertex1.data}) and " +
+                    "(${vertex2.id}, ${vertex2.data}) is not in the vertices array."
+            )
 
         val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
@@ -22,8 +25,10 @@ open class DirectedGraph<D> : Graph<D>() {
     }
 
     override fun removeEdge(edgeToRemove: Edge<D>): Edge<D> {
-        if (edgeToRemove !in edges)
-            throw NoSuchElementException("Edge is not in the graph")
+        if (edgeToRemove !in edges) throw NoSuchElementException(
+            "Edge between vertices (${edgeToRemove.vertex1.id}, ${edgeToRemove.vertex1.data}) and " +
+                "(${edgeToRemove.vertex2.id}, ${edgeToRemove.vertex2.data}) is not in the graph"
+        )
 
         val vertex1 = edgeToRemove.vertex1
         val vertex2 = edgeToRemove.vertex2
@@ -38,7 +43,9 @@ open class DirectedGraph<D> : Graph<D>() {
 
     override fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
         val edge = outgoingEdgesMap[vertex1]?.find { it.isIncident(vertex2) }
-            ?: throw NoSuchElementException("No edge between vertices with ids ${vertex1.id} and ${vertex2.id}")
+            ?: throw NoSuchElementException(
+                "No edge between vertices (${vertex1.id}, ${vertex1.data}) and (${vertex2.id}, ${vertex2.data})"
+            )
 
         return edge
     }
@@ -92,4 +99,3 @@ open class DirectedGraph<D> : Graph<D>() {
         adjacencyMap.putAll(reversedAdjacencyMap)
     }
 }
-
