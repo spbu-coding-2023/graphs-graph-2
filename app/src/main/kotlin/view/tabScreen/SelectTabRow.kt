@@ -34,14 +34,14 @@ fun SelectTabRow(
         content = {
             Box(
                 modifier =
-                Modifier.background(
-                    if (currentPageState.currentPage == index) MaterialTheme.colors.primary
-                    else Color.Transparent
-                )
-                    .padding(10.dp)
-                    .height(30.dp)
-                    .width(120.dp)
-                    .align(Alignment.CenterHorizontally),
+                    Modifier.background(
+                            if (currentPageState.currentPage == index) Color.Magenta
+                            else Color.Transparent
+                        )
+                        .padding(10.dp)
+                        .height(30.dp)
+                        .width(120.dp)
+                        .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
