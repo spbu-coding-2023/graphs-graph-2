@@ -9,12 +9,12 @@ import viewmodel.graph.TestRepresentation
 class MainScreenViewModel<D>(graph: Graph<D>) {
     val showVerticesData = mutableStateOf(false)
     val showVerticesIds = mutableStateOf(false)
+
     val graphViewModel =
         GraphViewModel(
             graph,
             showVerticesIds,
             showVerticesData,
-            WindowViewModel(mutableStateOf(1200.dp), mutableStateOf(700.dp))
         )
 
     init { // here will be a placement-function call

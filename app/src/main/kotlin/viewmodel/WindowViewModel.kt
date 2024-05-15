@@ -9,15 +9,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 class WindowViewModel(
-    private var height: MutableState<Dp> = mutableStateOf(0.dp),
     private var width: MutableState<Dp> = mutableStateOf(0.dp),
+    private var height: MutableState<Dp> = mutableStateOf(0.dp),
 ) {
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun SetCurrentDimensions() {
         val configuration = LocalWindowInfo.current.containerSize
-        println(configuration)
         height.value = configuration.height.dp
         width.value = configuration.width.dp
     }

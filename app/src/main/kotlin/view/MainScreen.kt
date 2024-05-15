@@ -28,10 +28,10 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
     Row {
         Column(
             modifier =
-                Modifier.width(360.dp)
-                    .background(color = Color.White)
-                    .fillMaxHeight()
-                    .clip(shape = RoundedCornerShape(10.dp))
+            Modifier.width(360.dp)
+                .background(color = Color.White)
+                .fillMaxHeight()
+                .clip(shape = RoundedCornerShape(10.dp))
             // TODO: make it rounded only from right side
         ) {
             val pageState = rememberPagerState(pageCount = { 3 })
@@ -73,9 +73,9 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
 
         Surface(
             modifier =
-                Modifier.fillMaxSize()
-                    .border(2f.dp, Color.LightGray, RectangleShape)
-                    .clipToBounds(),
+            Modifier.fillMaxSize()
+                .border(2f.dp, Color.Transparent, RectangleShape)
+                .clipToBounds(),
             color = Color.Transparent
         ) {
             GraphView(viewmodel.graphViewModel)
