@@ -36,7 +36,7 @@ fun App() {
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Graphs-2",
+        title = "WUDU",
         state =
             rememberWindowState(
                 position = WindowPosition(alignment = Alignment.Center),
