@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +35,7 @@ fun SelectTabRow(
             Box(
                 modifier =
                 Modifier.background(
-                    if (currentPageState.currentPage == index) Color.Magenta
+                    if (currentPageState.currentPage == index) MaterialTheme.colors.primary
                     else Color.Transparent
                 )
                     .padding(10.dp)
@@ -46,7 +47,7 @@ fun SelectTabRow(
                 Text(
                     text = title,
                     textAlign = TextAlign.Center,
-                    color = if (currentPageState.currentPage == index) Color.White else Color.Black
+                    color = if (currentPageState.currentPage == index) MaterialTheme.colors.surface else Color.Black
                     // Set text color for selected and unselected tabs
                 )
             }

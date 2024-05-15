@@ -29,29 +29,29 @@ fun <D> VertexView(viewModel: VertexViewModel<D>) {
 
     Box(
         modifier =
-        Modifier.offset {
-            IntOffset(viewModel.x.value.roundToPx(), viewModel.y.value.roundToPx())
-        }
-            .size(viewModel.radius * 2)
-            .background(
-                if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
-                shape = CircleShape
-            )
-            .clip(CircleShape)
-            .pointerInput(Unit) {
-                coroutineScope.launch {
-                    detectDragGestures { change, dragAmount ->
-                        viewModel.onDrag(
-                            DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()),
-                            windowVM
-                        )
-                        change.consume()
-                    }
-                    detectTapGestures(
-                        onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
-                    )
+            Modifier.offset {
+                    IntOffset(viewModel.x.value.roundToPx(), viewModel.y.value.roundToPx())
                 }
-            },
+                .size(viewModel.radius * 2)
+                .background(
+                    if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
+                    shape = CircleShape
+                )
+                .clip(CircleShape)
+                .pointerInput(Unit) {
+                    coroutineScope.launch {
+                        detectDragGestures { change, dragAmount ->
+                            viewModel.onDrag(
+                                DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()),
+                                windowVM
+                            )
+                            change.consume()
+                        }
+                        detectTapGestures(
+                            onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
+                        )
+                    }
+                },
         contentAlignment = Alignment.Center
     ) {
         if (viewModel.dataVisible.value) {
