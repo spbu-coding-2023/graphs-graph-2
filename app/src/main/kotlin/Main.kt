@@ -30,7 +30,7 @@ val testGraph: Graph<Int> =
 @Composable
 @Preview
 fun App() {
-    MaterialTheme { MainScreen(MainScreenViewModel(testGraph)) }
+    MaterialTheme { MainScreen(MainScreenViewModel(testGraph), true) }
 }
 
 fun main() = application {
