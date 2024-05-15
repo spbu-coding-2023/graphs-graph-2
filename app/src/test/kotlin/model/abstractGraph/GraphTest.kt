@@ -217,7 +217,7 @@ class GraphTest {
                     val defaultVerticesList = graphStructure.first
                     val defaultEdgesSet = graphStructure.second
 
-                    val removedVertex = graph.removeVertex(defaultVerticesList[3])
+                    val removedVertex = graph.removeVertex(defaultVerticesList[4])
 
                     val actualVertices = graph.getVertices()
                     val expectedVertices = defaultVerticesList - removedVertex
@@ -237,10 +237,13 @@ class GraphTest {
                     val v3 = defaultVerticesList[3]
                     val v4 = defaultVerticesList[4]
 
+                    val e0 = graph.getEdge(v3, v4)
+                    val e1 = graph.getEdge(v4, v1)
+
                     graph.removeVertex(v4)
 
                     val actualEdges = graph.getEdges().toSet()
-                    val expectedEdges = defaultEdgesSet - graph.getEdge(v3, v4) - graph.getEdge(v4, v1)
+                    val expectedEdges = defaultEdgesSet - e0 - e1
 
                     assertEquals(expectedEdges, actualEdges)
                 }
