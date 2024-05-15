@@ -14,10 +14,10 @@ data class ColorPalette(
 @Composable
 fun MyAppTheme(content: @Composable () -> Unit) {
     val mycolors = ColorPalette(
-        primary = Color(0xFFFF5094),
-        secondary = Color(0xFFFFB5BB),
-        background = Color(0xFFFEEEEC),
-        secondaryVariant = Color(0xFFFEBBB6),
+        primary = Color(0xFF8AAAC6),
+        secondary = Color(0xFFAECCE4),
+        background = Color(0xFFE5F3FD),
+        secondaryVariant = Color(0xFFF5FBFF),
         surface = Color.White,
     )
 
