@@ -21,6 +21,12 @@ abstract class Graph<D> {
     }
 
     fun removeVertex(vertexToRemove: Vertex<D>): Vertex<D> {
+        if (vertexToRemove !in vertices) {
+            throw NoSuchElementException(
+                "Vertex (${vertexToRemove.id}, ${vertexToRemove.data}) isn't in the vertices list"
+            )
+        }
+
         nextId--
 
         removeVertexFromEverywhere(vertexToRemove)
@@ -83,14 +89,16 @@ abstract class Graph<D> {
     // This and next two methods are used to localize exceptions
     protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
-            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the adjacency map.")
+                ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
 
         return neighbours
     }
 
     protected fun getOutgoingEdges(vertex: Vertex<D>): ArrayList<Edge<D>> {
         val outgoingEdges = outgoingEdgesMap[vertex]
-            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the outgoing edges map.")
+                ?: throw NoSuchElementException(
+                    "Vertex (${vertex.id}, ${vertex.data}) is not present in the outgoing edges map."
+                )
 
         return outgoingEdges
     }

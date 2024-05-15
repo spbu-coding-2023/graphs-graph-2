@@ -23,7 +23,10 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
 
     fun getWeight(edge: Edge<D>): Int {
         val weight = weightMap[edge]
-            ?: throw NoSuchElementException("No weight found for edge $edge")
+            ?: throw NoSuchElementException(
+                "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data})" +
+                    "and (${edge.vertex2.id}, ${edge.vertex2.data})"
+            )
 
         return weight
     }
@@ -63,13 +66,10 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
                 // If no path exists
                 return emptyList()
             }
-            if (edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex } == null) {
-                throw NoSuchElementException("Edge is not in the graph, path cannot be reconstructed.")
-            }
+
             path.add(
-                Pair(currentVertex,
-                    edges.find { it.vertex1 == predecessor && it.vertex2 == currentVertex }
-                        ?: throw NoSuchElementException("There is no edge between these vertices")))
+                Pair(currentVertex, getEdge(predecessor, currentVertex))
+            )
             currentVertex = predecessor
         }
         return path.reversed()
