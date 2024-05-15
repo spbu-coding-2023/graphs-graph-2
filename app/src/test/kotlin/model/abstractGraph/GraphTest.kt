@@ -6,19 +6,21 @@ import model.WeightedDirectedGraph
 import model.WeightedUndirectedGraph
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.stream.Stream
 
-@ParameterizedTest
-@MethodSource("provideAllGraphTypes")
+@ParameterizedTest(name = "{0}")
+@ArgumentsSource(AllGraphTypesProvider::class)
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 private annotation class TestAllGraphTypes
 
-fun provideAllGraphTypes(): Stream<Arguments> {
-    return Stream.of(
+class AllGraphTypesProvider : ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?) = Stream.of(
         Arguments.of(UndirectedGraph<Int>()),
         Arguments.of(DirectedGraph<Int>()),
         Arguments.of(WeightedDirectedGraph<Int>()),
@@ -284,6 +286,7 @@ class GraphTest {
                 }
             }
 
+            @TestAllGraphTypes
             fun `removing vertex with wrong data should cause exception`(graph: Graph<Int>) {
                 setup(graph)
 
