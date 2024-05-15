@@ -60,7 +60,6 @@ class GraphTest {
             fun `non-empty list of vertices should be returned`(graph: Graph<Int>) {
                 val graphStructure = setup(graph)
                 val defaultVerticesList = graphStructure.first
-                val defaultEdgesSet = graphStructure.second
 
                 val actualList = graph.getVertices()
                 val expectedList = defaultVerticesList
@@ -71,13 +70,11 @@ class GraphTest {
             @TestAllGraphTypes
             fun `graph should not change`(graph: Graph<Int>) {
                 val graphStructure = setup(graph)
-                val defaultVerticesList = graphStructure.first
-                val defaultEdgesSet = graphStructure.second
 
                 graph.getVertices()
 
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = defaultVerticesList to defaultEdgesSet
+                val expectedGraph = graphStructure
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -112,7 +109,6 @@ class GraphTest {
             @TestAllGraphTypes
             fun `non-empty list of edges should be returned`(graph: Graph<Int>) {
                 val graphStructure = setup(graph)
-                val defaultVerticesList = graphStructure.first
                 val defaultEdgesSet = graphStructure.second
 
                 val actualSet = graph.getEdges().toSet()
@@ -124,13 +120,11 @@ class GraphTest {
             @TestAllGraphTypes
             fun `graph should not change`(graph: Graph<Int>) {
                 val graphStructure = setup(graph)
-                val defaultVerticesList = graphStructure.first
-                val defaultEdgesSet = graphStructure.second
 
                 graph.getEdges()
 
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = defaultVerticesList to defaultEdgesSet
+                val expectedGraph = graphStructure
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -190,7 +184,6 @@ class GraphTest {
             fun `removed vertex should be returned`(graph: Graph<Int>) {
                 val graphStructure = setup(graph)
                 val defaultVerticesList = graphStructure.first
-                val defaultEdgesSet = graphStructure.second
 
                 val returnedVertex = graph.removeVertex(defaultVerticesList[2])
 
@@ -201,7 +194,6 @@ class GraphTest {
             fun `vertex added after removal should have right id`(graph: Graph<Int>) {
                 val graphStructure = setup(graph)
                 val defaultVerticesList = graphStructure.first
-                val defaultEdgesSet = graphStructure.second
 
                 graph.removeVertex(defaultVerticesList[3])
                 val newVertex = graph.addVertex(5)
@@ -215,7 +207,6 @@ class GraphTest {
                 fun `vertex should be removed from vertices list`(graph: Graph<Int>) {
                     val graphStructure = setup(graph)
                     val defaultVerticesList = graphStructure.first
-                    val defaultEdgesSet = graphStructure.second
 
                     val removedVertex = graph.removeVertex(defaultVerticesList[4])
 
@@ -255,7 +246,6 @@ class GraphTest {
                 fun `last added vertex should be moved to removed vertex's place`(graph: Graph<Int>) {
                     val graphStructure = setup(graph)
                     val defaultVerticesList = graphStructure.first
-                    val defaultEdgesSet = graphStructure.second
 
                     val oldV0 = defaultVerticesList[0]
                     val oldV1 = defaultVerticesList[1]
@@ -284,7 +274,6 @@ class GraphTest {
                 fun `last added vertex's incident edges should change`(graph: Graph<Int>) {
                     val graphStructure = setup(graph)
                     val defaultVerticesList = graphStructure.first
-                    val defaultEdgesSet = graphStructure.second
 
                     val oldV0 = defaultVerticesList[0]
                     val oldV1 = defaultVerticesList[1]
@@ -324,7 +313,7 @@ class GraphTest {
 
             @TestAllGraphTypes
             fun `removing non-existing vertex from a non-empty graph should cause exception`(graph: Graph<Int>) {
-                val graphStructure = setup(graph)
+                setup(graph)
 
                 assertThrows(NoSuchElementException::class.java) {
                     graph.removeVertex(Vertex(1904,-360))
@@ -333,7 +322,7 @@ class GraphTest {
 
             @TestAllGraphTypes
             fun `removing vertex with wrong id should cause exception`(graph: Graph<Int>) {
-                val graphStructure = setup(graph)
+                setup(graph)
 
                 assertThrows(NoSuchElementException::class.java) {
                     graph.removeVertex(Vertex(6,3))
@@ -342,7 +331,7 @@ class GraphTest {
 
             @TestAllGraphTypes
             fun `removing vertex with wrong data should cause exception`(graph: Graph<Int>) {
-                val graphStructure = setup(graph)
+                setup(graph)
 
                 assertThrows(NoSuchElementException::class.java) {
                     graph.removeVertex(Vertex(0,35))
