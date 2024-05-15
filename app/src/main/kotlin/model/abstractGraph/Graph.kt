@@ -65,9 +65,12 @@ abstract class Graph<D> {
         // If vertexToRemove isn't last, it will be overridden by its copy in fixIdFragmentation
         if (vertexToRemove.id == nextId) vertices.removeLast()
 
-        for (edge in edges) {
+        // iterator is used because an element can't be removed in a for loop
+        val iterator = edges.iterator()
+        while (iterator.hasNext()) {
+            val edge = iterator.next()
             if (edge.isIncident(vertexToRemove)) {
-                edges.remove(edge)
+                iterator.remove()
 
                 val incidentVertex = if (edge.vertex1 == vertexToRemove) edge.vertex2 else edge.vertex1
                 outgoingEdgesMap[incidentVertex]?.remove(edge)
