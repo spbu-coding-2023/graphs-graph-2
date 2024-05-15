@@ -8,6 +8,7 @@ data class ColorPalette(
     val secondary: Color,
     val background: Color,
     val surface: Color,
+    val secondaryVariant: Color,
 )
 
 @Composable
@@ -16,6 +17,7 @@ fun MyAppTheme(content: @Composable () -> Unit) {
         primary = Color(0xFFFF5094),
         secondary = Color(0xFFFFB5BB),
         background = Color(0xFFFEEEEC),
+        secondaryVariant = Color(0xFFFEBBB6),
         surface = Color.White,
     )
 
@@ -23,6 +25,7 @@ fun MyAppTheme(content: @Composable () -> Unit) {
         primary = primary,
         secondary = secondary,
         background = background,
+        secondaryVariant = secondaryVariant,
         surface = surface,
     )
 
