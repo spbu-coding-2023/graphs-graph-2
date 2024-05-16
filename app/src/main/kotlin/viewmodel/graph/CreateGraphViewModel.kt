@@ -42,6 +42,7 @@ class CreateGraphViewModel {
                                 "WeightedDirectedGraph UInt"))
                             is GraphType.String -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<String>(),
                                 "WeightedDirectedGraph String"))
+
                         }
                     }
 
