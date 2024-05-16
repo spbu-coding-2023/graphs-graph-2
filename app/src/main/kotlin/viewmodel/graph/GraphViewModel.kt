@@ -4,13 +4,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import model.abstractGraph.Edge
 import model.abstractGraph.Graph
+import model.abstractGraph.Vertex
 
 class GraphViewModel<D>(
     private val graph: Graph<D>,
     private val showIds: State<Boolean>,
     private val showVerticesData: State<Boolean>,
-    val graphType: MutableState<String>,
-    private val isDirected: State<Boolean>,
 ) {
 
     private var _verticesViewModels =
@@ -67,6 +66,30 @@ class GraphViewModel<D>(
         _edgeViewModels = _edgeViewModels.toMutableMap().apply {
             this[edge] = EdgeViewModel(firstVertexVM, secondVertexVM, isDirected)
         }
+    }
+
+
+    fun checkVertexById(id: Int): Boolean {
+        return _verticesViewModels.keys.any { it.id == id }
+    }
+
+    fun addVertex(data: String): Int {
+        val newVertex = graph.addVertex(data)
+//        _verticesViewModels[newVertex] =
+//            VertexViewModel(
+//            dataVisible = showVerticesData,
+//            idVisible = showIds,
+//            vertex = newVertex,
+//        )
+        return newVertex
+    }
+
+    fun addEdge(firstId: Int, secondId: Int) {
+        val firstVertexVM = _verticesViewModels[firstId]
+            ?: throw NoSuchElementException("No ViewModel found for vertex1")
+        val secondVertexVM = _verticesViewModels[secondId]
+            ?: throw NoSuchElementException("No ViewModel found for vertex2")
+        _edgeViewModels[edge] = EdgeViewModel(firstVertexVM, secondVertexVM, edge)
     }
 
     val verticesVM: Collection<VertexViewModel<D>>
