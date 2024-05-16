@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import viewmodel.WindowViewModel
 import viewmodel.graph.GraphViewModel
 
 @Composable
@@ -25,6 +26,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     var firstVertexId by remember { mutableStateOf("") }
     var secondVertexId by remember { mutableStateOf("") }
     var secondVertexData by remember { mutableStateOf("") }
+    var changesWereMade by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -253,5 +255,13 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                 }
             }
         }
+    }
+
+    if (changesWereMade) {
+        changesWereMade = false
+        val currentWindowVM = WindowViewModel()
+        currentWindowVM.SetCurrentDimensions()
+
+        graphVM.applyForceDirectedLayout(currentWindowVM.getWidth.value.toDouble(), currentWindowVM.getHeight.value.toDouble())
     }
 }

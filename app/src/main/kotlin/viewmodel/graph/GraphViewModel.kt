@@ -1,6 +1,8 @@
 package viewmodel.graph
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import model.abstractGraph.Edge
 import model.abstractGraph.Graph
 import model.abstractGraph.Vertex
@@ -10,7 +12,7 @@ class GraphViewModel<D>(
     private val showVerticesData: State<Boolean>,
     var showVerticesID: MutableState<Boolean>,
     val graphType: MutableState<String>,
-    private val isDirected: State<Boolean>,
+    private val isDirected: State<Boolean>
 ) {
 
     val updateIsRequired = mutableStateOf(false)
