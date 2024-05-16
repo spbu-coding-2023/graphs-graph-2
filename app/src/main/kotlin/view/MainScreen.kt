@@ -20,17 +20,17 @@ import viewmodel.MainScreenViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun <D> MainScreen(viewmodel: MainScreenViewModel<D>, showDialog: Boolean) {
+fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
     MyAppTheme {
         // Content of the main screen
         Row {
             // Column with tabs and content
             Column(
                 modifier =
-                    Modifier.width(360.dp)
-                        .background(color = MaterialTheme.colors.surface)
-                        .fillMaxHeight()
-                        .clip(shape = RoundedCornerShape(10.dp))
+                Modifier.width(360.dp)
+                    .background(color = MaterialTheme.colors.surface)
+                    .fillMaxHeight()
+                    .clip(shape = RoundedCornerShape(10.dp))
             ) {
                 // Tab row
                 val pageState = rememberPagerState(pageCount = { 3 })
@@ -45,7 +45,7 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>, showDialog: Boolean) {
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             modifier =
-                                Modifier.tabIndicatorOffset(tabPositions[pageState.currentPage]),
+                            Modifier.tabIndicatorOffset(tabPositions[pageState.currentPage]),
                             height = 0.dp
                         )
                     },
@@ -60,9 +60,9 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>, showDialog: Boolean) {
                 HorizontalPager(state = pageState, userScrollEnabled = true) {
                     Column(
                         modifier =
-                            Modifier.width(360.dp)
-                                .background(MaterialTheme.colors.background)
-                                .fillMaxHeight(),
+                        Modifier.width(360.dp)
+                            .background(MaterialTheme.colors.background)
+                            .fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                     ) {
@@ -76,6 +76,5 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>, showDialog: Boolean) {
             }
             Surface(modifier = Modifier.fillMaxSize()) { GraphView(viewmodel.graphViewModel) }
         }
-        GraphInitDialogWindow(showDialog = showDialog)
     }
 }
