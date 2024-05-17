@@ -1,10 +1,12 @@
 package viewmodel.graph
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import model.abstractGraph.Graph
 
 class GraphViewModel<D>(
     private val graph: Graph<D>,
+    private val isDirected: State<Boolean>,
     showIds: State<Boolean>,
     showVerticesData: State<Boolean>,
 ) {
@@ -27,7 +29,7 @@ class GraphViewModel<D>(
                 _verticesViewModels[edge.vertex2]
                     ?: throw NoSuchElementException("No such View Model, with mentioned edges")
 
-            EdgeViewModel(firstVertex, secondVertex, edge)
+            EdgeViewModel(firstVertex, secondVertex, isDirected, edge)
         }
 
     val verticesVM: Collection<VertexViewModel<D>>

@@ -13,6 +13,7 @@ class MainScreenViewModel<D>(graph: Graph<D>) {
     val graphViewModel =
         GraphViewModel(
             graph,
+            mutableStateOf(true),
             showVerticesIds,
             showVerticesData,
         )
