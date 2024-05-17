@@ -14,7 +14,7 @@ class VertexViewModel<D>(
     var y: MutableState<Dp> = mutableStateOf(0.dp),
     var dataVisible: State<Boolean>,
     var idVisible: State<Boolean>,
-    private val vertex: Vertex<D>,
+    val vertex: Vertex<D>,
     val radius: Dp = 30.dp,
 ) {
     var isSelected = mutableStateOf(false)
