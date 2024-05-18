@@ -34,6 +34,15 @@ class UndirectedGraphTest {
     }
 
     @Nested
+    inner class GetEdgeTest {}
+
+    @Nested
+    inner class GetNeighboursTest {}
+
+    @Nested
+    inner class GetOutgoingEdgesTest {}
+
+    @Nested
     inner class AddEdgeTest {}
 
     @Nested

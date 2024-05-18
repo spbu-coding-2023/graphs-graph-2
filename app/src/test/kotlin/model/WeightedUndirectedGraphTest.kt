@@ -15,6 +15,9 @@ class WeightedUndirectedGraphTest {
     }
 
     @Nested
+    inner class GetWeightTest {}
+
+    @Nested
     inner class AddEdgeTest {}
 
     @Nested
