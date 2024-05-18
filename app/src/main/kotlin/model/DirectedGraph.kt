@@ -9,9 +9,9 @@ open class DirectedGraph<D> : Graph<D>() {
         if (vertex1 == vertex2)
             throw IllegalArgumentException("Can't add edge from vertex to itself.")
 
-        if (vertex1.id > vertices.size || vertex2.id > vertices.size)
-            throw NoSuchElementException(
-                "One of vertices (${vertex1.id}, ${vertex1.data}) and " +
+        if (vertex1 !in vertices || vertex2 !in vertices)
+            throw IllegalArgumentException(
+                "One of the vertices (${vertex1.id}, ${vertex1.data}) and " +
                     "(${vertex2.id}, ${vertex2.data}) isn't in the graph"
             )
 

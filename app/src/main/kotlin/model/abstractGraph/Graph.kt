@@ -67,7 +67,7 @@ abstract class Graph<D> {
 
     fun getOutgoingEdges(vertex: Vertex<D>): List<Edge<D>> {
         val outgoingEdges = outgoingEdgesMap[vertex]
-            ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
+            ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the outgoing edges map.")
 
         return outgoingEdges.toList()
     }
