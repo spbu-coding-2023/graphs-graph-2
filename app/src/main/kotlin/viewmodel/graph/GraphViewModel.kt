@@ -10,6 +10,8 @@ class GraphViewModel<D>(
     private val graph: Graph<D>,
     private val showIds: State<Boolean>,
     private val showVerticesData: State<Boolean>,
+    val graphType: MutableState<String>,
+    private val isDirected: State<Boolean>,
 ) {
 
     private var _verticesViewModels =
