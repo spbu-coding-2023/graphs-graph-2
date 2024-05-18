@@ -38,16 +38,16 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         distanceMap[srcVertex] = 0
 
         while (priorityQueue.isNotEmpty()) {
-            val (node, currentDistance) = priorityQueue.poll()
-            if (visited.add(node to currentDistance)) {
-                adjacencyMap[node]?.forEach { adjacent ->
-                    val currentEdge = edges.find { it.vertex1 == adjacent }
-                    currentEdge?.let {
+            val (vertex, currentDistance) = priorityQueue.poll()
+            if (visited.add(vertex to currentDistance)) {
+                adjacencyMap[vertex]?.forEach { adjacent ->
+                    val currentEdge = getEdge(adjacent, vertex)
+                    currentEdge.let {
                         var totalDist = currentDistance
                         totalDist += getWeight(it)
                         if (totalDist < distanceMap.getValue(adjacent)) {
                             distanceMap[adjacent] = totalDist
-                            predecessorMap[adjacent] = node // Update predecessor
+                            predecessorMap[adjacent] = vertex // Update predecessor
                             priorityQueue.add(adjacent to totalDist)
                         }
                     }
