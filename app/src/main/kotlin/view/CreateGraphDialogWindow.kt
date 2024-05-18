@@ -8,27 +8,31 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.Role.Companion.RadioButton
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import viewmodel.graph.CreateGraphViewModel
 
 @Composable
-fun CreateGraphDialogWindow() {
+fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
 
-    var closeDialog by remember { mutableStateOf(false) }
+    var closeDialog = remember { mutableStateOf(false) }
+    val selectedStoredDataIndex = remember { mutableStateOf(0) }
+    val selectedOrientationIndex = remember { mutableStateOf(0) }
+    val selectedWeightinessIndex = remember { mutableStateOf(0) }
+    val createGraphClicked = remember { mutableStateOf(false) }
 
-    if (!closeDialog) {
+    if (!closeDialog.value) {
         Dialog(
             onDismissRequest = {},
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Column(
                 modifier =
-                    Modifier.background(Color.White).padding(16.dp).width(700.dp).height(390.dp)
+                Modifier.background(Color.White).padding(16.dp).width(700.dp).height(390.dp)
             ) {
                 Text(
                     "Create Graph",
@@ -43,31 +47,31 @@ fun CreateGraphDialogWindow() {
                         Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
 
                         val radioOptions = listOf("Integer", "UInteger", "String", "Boolean")
-                        val selectedOptionIndex = remember { mutableStateOf(0) }
+
                         Column(modifier = Modifier.width(220.dp)) {
                             radioOptions.forEachIndexed { index, option ->
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier =
-                                        Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedOptionIndex.value = index
-                                        }
+                                    Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
+                                        selectedStoredDataIndex.value = index
+                                    }
                                 ) {
                                     RadioButton(
-                                        selected = selectedOptionIndex.value == index,
-                                        onClick = { selectedOptionIndex.value = index },
+                                        selected = selectedStoredDataIndex.value == index,
+                                        onClick = { selectedStoredDataIndex.value = index },
                                         colors =
-                                            RadioButtonDefaults.colors(
-                                                selectedColor = MaterialTheme.colors.secondary
-                                            )
+                                        RadioButtonDefaults.colors(
+                                            selectedColor = MaterialTheme.colors.secondary
+                                        )
                                     )
                                     Spacer(Modifier.width(1.dp))
                                     Text(
                                         text = option,
                                         style = TextStyle(fontSize = 16.sp),
                                         color =
-                                            if (selectedOptionIndex.value == index) Color.Black
-                                            else Color.Gray
+                                        if (selectedStoredDataIndex.value == index) Color.Black
+                                        else Color.Gray
                                     )
                                 }
                             }
@@ -80,31 +84,30 @@ fun CreateGraphDialogWindow() {
                         Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
 
                         val radioOptions = listOf("Undirected", "Directed")
-                        val selectedOptionIndex = remember { mutableStateOf(0) }
                         Column(modifier = Modifier.width(220.dp)) {
                             radioOptions.forEachIndexed { index, option ->
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier =
-                                        Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedOptionIndex.value = index
-                                        }
+                                    Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
+                                        selectedOrientationIndex.value = index
+                                    }
                                 ) {
                                     RadioButton(
-                                        selected = selectedOptionIndex.value == index,
-                                        onClick = { selectedOptionIndex.value = index },
+                                        selected = selectedOrientationIndex.value == index,
+                                        onClick = { selectedOrientationIndex.value = index },
                                         colors =
-                                            RadioButtonDefaults.colors(
-                                                selectedColor = MaterialTheme.colors.secondary
-                                            )
+                                        RadioButtonDefaults.colors(
+                                            selectedColor = MaterialTheme.colors.secondary
+                                        )
                                     )
                                     Spacer(Modifier.width(1.dp))
                                     Text(
                                         text = option,
                                         style = TextStyle(fontSize = 16.sp),
                                         color =
-                                            if (selectedOptionIndex.value == index) Color.Black
-                                            else Color.Gray
+                                        if (selectedOrientationIndex.value == index) Color.Black
+                                        else Color.Gray
                                     )
                                 }
                             }
@@ -118,31 +121,30 @@ fun CreateGraphDialogWindow() {
 
                         Column(modifier = Modifier.width(220.dp)) {
                             val radioOptions = listOf("Unweighted", "Weighted")
-                            val selectedOptionIndex = remember { mutableStateOf(0) }
 
                             radioOptions.forEachIndexed { index, option ->
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier =
-                                        Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedOptionIndex.value = index
-                                        }
+                                    Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
+                                        selectedWeightinessIndex.value = index
+                                    }
                                 ) {
                                     RadioButton(
-                                        selected = selectedOptionIndex.value == index,
-                                        onClick = { selectedOptionIndex.value = index },
+                                        selected = selectedWeightinessIndex.value == index,
+                                        onClick = { selectedWeightinessIndex.value = index },
                                         colors =
-                                            RadioButtonDefaults.colors(
-                                                selectedColor = MaterialTheme.colors.secondary
-                                            )
+                                        RadioButtonDefaults.colors(
+                                            selectedColor = MaterialTheme.colors.secondary
+                                        )
                                     )
                                     Spacer(Modifier.width(1.dp))
                                     Text(
                                         text = option,
                                         style = TextStyle(fontSize = 16.sp),
                                         color =
-                                            if (selectedOptionIndex.value == index) Color.Black
-                                            else Color.Gray
+                                        if (selectedWeightinessIndex.value == index) Color.Black
+                                        else Color.Gray
                                     )
                                 }
                             }
@@ -158,7 +160,11 @@ fun CreateGraphDialogWindow() {
                     Button(
                         modifier = Modifier.width(145.dp).height(50.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-                        onClick = { closeDialog = true }
+                        onClick = {
+                            closeDialog.value = true
+                            createGraphClicked.value = true
+                        }
+
                     ) {
                         Text("Apply", color = Color.White)
                     }
@@ -166,4 +172,42 @@ fun CreateGraphDialogWindow() {
             }
         }
     }
+    if (createGraphClicked.value) {
+        onCreateGraphClicked(
+            viewModel,
+            selectedStoredDataIndex.value,
+            selectedOrientationIndex.value,
+            selectedWeightinessIndex.value
+        )
+    }
+}
+
+
+@Composable
+fun onCreateGraphClicked(
+    viewModel: CreateGraphViewModel,
+    storedDataIndex: Int,
+    orientationIndex: Int,
+    weightnessIndex: Int
+) {
+    val storedData = when (storedDataIndex) {
+        0 -> CreateGraphViewModel.GraphType.Integer
+        1 -> CreateGraphViewModel.GraphType.UInteger
+        2 -> CreateGraphViewModel.GraphType.String
+        else -> CreateGraphViewModel.GraphType.Integer // default to integer
+    }
+
+    val graphStructure = when (orientationIndex) {
+        0 -> CreateGraphViewModel.GraphStructure.Directed
+        1 -> CreateGraphViewModel.GraphStructure.Undirected
+        else -> CreateGraphViewModel.GraphStructure.Directed // default to directed
+    }
+
+    val weight = when (weightnessIndex) {
+        0 -> CreateGraphViewModel.Weight.Weighted
+        1 -> CreateGraphViewModel.Weight.Unweighted
+        else -> CreateGraphViewModel.Weight.Weighted // default to weighted
+    }
+
+    return viewModel.createGraph(storedData, graphStructure, weight)
 }

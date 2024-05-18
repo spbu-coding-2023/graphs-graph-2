@@ -7,40 +7,21 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import java.awt.Dimension
-import model.UndirectedGraph
-import model.abstractGraph.Graph
-import view.MainScreen
-import viewmodel.MainScreenViewModel
-
-val testGraph: Graph<Int> =
-    UndirectedGraph<Int>().apply {
-        val v1 = addVertex(1)
-        val v2 = addVertex(2)
-        val v3 = addVertex(3)
-        val v4 = addVertex(4)
-        val v5 = addVertex(5)
-
-        addEdge(v1, v5)
-        addEdge(v1, v4)
-        addEdge(v1, v3)
-        addEdge(v1, v2)
-        addEdge(v2, v4)
-    }
+import view.SelectInitDialogWindow
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme { MainScreen(MainScreenViewModel(testGraph), true) }
+    MaterialTheme {
+        SelectInitDialogWindow(true).GraphInitDialogWindow(true)
+    }
 }
 
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         title = "WUDU",
-        state =
-            rememberWindowState(
-                position = WindowPosition(alignment = Alignment.Center),
-            ),
+        state = rememberWindowState(position = WindowPosition(alignment = Alignment.Center)),
     ) {
         window.minimumSize = Dimension(1200, 700)
         App()
