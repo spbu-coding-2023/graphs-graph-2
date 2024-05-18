@@ -60,14 +60,14 @@ abstract class Graph<D> {
 
     fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
-            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the adjacency map.")
+            ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
 
         return neighbours
     }
 
     fun getOutgoingEdges(vertex: Vertex<D>): ArrayList<Edge<D>> {
         val outgoingEdges = outgoingEdgesMap[vertex]
-            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the outgoing edges map.")
+            ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
 
         return outgoingEdges
     }

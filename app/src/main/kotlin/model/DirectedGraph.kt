@@ -12,7 +12,7 @@ open class DirectedGraph<D> : Graph<D>() {
         if (vertex1.id > vertices.size || vertex2.id > vertices.size)
             throw NoSuchElementException(
                 "One of vertices (${vertex1.id}, ${vertex1.data}) and " +
-                    "(${vertex2.id}, ${vertex2.data}) is not in the vertices array."
+                    "(${vertex2.id}, ${vertex2.data}) isn't in the graph"
             )
 
         val newEdge = Edge(vertex1, vertex2)
@@ -27,7 +27,7 @@ open class DirectedGraph<D> : Graph<D>() {
     override fun removeEdge(edgeToRemove: Edge<D>): Edge<D> {
         if (edgeToRemove !in edges) throw NoSuchElementException(
             "Edge between vertices (${edgeToRemove.vertex1.id}, ${edgeToRemove.vertex1.data}) and " +
-                "(${edgeToRemove.vertex2.id}, ${edgeToRemove.vertex2.data}) is not in the graph"
+                "(${edgeToRemove.vertex2.id}, ${edgeToRemove.vertex2.data}) isn't in the graph"
         )
 
         val vertex1 = edgeToRemove.vertex1

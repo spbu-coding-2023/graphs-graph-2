@@ -16,9 +16,8 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         return newEdge
     }
 
-    /**
-     * In case weight is not passed, set it to default value = 1
-     */
+
+    // In case weight is not passed, set it to default value = 1
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
     fun getWeight(edge: Edge<D>): Int {
@@ -40,23 +39,17 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         distanceMap[srcVertex] = 0
 
         while (priorityQueue.isNotEmpty()) {
-            val (node, currentDistance) = priorityQueue.poll()
-            if (visited.add(node to currentDistance)) {
-                adjacencyMap[node]?.forEach { adjacent ->
-                    val currentEdge =
-                        edges.find {
-                            (it.vertex1 == adjacent && it.vertex2 == node) ||
-                                    (it.vertex1 == node && it.vertex2 == adjacent)
-                        }
-                    currentEdge?.let {
-                        var totalDist = currentDistance
-                        totalDist += getWeight(it)
+            val (currentVertex, currentDistance) = priorityQueue.poll()
+            if (visited.add(currentVertex to currentDistance)) {
+                adjacencyMap[currentVertex]?.forEach { adjacent ->
+                    val currentEdge = getEdge(adjacent, currentVertex)
 
-                        if (totalDist < distanceMap.getValue(adjacent)) {
-                            distanceMap[adjacent] = totalDist
-                            predecessorMap[adjacent] = node // Update predecessor
-                            priorityQueue.add(adjacent to totalDist)
-                        }
+                    val totalDist = currentDistance + getWeight(currentEdge)
+
+                    if (totalDist < distanceMap.getValue(adjacent)) {
+                        distanceMap[adjacent] = totalDist
+                        predecessorMap[adjacent] = currentVertex // Update predecessor
+                        priorityQueue.add(adjacent to totalDist)
                     }
                 }
             }
@@ -72,15 +65,10 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
                 // If no path exists
                 return emptyList()
             }
-            if (edges.find {
-                    it.vertex1 == predecessor && it.vertex2 == currentVertex ||
-                            it.vertex2 == predecessor && it.vertex1 == currentVertex
-                } == null) {
-                throw NoSuchElementException("Edge is not in the graph, path cannot be reconstructed.")
-            }
-            path.add(
-                Pair(currentVertex, getEdge(predecessor, currentVertex))
-            )
+
+            val currentEdge = getEdge(predecessor, currentVertex)
+            path.add(Pair(currentVertex, currentEdge))
+
             currentVertex = predecessor
         }
         return path.reversed()

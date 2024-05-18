@@ -16,9 +16,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         return newEdge
     }
 
-    /**
-     * In case weight is not passed, set it to default value = 1
-     */
+    // In case weight is not passed, set it to default value = 1
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
     fun getWeight(edge: Edge<D>): Int {
@@ -40,18 +38,17 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         distanceMap[srcVertex] = 0
 
         while (priorityQueue.isNotEmpty()) {
-            val (node, currentDistance) = priorityQueue.poll()
-            if (visited.add(node to currentDistance)) {
-                adjacencyMap[node]?.forEach { adjacent ->
-                    val currentEdge = edges.find { it.vertex1 == adjacent }
-                    currentEdge?.let {
-                        var totalDist = currentDistance
-                        totalDist += getWeight(it)
-                        if (totalDist < distanceMap.getValue(adjacent)) {
-                            distanceMap[adjacent] = totalDist
-                            predecessorMap[adjacent] = node // Update predecessor
-                            priorityQueue.add(adjacent to totalDist)
-                        }
+            val (currentVertex, currentDistance) = priorityQueue.poll()
+            if (visited.add(currentVertex to currentDistance)) {
+                adjacencyMap[currentVertex]?.forEach { adjacent ->
+                    val currentEdge = getEdge(adjacent, currentVertex)
+
+                    val totalDist = currentDistance + getWeight(currentEdge)
+
+                    if (totalDist < distanceMap.getValue(adjacent)) {
+                        distanceMap[adjacent] = totalDist
+                        predecessorMap[adjacent] = currentVertex // Update predecessor
+                        priorityQueue.add(adjacent to totalDist)
                     }
                 }
             }
@@ -62,14 +59,15 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
             val predecessor = predecessorMap[currentVertex]
+
             if (predecessor == null) {
                 // If no path exists
                 return emptyList()
             }
 
-            path.add(
-                Pair(currentVertex, getEdge(predecessor, currentVertex))
-            )
+            val currentEdge = getEdge(predecessor, currentVertex)
+            path.add(Pair(currentVertex, currentEdge))
+
             currentVertex = predecessor
         }
         return path.reversed()
