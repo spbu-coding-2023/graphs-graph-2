@@ -23,8 +23,8 @@ class AllGraphTypesProvider : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<Arguments> = Stream.of(
         Arguments.of(UndirectedGraph<Int>()),
         Arguments.of(DirectedGraph<Int>()),
-        Arguments.of(WeightedDirectedGraph<Int>()),
-        Arguments.of(WeightedUndirectedGraph<Int>())
+        Arguments.of(WeightedUndirectedGraph<Int>()),
+        Arguments.of(WeightedDirectedGraph<Int>())
     )
 }
 
@@ -294,7 +294,7 @@ class GraphTest {
                     val expectedEdges = setOf(
                         graph.getEdge(newV0, newV1),
                         graph.getEdge(newV3, newV2),
-                        graph.addEdge(newV2, newV1)
+                        graph.getEdge(newV2, newV1)
                     )
 
                     assertEquals(expectedEdges, actualEdges)
