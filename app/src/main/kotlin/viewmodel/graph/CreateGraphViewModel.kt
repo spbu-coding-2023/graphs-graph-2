@@ -37,17 +37,23 @@ class CreateGraphViewModel {
                 when (graphStructure) {
                     is GraphStructure.Directed -> {
                         when (storedData) {
-                            is GraphType.Integer -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<Int>()))
-                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<UInt>()))
-                            is GraphType.String -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<String>()))
+                            is GraphType.Integer -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<Int>(),
+                                "WeightedDirectedGraph Int"))
+                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<UInt>(),
+                                "WeightedDirectedGraph UInt"))
+                            is GraphType.String -> MainScreen(MainScreenViewModel(WeightedDirectedGraph<String>(),
+                                "WeightedDirectedGraph String"))
                         }
                     }
 
                     is GraphStructure.Undirected -> {
                         when (storedData) {
-                            is GraphType.Integer -> MainScreen(MainScreenViewModel(WeightedUndirectedGraph<Int>()))
-                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(WeightedUndirectedGraph<UInt>()))
-                            is GraphType.String -> MainScreen(MainScreenViewModel(WeightedUndirectedGraph<String>())
+                            is GraphType.Integer -> MainScreen(MainScreenViewModel(WeightedUndirectedGraph<Int>(),
+                                "WeightedUndirectedGraph Int"))
+                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(WeightedUndirectedGraph<UInt>(),
+                                "WeightedUndirectedGraph UInt"))
+                            is GraphType.String -> MainScreen(MainScreenViewModel(WeightedUndirectedGraph<String>(),
+                                "WeightedUndirectedGraph String")
                             )
                         }
                     }
@@ -58,17 +64,23 @@ class CreateGraphViewModel {
                 when (graphStructure) {
                     is GraphStructure.Directed -> {
                         when (storedData) {
-                            is GraphType.Integer -> MainScreen(MainScreenViewModel(DirectedGraph<Int>()))
-                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(DirectedGraph<UInt>()))
-                            is GraphType.String -> MainScreen(MainScreenViewModel(DirectedGraph<String>()))
+                            is GraphType.Integer -> MainScreen(MainScreenViewModel(DirectedGraph<Int>(),
+                                "DirectedGraph Int"))
+                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(DirectedGraph<UInt>(),
+                                "DirectedGraph UInt"))
+                            is GraphType.String -> MainScreen(MainScreenViewModel(DirectedGraph<String>(),
+                                "DirectedGraph String"))
                         }
                     }
 
                     is GraphStructure.Undirected -> {
                         when (storedData) {
-                            is GraphType.Integer -> MainScreen(MainScreenViewModel(UndirectedGraph<Int>()))
-                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(UndirectedGraph<UInt>()))
-                            is GraphType.String -> MainScreen(MainScreenViewModel(UndirectedGraph<String>()))
+                            is GraphType.Integer -> MainScreen(MainScreenViewModel(UndirectedGraph<Int>(),
+                                "UndirectedGraph Int"))
+                            is GraphType.UInteger -> MainScreen(MainScreenViewModel(UndirectedGraph<UInt>(),
+                                "UndirectedGraph UInt"))
+                            is GraphType.String -> MainScreen(MainScreenViewModel(UndirectedGraph<String>(),
+                                "UndirectedGraph String"))
                         }
                     }
                 }
