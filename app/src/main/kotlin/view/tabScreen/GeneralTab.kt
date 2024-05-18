@@ -172,18 +172,10 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     Button(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                         onClick = {
-                            connectVertexId = connectVertexId.replace("\n", "")
+                            secondVertexData = secondVertexData.replace("\n", "")
 
-                            if (!connectVertexId.all { char -> char.isDigit() }) {
-                                errorMessage = "ID should be a numeric"
-                            } else if (!graphVM.checkVertexById(connectVertexId.toInt())) {
-                                errorMessage = "There isn't a Vertex with such ID"
-                            } else if (connectVertexId.isBlank()) {
-                                errorMessage = "Please enter an ID"
-                            } else if (
-                                connectVertexId.isNotBlank() && connectVertexId.toIntOrNull() == null
-                            ) {
-                                errorMessage = "ID must be an integer"
+                            if (secondVertexData.isBlank()) {
+                                errorMessage = "Please enter data to store"
                             } else {
                                 val firstId = graphVM.addVertex(vertexData)
                                 val secondId = graphVM.addVertex(secondVertexData)
@@ -193,6 +185,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 errorMessage = ""
                                 connectVertexId = ""
                             }
+
                         }
                     ) {
                         Text("Connect")
