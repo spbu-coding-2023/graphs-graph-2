@@ -1,6 +1,5 @@
 package viewmodel.graph
 
-import model.abstractGraph.Edge
 import androidx.compose.runtime.State
 import androidx.compose.ui.unit.Dp
 import kotlin.math.sqrt

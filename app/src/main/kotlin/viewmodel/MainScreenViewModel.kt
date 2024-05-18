@@ -1,23 +1,17 @@
 package viewmodel
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.unit.dp
 import model.abstractGraph.Graph
 import viewmodel.graph.GraphViewModel
 import viewmodel.graph.TestRepresentation
 
-class MainScreenViewModel<D>(graph: Graph<D>) {
+class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
     val showVerticesData = mutableStateOf(false)
     val showVerticesIds = mutableStateOf(false)
     val isGraphDirected = mutableStateOf(false)
+    val graphType = mutableStateOf(currentGraphType)
 
-    val graphViewModel =
-        GraphViewModel(
-            graph,
-            isGraphDirected,
-            showVerticesIds,
-            showVerticesData,
-        )
+    val graphViewModel = GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, isGraphDirected)
 
     init { // here will be a placement-function call
         TestRepresentation().place(740.0, 650.0, graphViewModel.verticesVM)

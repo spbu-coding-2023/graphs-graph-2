@@ -22,10 +22,10 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     var vertexData by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var connectVertexId by remember { mutableStateOf("") }
-    var vertexExistenceStatus by remember { mutableStateOf(false) }
     var firstVertexId by remember { mutableStateOf("") }
     var secondVertexId by remember { mutableStateOf("") }
-    val displayId = remember { mutableStateOf(false) }
+    var displayId by remember { mutableStateOf(false) }
+    var secondVertexData by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -48,9 +48,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         )
                     },
                     colors =
-                        TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondaryVariant
-                        ),
+                    TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant
+                    ),
                 )
             }
             Column(modifier = Modifier.width(120.dp).fillMaxHeight(), Arrangement.Center) {
@@ -82,9 +82,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         )
                     },
                     colors =
-                        TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondaryVariant
-                        )
+                    TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant
+                    )
                 )
             }
 
@@ -101,9 +101,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         )
                     },
                     colors =
-                        TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondaryVariant
-                        )
+                    TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant
+                    )
                 )
             }
 
@@ -121,16 +121,19 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
         Row(
             modifier = Modifier.fillMaxWidth().padding(5.dp).clickable {
-                displayId.value = !displayId.value
+                displayId = !displayId
             },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = displayId.value,
-                onCheckedChange = { displayId.value = it },
+                checked = displayId,
+                onCheckedChange = { displayId = it },
                 // TODO display ids
                 colors =
-                    CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary, uncheckedColor = MaterialTheme.colors.secondary)
+                CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colors.primary,
+                    uncheckedColor = MaterialTheme.colors.secondary
+                )
             )
             Text(
                 text = "Checkbox Text",
@@ -146,51 +149,93 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
             Column(
                 modifier =
-                    Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
+                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
             ) {
-                Text("Input ID of vertex to connect with:")
+                if (graphVM.verticesVM.isEmpty()) {
+                    Text("Input data of second vertex to create and connect with")
 
-                TextField(
-                    value = connectVertexId,
-                    onValueChange = { newValue ->
-                        errorMessage = ""
-                        connectVertexId = newValue
-                    },
-                    modifier = Modifier.fillMaxWidth().height(60.dp).clip(RoundedCornerShape(8.dp)),
-                    textStyle = TextStyle(fontSize = 14.sp),
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
-                )
-
-                if (errorMessage.isNotBlank()) {
-                    Text(errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
-                }
-
-                Button(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                    onClick = {
-                        connectVertexId = connectVertexId.replace("\n", "")
-
-                        if (!connectVertexId.all { char -> char.isDigit() }) {
-                            errorMessage = "ID should be a numeric"
-//                        } else if (!graphVM.checkVertexById(connectVertexId.toInt())) {
-//                            errorMessage = "There isn't a Vertex with such ID"
-                        } else if (connectVertexId.isBlank()) {
-                            errorMessage = "Please enter an ID"
-                        } else if (
-                            connectVertexId.isNotBlank() && connectVertexId.toIntOrNull() == null
-                        ) {
-                            errorMessage = "ID must be an integer"
-                        } else {
-                            // val firstId = graphVM.addVertex<D>(vertexData)
-                            // graphVM.addEdge(firstId, connectVertexId.toInt())
-                            // TODO
-                            showDialog = false
+                    TextField(
+                        value = secondVertexData,
+                        onValueChange = { enteredValue ->
                             errorMessage = ""
-                            connectVertexId = ""
-                        }
+                            secondVertexData = enteredValue
+                        },
+                        modifier = Modifier.fillMaxWidth().height(60.dp).clip(RoundedCornerShape(8.dp)),
+                        textStyle = TextStyle(fontSize = 14.sp),
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+                    )
+
+                    if (errorMessage.isNotBlank()) {
+                        Text(errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
                     }
-                ) {
-                    Text("Connect")
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                        onClick = {
+                            secondVertexData = secondVertexData.replace("\n", "")
+
+                            if (secondVertexData.isBlank()) {
+                                errorMessage = "Please enter data to store"
+                            } else {
+                                val firstId = graphVM.addVertex(vertexData)
+                                val secondId = graphVM.addVertex(secondVertexData)
+                                graphVM.addEdge(firstId, secondId)
+
+                                showDialog = false
+                                errorMessage = ""
+                                connectVertexId = ""
+                            }
+
+                        }
+                    ) {
+                        Text("Connect")
+                    }
+
+                } else {
+                    Text("Input ID of vertex to connect with:")
+
+                    TextField(
+                        value = connectVertexId,
+                        onValueChange = { newValue ->
+                            errorMessage = ""
+                            connectVertexId = newValue
+                        },
+                        modifier = Modifier.fillMaxWidth().height(60.dp).clip(RoundedCornerShape(8.dp)),
+                        textStyle = TextStyle(fontSize = 14.sp),
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+                    )
+
+                    if (errorMessage.isNotBlank()) {
+                        Text(errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+                    }
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                        onClick = {
+                            connectVertexId = connectVertexId.replace("\n", "")
+
+                            if (!connectVertexId.all { char -> char.isDigit() }) {
+                                errorMessage = "ID should be a numeric"
+                            } else if (!graphVM.checkVertexById(connectVertexId.toInt())) {
+                                errorMessage = "There isn't a Vertex with such ID"
+                            } else if (connectVertexId.isBlank()) {
+                                errorMessage = "Please enter an ID"
+                            } else if (
+                                connectVertexId.isNotBlank() && connectVertexId.toIntOrNull() == null
+                            ) {
+                                errorMessage = "ID must be an integer"
+                            } else {
+                                val firstId = graphVM.addVertex(vertexData)
+                                graphVM.addEdge(firstId, connectVertexId.toInt())
+
+                                showDialog = false
+                                errorMessage = ""
+                                connectVertexId = ""
+                            }
+                        }
+                    ) {
+                        Text("Connect")
+                    }
                 }
             }
         }
