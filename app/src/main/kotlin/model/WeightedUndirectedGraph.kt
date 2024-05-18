@@ -16,9 +16,8 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         return newEdge
     }
 
-    /**
-     * In case weight is not passed, set it to default value = 1
-     */
+
+    // In case weight is not passed, set it to default value = 1
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
     fun getWeight(edge: Edge<D>): Int {
