@@ -38,18 +38,17 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         distanceMap[srcVertex] = 0
 
         while (priorityQueue.isNotEmpty()) {
-            val (vertex, currentDistance) = priorityQueue.poll()
-            if (visited.add(vertex to currentDistance)) {
-                adjacencyMap[vertex]?.forEach { adjacent ->
-                    val currentEdge = getEdge(adjacent, vertex)
-                    currentEdge.let {
-                        var totalDist = currentDistance
-                        totalDist += getWeight(it)
-                        if (totalDist < distanceMap.getValue(adjacent)) {
-                            distanceMap[adjacent] = totalDist
-                            predecessorMap[adjacent] = vertex // Update predecessor
-                            priorityQueue.add(adjacent to totalDist)
-                        }
+            val (currentVertex, currentDistance) = priorityQueue.poll()
+            if (visited.add(currentVertex to currentDistance)) {
+                adjacencyMap[currentVertex]?.forEach { adjacent ->
+                    val currentEdge = getEdge(adjacent, currentVertex)
+
+                    val totalDist = currentDistance + getWeight(currentEdge)
+
+                    if (totalDist < distanceMap.getValue(adjacent)) {
+                        distanceMap[adjacent] = totalDist
+                        predecessorMap[adjacent] = currentVertex // Update predecessor
+                        priorityQueue.add(adjacent to totalDist)
                     }
                 }
             }
@@ -60,14 +59,15 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
             val predecessor = predecessorMap[currentVertex]
+
             if (predecessor == null) {
                 // If no path exists
                 return emptyList()
             }
 
-            path.add(
-                Pair(currentVertex, getEdge(predecessor, currentVertex))
-            )
+            val currentEdge = getEdge(predecessor, currentVertex)
+            path.add(Pair(currentVertex, currentEdge))
+
             currentVertex = predecessor
         }
         return path.reversed()
