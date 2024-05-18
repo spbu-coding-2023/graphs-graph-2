@@ -9,11 +9,12 @@ import viewmodel.graph.TestRepresentation
 class MainScreenViewModel<D>(graph: Graph<D>) {
     val showVerticesData = mutableStateOf(false)
     val showVerticesIds = mutableStateOf(false)
+    val isGraphDirected = mutableStateOf(false)
 
     val graphViewModel =
         GraphViewModel(
             graph,
-            mutableStateOf(true),
+            isGraphDirected,
             showVerticesIds,
             showVerticesData,
         )
