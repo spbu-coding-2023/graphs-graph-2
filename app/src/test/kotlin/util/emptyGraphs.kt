@@ -8,7 +8,7 @@ import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
 
 val emptyDirectedGraph = DirectedGraph<Int>()
-val emptyUndirectedGrap = UndirectedGraph<Int>()
+val emptyUndirectedGraph = UndirectedGraph<Int>()
 
 val emptyWDGrapgh = WeightedDirectedGraph<Int>()
 val emptyWUGrapgh = WeightedUndirectedGraph<Int>()
