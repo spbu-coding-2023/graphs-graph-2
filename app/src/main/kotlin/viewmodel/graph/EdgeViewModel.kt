@@ -8,6 +8,4 @@ class EdgeViewModel<D>(
     val secondVertex: VertexViewModel<D>,
     var isDirected: State<Boolean>,
     private val currentEdge: Edge<D> // do we really need it?
-) {
-
-}
+) {}

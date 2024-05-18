@@ -172,8 +172,8 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
                         if (!connectVertexId.all { char -> char.isDigit() }) {
                             errorMessage = "ID should be a numeric"
-                        } else if (!graphVM.checkVertexById(connectVertexId.toInt())) {
-                            errorMessage = "There isn't a Vertex with such ID"
+//                        } else if (!graphVM.checkVertexById(connectVertexId.toInt())) {
+//                            errorMessage = "There isn't a Vertex with such ID"
                         } else if (connectVertexId.isBlank()) {
                             errorMessage = "Please enter an ID"
                         } else if (
