@@ -18,7 +18,8 @@ fun setup(graph: Graph<Int>): Pair<List<Vertex<Int>>, Set<Edge<Int>>> {
         graph.addEdge(v1, v2),
         graph.addEdge(v2, v3),
         graph.addEdge(v3, v4),
-        graph.addEdge(v4, v1)
+        graph.addEdge(v4, v1),
+        graph.addEdge(v3, v1)
     )
 
     return defaultVerticesList to defaultEdgesSet

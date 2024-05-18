@@ -251,7 +251,8 @@ class GraphTest {
                     val expectedEdges = setOf(
                         graph.getEdge(newV0, newV1),
                         graph.getEdge(newV3, newV2),
-                        graph.getEdge(newV2, newV1)
+                        graph.getEdge(newV2, newV1),
+                        graph.getEdge(newV3, newV1)
                     )
 
                     assertEquals(expectedEdges, actualEdges)
