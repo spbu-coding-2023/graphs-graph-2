@@ -1,55 +1,12 @@
 package model.abstractGraph
 
-import model.DirectedGraph
-import model.UndirectedGraph
-import model.WeightedDirectedGraph
-import model.WeightedUndirectedGraph
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.extension.ExtensionContext
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.ArgumentsProvider
-import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.stream.Stream
-
-@ParameterizedTest(name = "{0}")
-@ArgumentsSource(AllGraphTypesProvider::class)
-@Target(AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
-private annotation class TestAllGraphTypes
-
-class AllGraphTypesProvider : ArgumentsProvider {
-    override fun provideArguments(context: ExtensionContext?): Stream<Arguments> = Stream.of(
-        Arguments.of(UndirectedGraph<Int>()),
-        Arguments.of(DirectedGraph<Int>()),
-        Arguments.of(WeightedUndirectedGraph<Int>()),
-        Arguments.of(WeightedDirectedGraph<Int>())
-    )
-}
-
-fun setup(graph: Graph<Int>): Pair<List<Vertex<Int>>, Set<Edge<Int>>> {
-    val v0 = graph.addVertex(0)
-    val v1 = graph.addVertex(1)
-    val v2 = graph.addVertex(2)
-    val v3 = graph.addVertex(3)
-    val v4 = graph.addVertex(4)
-
-    val defaultVerticesList = listOf(v0, v1, v2, v3, v4)
-
-    val defaultEdgesSet = setOf(
-        graph.addEdge(v0, v1),
-        graph.addEdge(v1, v2),
-        graph.addEdge(v2, v3),
-        graph.addEdge(v3, v4),
-        graph.addEdge(v4, v1)
-    )
-
-    return defaultVerticesList to defaultEdgesSet
-}
-
-val emptyVerticesList = listOf<Vertex<Int>>()
-val emptyEdgesSet = setOf<Edge<Int>>()
+import util.annotations.TestAllGraphTypes
+import util.setup
+import util.emptyVerticesList
+import util.emptyEdgesSet
+import util.emptyGraph
 
 class GraphTest {
     @Nested
@@ -95,7 +52,7 @@ class GraphTest {
                 graph.getVertices()
 
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = emptyVerticesList to emptyEdgesSet
+                val expectedGraph = emptyGraph
 
                 assertEquals(expectedGraph, actualGraph)
             }
@@ -145,7 +102,7 @@ class GraphTest {
                 graph.getEdges()
 
                 val actualGraph = graph.getVertices() to graph.getEdges().toSet()
-                val expectedGraph = emptyVerticesList to emptyEdgesSet
+                val expectedGraph = emptyGraph
 
                 assertEquals(expectedGraph, actualGraph)
             }

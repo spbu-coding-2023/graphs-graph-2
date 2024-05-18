@@ -2,6 +2,7 @@ package model
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
+import util.setup
 
 class WeightedDirectedGraphTest {
     private lateinit var graph: WeightedDirectedGraph<Int>
