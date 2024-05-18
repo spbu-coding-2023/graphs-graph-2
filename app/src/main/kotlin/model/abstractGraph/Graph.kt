@@ -21,49 +21,10 @@ abstract class Graph<D> {
     }
 
     fun removeVertex(vertexToRemove: Vertex<D>): Vertex<D> {
-        if (vertexToRemove !in vertices) {
-            throw NoSuchElementException(
-                "Vertex (${vertexToRemove.id}, ${vertexToRemove.data}) isn't in the vertices list"
-            )
-        }
-
         nextId--
 
-        removeVertexFromEverywhere(vertexToRemove)
-        fixIdFragmentation(vertexToRemove)
-
-        return vertexToRemove
-    }
-
-    private fun fixIdFragmentation(vertexToRemove: Vertex<D>) {
-        if (vertexToRemove.id == nextId) return
-
-        val lastAddedVertex = vertices[nextId]
-
-        val copyOfLastAddedVertex = Vertex(vertexToRemove.id, lastAddedVertex.data)
-
-        vertices[copyOfLastAddedVertex.id] = copyOfLastAddedVertex
-        adjacencyMap[copyOfLastAddedVertex] = getNeighbours(lastAddedVertex)
-        outgoingEdgesMap[copyOfLastAddedVertex] = getOutgoingEdges(lastAddedVertex)
-
-        val adjacentVertices = getNeighbours(copyOfLastAddedVertex)
-
-        for (adjacentVertex in adjacentVertices) {
-            if (adjacencyMap[adjacentVertex]?.remove(lastAddedVertex) == true) {
-                adjacencyMap[adjacentVertex]?.add(copyOfLastAddedVertex)
-            }
-        }
-
-        removeVertexFromEverywhere(lastAddedVertex)
-    }
-
-    private fun removeVertexFromEverywhere(vertexToRemove: Vertex<D>) {
         val adjacentVertices = getNeighbours(vertexToRemove)
-
         for (adjacentVertex in adjacentVertices) adjacencyMap[adjacentVertex]?.remove(vertexToRemove)
-
-        // If vertexToRemove isn't last, it will be overridden by its copy in fixIdFragmentation
-        if (vertexToRemove.id == nextId) vertices.removeLast()
 
         // iterator is used because an element can't be removed in a for loop
         val iterator = edges.iterator()
@@ -74,11 +35,19 @@ abstract class Graph<D> {
 
                 val incidentVertex = if (edge.vertex1 == vertexToRemove) edge.vertex2 else edge.vertex1
                 outgoingEdgesMap[incidentVertex]?.remove(edge)
+                adjacencyMap[incidentVertex]?.remove(vertexToRemove)
             }
         }
 
+        val lastAddedVertex = vertices[nextId]
+        lastAddedVertex.id = vertexToRemove.id
+        vertices[vertexToRemove.id] = lastAddedVertex
+
+        vertices.remove(vertexToRemove)
         adjacencyMap.remove(vertexToRemove)
         outgoingEdgesMap.remove(vertexToRemove)
+
+        return vertexToRemove
     }
 
     abstract fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
@@ -89,22 +58,19 @@ abstract class Graph<D> {
 
     fun getVertices() = vertices.toList()
 
-    // This and next two methods are used to localize exceptions
-    protected fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
+    fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
-                ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
+            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the adjacency map.")
 
         return neighbours
     }
 
-    protected fun getOutgoingEdges(vertex: Vertex<D>): ArrayList<Edge<D>> {
+    fun getOutgoingEdges(vertex: Vertex<D>): ArrayList<Edge<D>> {
         val outgoingEdges = outgoingEdgesMap[vertex]
-                ?: throw NoSuchElementException(
-                    "Vertex (${vertex.id}, ${vertex.data}) is not present in the outgoing edges map."
-                )
+            ?: throw NoSuchElementException("Vertex with id ${vertex.id} is not present in the outgoing edges map.")
 
         return outgoingEdges
     }
 
-    protected abstract fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
+    abstract fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
 }

@@ -1,3 +1,3 @@
 package model.abstractGraph
 
-class Vertex<D>(val id: Int, val data: D)
+class Vertex<D>(var id: Int, val data: D)
