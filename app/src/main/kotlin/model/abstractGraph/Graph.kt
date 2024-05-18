@@ -4,16 +4,16 @@ abstract class Graph<D> {
     protected val vertices: ArrayList<Vertex<D>> = arrayListOf()
     protected val edges: MutableSet<Edge<D>> = mutableSetOf()
 
-    protected val adjacencyMap: MutableMap<Vertex<D>, ArrayList<Vertex<D>>> = mutableMapOf()
-    protected val outgoingEdgesMap: MutableMap<Vertex<D>, ArrayList<Edge<D>>> = mutableMapOf()
+    protected val adjacencyMap: MutableMap<Vertex<D>, MutableSet<Vertex<D>>> = mutableMapOf()
+    protected val outgoingEdgesMap: MutableMap<Vertex<D>, MutableSet<Edge<D>>> = mutableMapOf()
 
     private var nextId = 0
 
     fun addVertex(data: D): Vertex<D> {
         val newVertex = Vertex(nextId++, data)
 
-        outgoingEdgesMap[newVertex] = ArrayList()
-        adjacencyMap[newVertex] = ArrayList()
+        outgoingEdgesMap[newVertex] = mutableSetOf()
+        adjacencyMap[newVertex] = mutableSetOf()
 
         vertices.add(newVertex)
 
@@ -58,18 +58,18 @@ abstract class Graph<D> {
 
     fun getVertices() = vertices.toList()
 
-    fun getNeighbours(vertex: Vertex<D>): ArrayList<Vertex<D>> {
+    fun getNeighbours(vertex: Vertex<D>): List<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
             ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
 
-        return neighbours
+        return neighbours.toList()
     }
 
-    fun getOutgoingEdges(vertex: Vertex<D>): ArrayList<Edge<D>> {
+    fun getOutgoingEdges(vertex: Vertex<D>): List<Edge<D>> {
         val outgoingEdges = outgoingEdgesMap[vertex]
             ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
 
-        return outgoingEdges
+        return outgoingEdges.toList()
     }
 
     abstract fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
