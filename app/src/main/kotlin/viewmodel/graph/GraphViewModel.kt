@@ -10,6 +10,7 @@ class GraphViewModel<D>(
     private val showIds: State<Boolean>,
     private val showVerticesData: State<Boolean>,
     val graphType: MutableState<String>,
+    private val isDirected: State<Boolean>,
 ) {
 
     private var _verticesViewModels =
@@ -31,7 +32,7 @@ class GraphViewModel<D>(
                 _verticesViewModels[edge.vertex2]
                     ?: throw NoSuchElementException("No such View Model, with mentioned edges")
 
-            EdgeViewModel(firstVertex, secondVertex, edge)
+            EdgeViewModel(firstVertex, secondVertex, isDirected)
         }.toMutableMap()
 
 
@@ -52,7 +53,7 @@ class GraphViewModel<D>(
     }
 
     fun addEdge(firstId: Int, secondId: Int) {
-        val firstVertex =graph.getVertices().find { it.id == firstId }
+        val firstVertex = graph.getVertices().find { it.id == firstId }
             ?: throw NoSuchElementException("No vertex found with id $firstId")
         val secondVertex = graph.getVertices().find { it.id == secondId }
             ?: throw NoSuchElementException("No vertex found with id $secondId")
@@ -64,9 +65,8 @@ class GraphViewModel<D>(
         val edge = graph.addEdge(firstVertexVM.vertex, secondVertexVM.vertex)
 
         _edgeViewModels = _edgeViewModels.toMutableMap().apply {
-            this[edge] = EdgeViewModel(firstVertexVM, secondVertexVM, edge)
+            this[edge] = EdgeViewModel(firstVertexVM, secondVertexVM, isDirected)
         }
-        TestRepresentation().place(740.0, 650.0, verticesVM)
     }
 
     val verticesVM: Collection<VertexViewModel<D>>
