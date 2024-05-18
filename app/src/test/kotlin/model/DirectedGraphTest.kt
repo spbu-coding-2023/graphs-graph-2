@@ -1,10 +1,13 @@
 package model
 
+import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllDirectedGraphs
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
+import util.emptyEdgesSet
+import util.emptyVerticesList
 import util.setup
 
 class DirectedGraphTest {
@@ -293,7 +296,88 @@ class DirectedGraphTest {
     }
 
     @Nested
-    inner class RemoveEdgeTest {}
+    inner class RemoveEdgeTest {
+        @Nested
+        inner class `Edge is in the graph` {
+            @TestAllDirectedGraphs
+            fun `removed edge should be returned`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v1 = defaultVerticesList[1]
+                val v3 = defaultVerticesList[3]
+
+                val edgeToRemove = graph.getEdge(v3, v1)
+
+                val actualValue = graph.removeEdge(edgeToRemove)
+                val expectedValue = edgeToRemove
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `edge should be removed from graph`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+                val defaultEdgesSet = graphStructure.second
+
+                val v1 = defaultVerticesList[1]
+                val v4 = defaultVerticesList[4]
+
+                val edgeToRemove = graph.getEdge(v4, v1)
+                graph.removeEdge(edgeToRemove)
+
+                val actualEdges = graph.getEdges().toSet()
+                val expectedEdges = defaultEdgesSet - edgeToRemove
+
+                assertEquals(expectedEdges, actualEdges)
+            }
+
+            @TestAllDirectedGraphs
+            fun `second vertex should be removed from first's adjacency map`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v1 = defaultVerticesList[1]
+                val v2 = defaultVerticesList[2]
+
+                val edgeToRemove = graph.getEdge(v1, v2)
+                graph.removeEdge(edgeToRemove)
+
+                val actualVertices = graph.getNeighbours(v1).toSet()
+                val expectedVertices = emptyVerticesList.toSet()
+
+                assertEquals(expectedVertices, actualVertices)
+            }
+
+            @TestAllDirectedGraphs
+            fun `edge should be removed from first vertex's outgoing edges map`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v2 = defaultVerticesList[2]
+                val v3 = defaultVerticesList[3]
+
+                val edgeToRemove = graph.getEdge(v2, v3)
+                graph.removeEdge(edgeToRemove)
+
+                val actualEdges = graph.getOutgoingEdges(v2).toSet()
+                val expectedEdges = emptyEdgesSet
+
+                assertEquals(expectedEdges, actualEdges)
+            }
+        }
+
+        @Nested
+        inner class `Edge isn't in the graph` {
+            @TestAllDirectedGraphs
+            fun `exception should be thrown`(graph: DirectedGraph<Int>) {
+                assertThrows(NoSuchElementException::class.java) {
+                    graph.removeEdge(Edge(Vertex(0,0), Vertex(1, 1)))
+                }
+            }
+        }
+    }
 
     @Nested
     inner class FindSCCTest {}
