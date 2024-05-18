@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import model.abstractGraph.Edge
 import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
 
 class GraphViewModel<D>(
     private val graph: Graph<D>,
@@ -49,6 +48,7 @@ class GraphViewModel<D>(
             idVisible = showIds,
             vertex = newVertex,
         )
+        TestRepresentation().place(740.0, 650.0, verticesVM)
         return newVertex.id
     }
 
@@ -67,6 +67,7 @@ class GraphViewModel<D>(
         _edgeViewModels = _edgeViewModels.toMutableMap().apply {
             this[edge] = EdgeViewModel(firstVertexVM, secondVertexVM, edge)
         }
+        TestRepresentation().place(740.0, 650.0, verticesVM)
     }
 
     val verticesVM: Collection<VertexViewModel<D>>
