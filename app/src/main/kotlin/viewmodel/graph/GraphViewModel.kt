@@ -29,7 +29,7 @@ class GraphViewModel<D>(
                 _verticesViewModels[edge.vertex2]
                     ?: throw NoSuchElementException("No such View Model, with mentioned edges")
 
-            EdgeViewModel(firstVertex, secondVertex, isDirected, edge)
+            EdgeViewModel(firstVertex, secondVertex, isDirected)
         }
 
     val verticesVM: Collection<VertexViewModel<D>>

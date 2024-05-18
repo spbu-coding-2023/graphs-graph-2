@@ -12,8 +12,7 @@ const val SQRT_3 = 1.732f
 class EdgeViewModel<D>(
     private val firstVertex: VertexViewModel<D>,
     private val secondVertex: VertexViewModel<D>,
-    private val isDirected: State<Boolean>,
-    private val currentEdge: Edge<D> // do we really need it?
+    private val isDirected: State<Boolean>
 ) {
 
     private val radius = firstVertex.radius
@@ -44,7 +43,7 @@ class EdgeViewModel<D>(
         val vectorX = secondVertexCenterX - firstVertexCenterX
         val vectorY = secondVertexCenterY - firstVertexCenterY
 
-        val len = sqrt(vectorX * vectorX + vectorY * vectorY)
+        val len = sqrt(vectorX.value * vectorX.value + vectorY.value * vectorY.value)
         val normedVectorX = vectorX / len
         val normedVectorY = vectorY / len
 
@@ -71,8 +70,4 @@ class EdgeViewModel<D>(
             Pair(arrowRightPointX, arrowRightPointY)
         )
     }
-}
-
-private operator fun Dp.times(other: Dp): Float {
-    return this.value * other.value
 }
