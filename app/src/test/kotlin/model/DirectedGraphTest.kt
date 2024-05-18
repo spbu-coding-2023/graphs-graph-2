@@ -21,8 +21,10 @@ class DirectedGraphTest {
                 val v0 = defaultVerticesList[0]
                 val v2 = defaultVerticesList[2]
 
-                val expectedValue = graph.addEdge(v0, v2)
-                val actualValue = graph.getEdge(v0, v2)
+                val newEdge = graph.addEdge(v0, v2)
+
+                val actualValue = newEdge
+                val expectedValue = graph.getEdge(v0, v2)
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -60,7 +62,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `getting non-existent edge should throw an exception`(graph: DirectedGraph<Int>) {
+            fun `trying to get non-existent edge should throw an exception`(graph: DirectedGraph<Int>) {
                 assertThrows(NoSuchElementException::class.java) {
                     graph.getEdge(Vertex(2, 12), Vertex(85, 6))
                 }
@@ -69,10 +71,100 @@ class DirectedGraphTest {
     }
 
     @Nested
-    inner class GetNeighboursTest {}
+    inner class GetNeighboursTest {
+        @Nested
+        inner class `Vertex is in the graph` {
+            @TestAllDirectedGraphs
+            fun `neighbours should be returned`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v0 = defaultVerticesList[0]
+                val v1 = defaultVerticesList[1]
+                val v2 = defaultVerticesList[2]
+                val v3 = defaultVerticesList[3]
+                val v4 = defaultVerticesList[4]
+
+                val actualValue = graph.getNeighbours(v3).toSet()
+                val expectedValue = setOf(v4, v1)
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v0 = defaultVerticesList[0]
+
+                graph.getNeighbours(v0)
+
+                val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+                val expectedGraph = graphStructure
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+
+        @Nested
+        inner class `Vertex isn't in the graph` {
+            @TestAllDirectedGraphs
+            fun `exception should be thrown`(graph: DirectedGraph<Int>) {
+                assertThrows(NoSuchElementException::class.java) {
+                    graph.getNeighbours(Vertex(2201, 2006))
+                }
+            }
+        }
+    }
 
     @Nested
-    inner class GetOutgoingEdgesTest {}
+    inner class GetOutgoingEdgesTest {
+        @Nested
+        inner class `Vertex is in the graph` {
+            @TestAllDirectedGraphs
+            fun `outgoing edges should be returned`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v0 = defaultVerticesList[0]
+                val v1 = defaultVerticesList[1]
+                val v2 = defaultVerticesList[2]
+                val v3 = defaultVerticesList[3]
+                val v4 = defaultVerticesList[4]
+
+                val actualValue = graph.getOutgoingEdges(v3).toSet()
+                val expectedValue = setOf(graph.getEdge(v3, v4), graph.getEdge(v3, v1))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v4 = defaultVerticesList[4]
+
+                graph.getOutgoingEdges(v4)
+
+                val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+                val expectedGraph = graphStructure
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+
+        @Nested
+        inner class `Vertex isn't in the graph` {
+            @TestAllDirectedGraphs
+            fun `exception should be thrown`(graph: DirectedGraph<Int>) {
+                assertThrows(NoSuchElementException::class.java) {
+                    graph.getOutgoingEdges(Vertex(2611, 2005))
+                }
+            }
+        }
+    }
 
     @Nested
     inner class AddEdgeTest {}
