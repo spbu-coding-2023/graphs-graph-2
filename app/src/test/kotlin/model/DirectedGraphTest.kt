@@ -2,10 +2,9 @@ package model
 
 import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllDirectedGraphs
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import util.emptyEdgesSet
 import util.emptyVerticesList
 import util.setup
@@ -242,6 +241,50 @@ class DirectedGraphTest {
 
                     assertEquals(expectedEdges, actualEdges)
                 }
+
+                @TestAllDirectedGraphs
+                fun `adding already existing edge shouldn't change anything`(graph: DirectedGraph<Int>) {
+                    val graphStructure = setup(graph)
+                    val defaultVerticesList = graphStructure.first
+
+                    val v1 = defaultVerticesList[1]
+                    val v4 = defaultVerticesList[4]
+
+                    val expectedNeighbours = graph.getNeighbours(v4).toSet()
+                    val expectedOutgoingEdges = graph.getOutgoingEdges(v4).toSet()
+
+                    graph.addEdge(v4, v1)
+
+                    val actualNeighbours = graph.getNeighbours(v4).toSet()
+                    val actualOutgoingEdges = graph.getOutgoingEdges(v4).toSet()
+
+                    val expectedGraph = graphStructure
+                    val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+
+                    assertEquals(expectedGraph, actualGraph)
+                    assertEquals(expectedNeighbours, actualNeighbours)
+                    assertEquals(expectedOutgoingEdges, actualOutgoingEdges)
+                }
+
+                @TestAllDirectedGraphs
+                fun `second vertex's map values shouldn't change`(graph: DirectedGraph<Int>) {
+                    val graphStructure = setup(graph)
+                    val defaultVerticesList = graphStructure.first
+
+                    val v0 = defaultVerticesList[0]
+                    val v3 = defaultVerticesList[3]
+
+                    val expectedNeighbours = graph.getNeighbours(v0).toSet()
+                    val expectedOutgoingEdges = graph.getOutgoingEdges(v0).toSet()
+
+                    graph.addEdge(v3, v0)
+
+                    val actualNeighbours = graph.getNeighbours(v0).toSet()
+                    val actualOutgoingEdges = graph.getOutgoingEdges(v0).toSet()
+
+                    assertEquals(expectedNeighbours, actualNeighbours)
+                    assertEquals(expectedOutgoingEdges, actualOutgoingEdges)
+                }
             }
 
             @Nested
@@ -370,6 +413,19 @@ class DirectedGraphTest {
 
         @Nested
         inner class `Edge isn't in the graph` {
+            @TestAllDirectedGraphs
+            fun `wrong order of the arguments should throw an exception`(graph: DirectedGraph<Int>) {
+                val graphStructure = setup(graph)
+                val defaultVerticesList = graphStructure.first
+
+                val v3 = defaultVerticesList[3]
+                val v4 = defaultVerticesList[4]
+
+                assertThrows(NoSuchElementException::class.java) {
+                    graph.removeEdge(graph.getEdge(v4, v3))
+                }
+            }
+
             @TestAllDirectedGraphs
             fun `exception should be thrown`(graph: DirectedGraph<Int>) {
                 assertThrows(NoSuchElementException::class.java) {
