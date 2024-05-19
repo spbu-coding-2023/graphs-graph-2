@@ -205,7 +205,7 @@ class DirectedGraphTest {
                 }
 
                 @TestAllDirectedGraphs
-                fun `one vertex has to be added to the other's adjacency map`(graph: DirectedGraph<Int>) {
+                fun `one vertex has to be added to the other's adjacency map value`(graph: DirectedGraph<Int>) {
                     val graphStructure = setup(graph)
                     val defaultVerticesList = graphStructure.first
 
@@ -224,7 +224,7 @@ class DirectedGraphTest {
                 }
 
                 @TestAllDirectedGraphs
-                fun `edge has to be added to first vertex's outgoing edges map`(graph: DirectedGraph<Int>) {
+                fun `edge has to be added to first vertex's outgoing edges map value`(graph: DirectedGraph<Int>) {
                     val graphStructure = setup(graph)
                     val defaultVerticesList = graphStructure.first
 
@@ -377,7 +377,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `second vertex should be removed from first's adjacency map`(graph: DirectedGraph<Int>) {
+            fun `second vertex should be removed from first's adjacency map value`(graph: DirectedGraph<Int>) {
                 val graphStructure = setup(graph)
                 val defaultVerticesList = graphStructure.first
 
@@ -394,7 +394,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `edge should be removed from first vertex's outgoing edges map`(graph: DirectedGraph<Int>) {
+            fun `edge should be removed from first vertex's outgoing edges map value`(graph: DirectedGraph<Int>) {
                 val graphStructure = setup(graph)
                 val defaultVerticesList = graphStructure.first
 
@@ -427,7 +427,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `exception should be thrown`(graph: DirectedGraph<Int>) {
+            fun `non-existing edge should throw an exception`(graph: DirectedGraph<Int>) {
                 assertThrows(NoSuchElementException::class.java) {
                     graph.removeEdge(Edge(Vertex(0,0), Vertex(1, 1)))
                 }
