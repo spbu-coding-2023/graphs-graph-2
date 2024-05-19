@@ -16,6 +16,9 @@ open class UndirectedGraph<D> : Graph<D>() {
                     "(${vertex2.id}, ${vertex2.data}) isn't in the graph"
             )
 
+        // Don't do anything if the edge is already in the graph
+        if (vertex2 in getNeighbours(vertex1)) return getEdge(vertex1, vertex2)
+
         val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
 
