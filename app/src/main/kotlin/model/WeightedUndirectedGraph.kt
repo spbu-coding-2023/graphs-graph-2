@@ -20,6 +20,14 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
     // In case weight is not passed, set it to default value = 1
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
 
+    override fun removeEdge(edgeToRemove: Edge<D>): Edge<D> {
+        val removedEdge = super.removeEdge(edgeToRemove)
+
+        weightMap.remove(edgeToRemove)
+
+        return removedEdge
+    }
+
     fun getWeight(edge: Edge<D>): Int {
         val weight = weightMap[edge]
             ?: throw NoSuchElementException(
