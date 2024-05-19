@@ -8,13 +8,6 @@ import util.annotations.TestAllUndirectedGraphs
 import util.setup
 
 class UndirectedGraphTest {
-    private lateinit var graph: UndirectedGraph<Int>
-
-    @BeforeEach
-    fun setup() {
-        graph = UndirectedGraph()
-    }
-
     @Nested
     inner class GetEdgeTest {}
 
@@ -34,8 +27,8 @@ class UndirectedGraphTest {
     inner class FindBridgesTest {
         @Nested
         inner class `All bridges should be found`() {
-            @Test
-            fun `if graph has one edge`() {
+            @TestAllUndirectedGraphs
+            fun `if graph has one edge`(graph: UndirectedGraph<Int>) {
                 val vertex0 = graph.addVertex(0)
                 val vertex1 = graph.addVertex(1)
 
@@ -45,8 +38,8 @@ class UndirectedGraphTest {
                 assertEquals(expectedBridges, actualBridges)
             }
 
-            @Test
-            fun `if two components are connected via one edge`() {
+            @TestAllUndirectedGraphs
+            fun `if two components are connected via one edge`(graph: UndirectedGraph<Int>) {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
@@ -71,8 +64,8 @@ class UndirectedGraphTest {
                 assertEquals(expectedBridges, actualBridges)
             }
 
-            @Test
-            fun `if graph is chain-like`() {
+            @TestAllUndirectedGraphs
+            fun `if graph is chain-like`(graph: UndirectedGraph<Int>) {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
@@ -88,8 +81,8 @@ class UndirectedGraphTest {
                 assertEquals(expectedBridges, actualBridges)
             }
 
-            @Test
-            fun `if graph is star-like`() {
+            @TestAllUndirectedGraphs
+            fun `if graph is star-like`(graph: UndirectedGraph<Int>) {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
@@ -108,16 +101,16 @@ class UndirectedGraphTest {
 
         @Nested
         inner class `No bridge should be found`() {
-            @Test
-            fun `if graph has no vertices`() {
+            @TestAllUndirectedGraphs
+            fun `if graph has no vertices`(graph: UndirectedGraph<Int>) {
                 val expectedBridges = listOf<Edge<Int>>()
                 val actualBridges = graph.findBridges()
 
                 assertEquals(expectedBridges, actualBridges)
             }
 
-            @Test
-            fun `if graph has no edges`() {
+            @TestAllUndirectedGraphs
+            fun `if graph has no edges`(graph: UndirectedGraph<Int>) {
                 graph.apply {
                     addVertex(0)
                     addVertex(1)
@@ -130,8 +123,8 @@ class UndirectedGraphTest {
                 assertEquals(expectedBridges, actualBridges)
             }
 
-            @Test
-            fun `if graph is circle-like`() {
+            @TestAllUndirectedGraphs
+            fun `if graph is circle-like`(graph: UndirectedGraph<Int>) {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
@@ -152,8 +145,8 @@ class UndirectedGraphTest {
                 assertEquals(expectedBridges, actualBridges)
             }
 
-            @Test
-            fun `if two components are connected via more than one edge`() {
+            @TestAllUndirectedGraphs
+            fun `if two components are connected via more than one edge`(graph: UndirectedGraph<Int>) {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
