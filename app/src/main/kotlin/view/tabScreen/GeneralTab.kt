@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import viewmodel.WindowViewModel
 import viewmodel.graph.GraphViewModel
 
 @Composable
@@ -24,8 +25,8 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     var connectVertexId by remember { mutableStateOf("") }
     var firstVertexId by remember { mutableStateOf("") }
     var secondVertexId by remember { mutableStateOf("") }
-    var displayId by remember { mutableStateOf(false) }
     var secondVertexData by remember { mutableStateOf("") }
+    var changesWereMade by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -121,14 +122,13 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
         Row(
             modifier = Modifier.fillMaxWidth().padding(5.dp).clickable {
-                displayId = !displayId
+                graphVM.showIds.value = !graphVM.showIds.value
             },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = displayId,
-                onCheckedChange = { displayId = it },
-                // TODO display ids
+                checked = graphVM.showIds.value,
+                onCheckedChange = { graphVM.showIds.value = it },
                 colors =
                 CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colors.primary,
@@ -136,7 +136,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                 )
             )
             Text(
-                text = "Checkbox Text",
+                text = "Show ID",
                 modifier = Modifier.padding(start = 10.dp, bottom = 3.dp).align(Alignment.CenterVertically)
             )
 
@@ -182,6 +182,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 graphVM.addEdge(firstId, secondId)
 
                                 showDialog = false
+                                changesWereMade = true
                                 errorMessage = ""
                                 connectVertexId = ""
                             }
@@ -229,6 +230,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 graphVM.addEdge(firstId, connectVertexId.toInt())
 
                                 showDialog = false
+                                changesWereMade = true
                                 errorMessage = ""
                                 connectVertexId = ""
                             }
@@ -239,5 +241,13 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                 }
             }
         }
+    }
+
+    if (changesWereMade) {
+        changesWereMade = false
+        val currentWindowVM = WindowViewModel()
+        currentWindowVM.SetCurrentDimensions()
+
+        graphVM.applyForceDirectedLayout(currentWindowVM.getWidth.value.toDouble(), currentWindowVM.getHeight.value.toDouble())
     }
 }
