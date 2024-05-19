@@ -1,13 +1,11 @@
 package viewmodel.graph
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import model.abstractGraph.Edge
 import model.abstractGraph.Graph
 
 class GraphViewModel<D>(
     private val graph: Graph<D>,
-    private val showIds: State<Boolean>,
     private val showVerticesData: State<Boolean>,
     val graphType: MutableState<String>,
     private val isDirected: State<Boolean>,
@@ -44,16 +42,15 @@ class GraphViewModel<D>(
         val newVertex = graph.addVertex(data as D)
         _verticesViewModels[newVertex] =
             VertexViewModel(
-            dataVisible = showVerticesData,
-            idVisible = showIds,
-            vertex = newVertex,
-        )
-        TestRepresentation().place(740.0, 650.0, verticesVM)
+                dataVisible = showVerticesData,
+                idVisible = showIds,
+                vertex = newVertex,
+            )
         return newVertex.id
     }
 
     fun addEdge(firstId: Int, secondId: Int) {
-        val firstVertex =graph.getVertices().find { it.id == firstId }
+        val firstVertex = graph.getVertices().find { it.id == firstId }
             ?: throw NoSuchElementException("No vertex found with id $firstId")
         val secondVertex = graph.getVertices().find { it.id == secondId }
             ?: throw NoSuchElementException("No vertex found with id $secondId")
@@ -67,7 +64,11 @@ class GraphViewModel<D>(
         _edgeViewModels = _edgeViewModels.toMutableMap().apply {
             this[edge] = EdgeViewModel(firstVertexVM, secondVertexVM, edge)
         }
-        TestRepresentation().place(740.0, 650.0, verticesVM)
+    }
+
+    fun applyForceDirectedLayout(width: Double, height: Double) {
+        val layout = TFDPLayout()
+        layout.place(width, height, verticesVM)
     }
 
     val verticesVM: Collection<VertexViewModel<D>>
