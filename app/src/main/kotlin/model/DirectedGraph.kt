@@ -15,6 +15,9 @@ open class DirectedGraph<D> : Graph<D>() {
                     "(${vertex2.id}, ${vertex2.data}) isn't in the graph"
             )
 
+        // Don't do anything if the edge is already in the graph
+        if (vertex2 in getNeighbours(vertex1)) return getEdge(vertex1, vertex2)
+
         val newEdge = Edge(vertex1, vertex2)
         edges.add(newEdge)
 
@@ -88,10 +91,10 @@ open class DirectedGraph<D> : Graph<D>() {
     }
 
     private fun reverseGraph() {
-        val reversedAdjacencyMap = mutableMapOf<Vertex<D>, ArrayList<Vertex<D>>>()
+        val reversedAdjacencyMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
         for (vertex in vertices) {
             adjacencyMap[vertex]?.forEach { vertex2 ->
-                reversedAdjacencyMap[vertex2] = reversedAdjacencyMap[vertex2] ?: ArrayList()
+                reversedAdjacencyMap[vertex2] = reversedAdjacencyMap[vertex2] ?: mutableSetOf()
                 reversedAdjacencyMap[vertex2]?.add(vertex)
             }
         }
