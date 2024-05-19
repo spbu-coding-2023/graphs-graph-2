@@ -37,5 +37,8 @@ class VertexViewModel<D>(
         x.value = newX
         y.value = newY
     }
+
+    val getVertexID
+        get() = vertex.id
 }
 
