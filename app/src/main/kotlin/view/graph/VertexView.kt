@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,6 +19,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 import viewmodel.WindowViewModel
 import viewmodel.graph.VertexViewModel
@@ -58,6 +61,9 @@ fun <D> VertexView(viewModel: VertexViewModel<D>) {
     ) {
         if (viewModel.dataVisible.value) {
             Text(modifier = Modifier.align(Alignment.Center), text = viewModel.getVertexData)
+        }
+        if (viewModel.idVisible.value) {
+            Text(modifier = Modifier.align(Alignment.Center).zIndex(3f), text = viewModel.getVertexID.toString(), color = Color.Black, style = MaterialTheme.typography.body1.copy(fontSize = 20.sp))
         }
     }
 }
