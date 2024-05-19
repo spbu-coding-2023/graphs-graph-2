@@ -1,5 +1,6 @@
 package viewmodel.graph
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -22,10 +23,11 @@ class VertexViewModel<D>(
     val getVertexData
         get() = vertex.data.toString()
 
-    fun onDrag(dragAmount: DpOffset, currentWindowVM: WindowViewModel) {
+    fun onDrag(dragAmount: DpOffset, currentWindowVM: WindowViewModel, density: Float) {
+        val screenScaleFactor = density
 
-        val maxX = currentWindowVM.getWidth / 2 - 360.dp - radius * 2
-        val maxY = currentWindowVM.getHeight / 2  - radius * 2
+        val maxX = currentWindowVM.getWidth / screenScaleFactor - 360.dp - radius * 2
+        val maxY = currentWindowVM.getHeight / screenScaleFactor - radius * 2
 
         // calculate the new position after dragging
         val newX = (x.value + dragAmount.x).coerceIn(0.dp, maxX)
@@ -36,3 +38,4 @@ class VertexViewModel<D>(
         y.value = newY
     }
 }
+

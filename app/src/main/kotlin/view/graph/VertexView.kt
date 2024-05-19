@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ import viewmodel.graph.VertexViewModel
 fun <D> VertexView(viewModel: VertexViewModel<D>) {
     val coroutineScope = rememberCoroutineScope()
     val windowVM = WindowViewModel()
+    val density = LocalDensity.current.density
     windowVM.SetCurrentDimensions()
 
     Box(
@@ -43,7 +45,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>) {
                         detectDragGestures { change, dragAmount ->
                             viewModel.onDrag(
                                 DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()),
-                                windowVM
+                                windowVM, density
                             )
                             change.consume()
                         }
