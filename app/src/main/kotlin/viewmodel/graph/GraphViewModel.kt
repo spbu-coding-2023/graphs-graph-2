@@ -7,7 +7,7 @@ import model.abstractGraph.Graph
 class GraphViewModel<D>(
     private val graph: Graph<D>,
     private val showVerticesData: State<Boolean>,
-    private val showVerticesID: State<Boolean>,
+    var showVerticesID: MutableState<Boolean>,
     val graphType: MutableState<String>,
     private val isDirected: State<Boolean>,
 ) {

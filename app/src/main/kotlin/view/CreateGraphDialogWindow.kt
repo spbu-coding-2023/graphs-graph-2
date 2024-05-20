@@ -32,7 +32,7 @@ fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
         ) {
             Column(
                 modifier =
-                Modifier.background(Color.White).padding(16.dp).width(700.dp).height(390.dp)
+                Modifier.background(Color.White).padding(16.dp).width(700.dp).height(290.dp)
             ) {
                 Text(
                     "Create Graph",
@@ -40,13 +40,13 @@ fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
                     fontSize = 20.sp,
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
-                Row(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+                Row(modifier = Modifier.fillMaxWidth().height(200.dp)) {
                     Column(modifier = Modifier.width(250.dp).fillMaxHeight()) {
                         Text("Select stored data:")
 
                         Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
 
-                        val radioOptions = listOf("Integer", "UInteger", "String", "Boolean")
+                        val radioOptions = listOf("Integer", "UInteger", "String")
 
                         Column(modifier = Modifier.width(220.dp)) {
                             radioOptions.forEachIndexed { index, option ->
@@ -198,8 +198,8 @@ fun onCreateGraphClicked(
     }
 
     val graphStructure = when (orientationIndex) {
-        0 -> CreateGraphViewModel.GraphStructure.Directed
-        1 -> CreateGraphViewModel.GraphStructure.Undirected
+        0 -> CreateGraphViewModel.GraphStructure.Undirected
+        1 -> CreateGraphViewModel.GraphStructure.Directed
         else -> CreateGraphViewModel.GraphStructure.Directed // default to directed
     }
 

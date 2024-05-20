@@ -5,8 +5,6 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.pow
 import kotlin.math.sqrt
 import androidx.compose.ui.platform.LocalDensity
-import org.jetbrains.kotlinx.multik.ndarray.complex.minus
-import org.jetbrains.kotlinx.multik.ndarray.operations.minus
 
 class TFDPLayout(
     private val longRangeAttractionConstant: Float = 0.001f, // strength of attractive force (long-range) - B

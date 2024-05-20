@@ -122,13 +122,13 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
         Row(
             modifier = Modifier.fillMaxWidth().padding(5.dp).clickable {
-                graphVM.showIds.value = !graphVM.showIds.value
+                graphVM.showVerticesID.value = !graphVM.showVerticesID.value
             },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = graphVM.showIds.value,
-                onCheckedChange = { graphVM.showIds.value = it },
+                checked = graphVM.showVerticesID.value,
+                onCheckedChange = { graphVM.showVerticesID.value = it },
                 colors =
                 CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colors.primary,
