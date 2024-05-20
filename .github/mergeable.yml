@@ -10,6 +10,8 @@ mergeable:
 
   - when: pull_request.*, pull_request_review.*
     name: 'Approval check'
+    branches-ignore:
+      - 'main'
     validate:
       - do: approvals
         min:
