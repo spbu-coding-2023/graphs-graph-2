@@ -8,6 +8,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.zIndex
 import viewmodel.WindowViewModel
 import viewmodel.graph.EdgeViewModel
 
@@ -26,7 +27,7 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>) {
 
     val arrowPoints = viewModel.calculateArrowPoints()
 
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
         drawLine(
             color = Color.LightGray,
             strokeWidth = 5f,
