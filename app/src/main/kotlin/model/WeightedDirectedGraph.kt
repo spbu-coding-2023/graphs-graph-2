@@ -50,7 +50,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         while (priorityQueue.isNotEmpty()) {
             val (currentVertex, currentDistance) = priorityQueue.poll()
             if (visited.add(currentVertex to currentDistance)) {
-                adjacencyMap[currentVertex]?.forEach { adjacent ->
+                getNeighbours(currentVertex).forEach { adjacent ->
                     val currentEdge = getEdge(currentVertex, adjacent) // Ensure correct edge direction
 
                     val totalDist = currentDistance + getWeight(currentEdge)

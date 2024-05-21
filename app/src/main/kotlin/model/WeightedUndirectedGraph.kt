@@ -51,7 +51,7 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         while (priorityQueue.isNotEmpty()) {
             val (currentVertex, currentDistance) = priorityQueue.poll()
             if (visited.add(currentVertex to currentDistance)) {
-                adjacencyMap[currentVertex]?.forEach { adjacent ->
+                getNeighbours(currentVertex).forEach { adjacent ->
                     val currentEdge = getEdge(adjacent, currentVertex)
 
                     val totalDist = currentDistance + getWeight(currentEdge)
