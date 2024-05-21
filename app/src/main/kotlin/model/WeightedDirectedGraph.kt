@@ -78,4 +78,55 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         }
         return path.reversed()
     }
+
+    // SPFA variant
+    fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>> {
+        val distanceList = MutableList(vertices.size) { Int.MAX_VALUE }
+        val queue: Queue<Vertex<D>> = ArrayDeque()
+        val isInQueueList = MutableList(vertices.size) { false }
+        val parentList = MutableList<Vertex<D>?>(vertices.size) { null }
+
+        distanceList[srcVertex.id] = 0
+        queue.add(srcVertex)
+        isInQueueList[srcVertex.id] = true
+
+        while (queue.isNotEmpty()) {
+            val currentVertex = queue.remove()
+            isInQueueList[currentVertex.id] = false
+
+            val currentVertexDistance = distanceList[currentVertex.id]
+
+            for (edge in getOutgoingEdges(currentVertex)) {
+                val neighbour = if (currentVertex == edge.vertex1) edge.vertex2 else edge.vertex1
+
+                if (distanceList[neighbour.id] > distanceList[currentVertex.id] + getWeight(edge)) {
+                    distanceList[neighbour.id] = distanceList[currentVertex.id] + getWeight(edge)
+
+                    parentList[neighbour.id] = currentVertex
+
+                    if (!isInQueueList[neighbour.id]) {
+                        queue.add(neighbour)
+                        isInQueueList[neighbour.id] = true
+                    }
+                }
+            }
+        }
+
+        // path doesn't exist
+        if (parentList[destVertex.id] == null) return emptyList()
+
+        val path: MutableList<Pair<Vertex<D>, Edge<D>>> = mutableListOf()
+
+        var currentVertex = destVertex
+        while (currentVertex != srcVertex) {
+            val parent = parentList[currentVertex.id]
+                ?: throw NoSuchElementException("Vertex (${currentVertex.id}, ${currentVertex.data}) has no parent :(")
+
+            path.add(parent to getEdge(parent, currentVertex))
+
+            currentVertex = parent
+        }
+
+        return path.reversed()
+    }
 }
