@@ -217,12 +217,44 @@ class WeightedUndirectedGraphTest {
 
                 assertEquals(expectedResult, actualResult)
             }
+
+            @Test
+            fun `if path is in other way (not how edges were set)`() {
+                val graph = WeightedUndirectedGraph<Int>()
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                val e0 = graph.addEdge(v0, v1, 0)
+                val e1 = graph.addEdge(v1, v2, 0)
+
+                val expectedResult = listOf(Pair(v1, e1), Pair(v0, e0))
+                val actualResult = graph.findShortestPathDijkstra(v2, v0)
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if all the edges have zero weight in undirected graph`() {
+                val graph = WeightedUndirectedGraph<Int>()
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                val e0 = graph.addEdge(v0, v1, 0)
+                val e1 = graph.addEdge(v1, v2, 0)
+
+                val expectedResult = listOf(Pair(v1, e0), Pair(v2, e1))
+                val actualResult = graph.findShortestPathDijkstra(v0, v2)
+
+                assertEquals(expectedResult, actualResult)
+            }
         }
 
         @Nested
         inner class `No path should be returned`() {
             @Test
-            fun `if just no path exists`() {
+            fun `no path exists in undirected graph`() {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
@@ -231,10 +263,9 @@ class WeightedUndirectedGraphTest {
                 graph.addEdge(v0, v1, 1)
                 graph.addEdge(v1, v2, 2)
 
-                val expectedResult = listOf<Pair<Vertex<Int>, Edge<Int>>>()
                 val actualResult = graph.findShortestPathDijkstra(v0, v3)
 
-                assertEquals(expectedResult, actualResult)
+                assertEquals(actualResult, null)
             }
 
             @Test
@@ -245,19 +276,19 @@ class WeightedUndirectedGraphTest {
 
                 graph.addEdge(v0, v1, 1)
                 graph.addEdge(v1, v2, 2)
-                val expectedResult = listOf<Pair<Vertex<Int>, Edge<Int>>>()
+
                 val actualResult = graph.findShortestPathDijkstra(v0, v0)
 
-                assertEquals(expectedResult, actualResult)
+                actualResult?.isEmpty()?.let { assertTrue(it) }
             }
 
             @Test
             fun `if graph has single vertex`() {
                 val v0 = graph.addVertex(0)
-                val expectedResult = listOf<Pair<Vertex<Int>, Edge<Int>>>()
+
                 val actualResult = graph.findShortestPathDijkstra(v0, v0)
 
-                assertEquals(expectedResult, actualResult)
+                actualResult?.isEmpty()?.let { assertTrue(it) }
             }
         }
     }
