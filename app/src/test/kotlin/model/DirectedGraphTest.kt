@@ -588,7 +588,6 @@ class DirectedGraphTest {
 
         @Nested
         inner class `SCC should return single-element SCCs`() {
-
             @TestAllDirectedGraphs
             fun `graph has single vertex`() {
                 val graph = DirectedGraph<Int>()
@@ -616,7 +615,6 @@ class DirectedGraphTest {
         }
         @Nested
         inner class `Additional edge cases`() {
-
             @TestAllDirectedGraphs
             fun `empty graph`() {
                 val graph = DirectedGraph<Int>()
