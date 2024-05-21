@@ -12,7 +12,7 @@ open class DirectedGraph<D> : Graph<D>() {
         if (vertex1 !in vertices || vertex2 !in vertices)
             throw IllegalArgumentException(
                 "One of the vertices (${vertex1.id}, ${vertex1.data}) and " +
-                    "(${vertex2.id}, ${vertex2.data}) isn't in the graph"
+                        "(${vertex2.id}, ${vertex2.data}) isn't in the graph"
             )
 
         // Don't do anything if the edge is already in the graph
@@ -30,7 +30,7 @@ open class DirectedGraph<D> : Graph<D>() {
     override fun removeEdge(edgeToRemove: Edge<D>): Edge<D> {
         if (edgeToRemove !in edges) throw NoSuchElementException(
             "Edge between vertices (${edgeToRemove.vertex1.id}, ${edgeToRemove.vertex1.data}) and " +
-                "(${edgeToRemove.vertex2.id}, ${edgeToRemove.vertex2.data}) isn't in the graph"
+                    "(${edgeToRemove.vertex2.id}, ${edgeToRemove.vertex2.data}) isn't in the graph"
         )
 
         val vertex1 = edgeToRemove.vertex1
@@ -75,14 +75,14 @@ open class DirectedGraph<D> : Graph<D>() {
             if (visited[vertex] != true) auxiliaryDFS(vertex, component)
         }
 
-        reverseGraph()
+        val reversedEdgesMap = reverseEdgesMap()
         visited.clear()
         component.clear()
 
         fun reverseDFS(vertex: Vertex<D>, componentList: MutableSet<Vertex<D>>) {
             visited[vertex] = true
             componentList.add(vertex)
-            getNeighbours(vertex).forEach { vertex2 ->
+            reversedEdgesMap[vertex]?.forEach { vertex2 ->
                 if (visited[vertex2] != true) {
                     reverseDFS(vertex2, componentList)
                 }
@@ -100,15 +100,13 @@ open class DirectedGraph<D> : Graph<D>() {
         return sccList
     }
 
-    private fun reverseGraph() {
-        val reversedAdjacencyMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
-        vertices.forEach { reversedAdjacencyMap[it] = mutableSetOf() }
-        adjacencyMap.forEach { (from, toList) ->
-            toList.forEach { to ->
-                reversedAdjacencyMap[to]?.add(from)
-            }
+    private fun reverseEdgesMap(): Map<Vertex<D>, MutableSet<Vertex<D>>> {
+        val reversedEdgesMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
+        vertices.forEach { reversedEdgesMap[it] = mutableSetOf() }
+        edges.forEach { edge ->
+            reversedEdgesMap[edge.vertex2]?.add(edge.vertex1)
         }
-        adjacencyMap.clear()
-        adjacencyMap.putAll(reversedAdjacencyMap)
+        return reversedEdgesMap
     }
 }
+
