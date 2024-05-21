@@ -101,7 +101,6 @@ class WeightedDirectedGraphTest {
 
     @Nested
     inner class FindShortestPathDijkstraTest {
-
         @Nested
         inner class `Normal path should be returned`() {
             @Test
