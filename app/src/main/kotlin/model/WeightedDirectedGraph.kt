@@ -80,7 +80,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
     }
 
     // returns null if path doesn't exist
-    fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>>? {
+    fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Edge<D>, Vertex<D>>>? {
         val NEG_INF = -1000000
 
         val distance = MutableList(vertices.size) { Int.MAX_VALUE }
@@ -121,13 +121,13 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         if (srcVertex == destVertex) return emptyList()
 
         // reconstruct the path from srcVertex to destVertex
-        val path: MutableList<Pair<Vertex<D>, Edge<D>>> = mutableListOf()
+        val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
             val currentPredecessor = predecessor[currentVertex.id]
                 ?: return null // path doesn't exist
 
-            path.add(currentVertex to getEdge(currentPredecessor, currentVertex))
+            path.add(getEdge(currentPredecessor, currentVertex) to currentVertex)
 
             currentVertex = currentPredecessor
         }
