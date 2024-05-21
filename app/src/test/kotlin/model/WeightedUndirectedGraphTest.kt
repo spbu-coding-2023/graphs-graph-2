@@ -2,12 +2,11 @@ package model
 
 import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import util.setup
 import util.setupWeightedUndirected
 
 class WeightedUndirectedGraphTest {
@@ -104,7 +103,194 @@ class WeightedUndirectedGraphTest {
     }
 
     @Nested
-    inner class FindShortestPathDijkstraTest {}
+    inner class FindShortestPathDijkstraTest {
+        @Nested
+        inner class `Normal path should be returned`() {
+            @Test
+            fun `all is as usual, should return default`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+
+                val e0 = graph.addEdge(v0, v1, 10)
+                val e1 = graph.addEdge(v0, v4, 100)
+                val e2 = graph.addEdge(v0, v3, 30)
+                val e3 = graph.addEdge(v1, v2, 2)
+                val e4 = graph.addEdge(v2, v4, 10)
+                val e5 = graph.addEdge(v3, v2, 20)
+                val e6 = graph.addEdge(v3, v4, 60)
+
+                val expectedResult = listOf<Pair<Vertex<Int>, Edge<Int>>>(Pair(v1, e0), Pair(v2, e3), Pair(v4, e4))
+                val actualResult = graph.findShortestPathDijkstra(v0, v4)
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if graph has multiple paths and equal weights`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                val e0 = graph.addEdge(v0, v1, 1)
+                val e1 = graph.addEdge(v0, v2, 1)
+                val e2 = graph.addEdge(v1, v3, 1)
+                val e3 = graph.addEdge(v2, v3, 1)
+
+                val expectedResult1 = listOf(Pair(v1, e0), Pair(v3, e2))
+                val expectedResult2 = listOf(Pair(v2, e1), Pair(v3, e3))
+
+                val actualResult = graph.findShortestPathDijkstra(v0, v3)
+
+                assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
+            }
+
+            @Test
+            fun `if graph has single edge`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+
+                val e0 = graph.addEdge(v0, v1, 5)
+
+                val expectedResult = listOf(Pair(v1, e0))
+                val actualResult = graph.findShortestPathDijkstra(v0, v1)
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Disabled("Dijkstra's algorithm doesn't work with negative weights")
+            @Test
+            fun `if graph has negative weights`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                val e0 = graph.addEdge(v0, v1, -1)
+                val e1 = graph.addEdge(v1, v2, -2)
+                val e2 = graph.addEdge(v2, v3, -3)
+
+                val expectedResult = listOf(Pair(v1, e0), Pair(v2, e1), Pair(v3, e2))
+                val actualResult = graph.findShortestPathDijkstra(v0, v3)
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `graph has multiple equal shortest paths`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+
+                val e0 = graph.addEdge(v0, v1, 1)
+                val e1 = graph.addEdge(v0, v2, 1)
+                val e2 = graph.addEdge(v1, v3, 1)
+                val e3 = graph.addEdge(v2, v3, 1)
+                val e4 = graph.addEdge(v3, v4, 1)
+
+                val expectedResult1 = listOf(Pair(v1, e0), Pair(v3, e2), Pair(v4, e4))
+                val expectedResult2 = listOf(Pair(v2, e1), Pair(v3, e3), Pair(v4, e4))
+                val actualResult = graph.findShortestPathDijkstra(v0, v4)
+
+                assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
+            }
+
+            @Test
+            fun `if graph has a cycle`() {
+                val graph = WeightedUndirectedGraph<Int>()
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                val e0 = graph.addEdge(v0, v1, 1)
+                val e1 = graph.addEdge(v1, v2, 2)
+                val e2 = graph.addEdge(v2, v0, 3)
+
+                val actualResult = graph.findShortestPathDijkstra(v0, v2)
+                val expectedResult = listOf(Pair(v2, e2))
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if path is in other way (not how edges were set)`() {
+                val graph = WeightedUndirectedGraph<Int>()
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                val e0 = graph.addEdge(v0, v1, 0)
+                val e1 = graph.addEdge(v1, v2, 0)
+
+                val expectedResult = listOf(Pair(v1, e1), Pair(v0, e0))
+                val actualResult = graph.findShortestPathDijkstra(v2, v0)
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if all the edges have zero weight in undirected graph`() {
+                val graph = WeightedUndirectedGraph<Int>()
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                val e0 = graph.addEdge(v0, v1, 0)
+                val e1 = graph.addEdge(v1, v2, 0)
+
+                val expectedResult = listOf(Pair(v1, e0), Pair(v2, e1))
+                val actualResult = graph.findShortestPathDijkstra(v0, v2)
+
+                assertEquals(expectedResult, actualResult)
+            }
+        }
+
+        @Nested
+        inner class `No path should be returned`() {
+            @Test
+            fun `no path exists in undirected graph`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.addEdge(v0, v1, 1)
+                graph.addEdge(v1, v2, 2)
+
+                val actualResult = graph.findShortestPathDijkstra(v0, v3)
+
+                assertEquals(actualResult, null)
+            }
+
+            @Test
+            fun `if start and end vertices are the same`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                graph.addEdge(v0, v1, 1)
+                graph.addEdge(v1, v2, 2)
+
+                val actualResult = graph.findShortestPathDijkstra(v0, v0)
+
+                actualResult?.isEmpty()?.let { assertTrue(it) }
+            }
+
+            @Test
+            fun `if graph has single vertex`() {
+                val v0 = graph.addVertex(0)
+
+                val actualResult = graph.findShortestPathDijkstra(v0, v0)
+
+                actualResult?.isEmpty()?.let { assertTrue(it) }
+            }
+        }
+    }
 
     @Nested
     inner class FindMinSpanningTreeTest {
