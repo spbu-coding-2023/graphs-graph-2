@@ -37,11 +37,13 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         return weight
     }
 
-    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>> {
+    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>>? {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(srcVertex to 0) }
         val visited = mutableSetOf<Pair<Vertex<D>, Int>>()
+
+        if (srcVertex == destVertex) return emptyList()
 
         distanceMap[srcVertex] = 0
 
@@ -67,11 +69,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
             val predecessor = predecessorMap[currentVertex]
-
-            if (predecessor == null) {
-                // If no path exists
-                return emptyList()
-            }
+                ?: return null // path doesn't exist
 
             val currentEdge = getEdge(predecessor, currentVertex)
             path.add(Pair(currentVertex, currentEdge))
