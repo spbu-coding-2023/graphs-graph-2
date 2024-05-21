@@ -678,5 +678,99 @@ class DirectedGraphTest {
                 assertEquals(expectedValue, actualValue)
             }
         }
+        @Nested
+        inner class `Side-effects check`() {
+            @TestAllDirectedGraphs
+            fun `check vertices in complex graph`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v3, v4)
+
+                val edgesBeforeReverse = graph.getEdges()
+                val expectedValue = graph.getVertices()
+                graph.findSCC()
+                val actualValue = graph.getVertices()
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `check edges in complex graph`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v3, v4)
+
+
+                val expectedValue = graph.getEdges()
+
+                graph.findSCC()
+
+                val actualValue = graph.getEdges()
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `check edges in graph with cycles and tail`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v4, v3)
+                graph.addEdge(v4, v5)
+
+                val expectedValue = graph.getEdges()
+
+                graph.findSCC()
+
+                val actualValue = graph.getEdges()
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `check vertices graph with cycles and tail`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v4, v3)
+                graph.addEdge(v4, v5)
+
+                val expectedValue = graph.getVertices()
+
+                graph.findSCC()
+
+                val actualValue = graph.getVertices()
+
+                assertEquals(expectedValue, actualValue)
+            }
+        }
     }
 }
