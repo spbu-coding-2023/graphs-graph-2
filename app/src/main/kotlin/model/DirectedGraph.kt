@@ -54,36 +54,46 @@ open class DirectedGraph<D> : Graph<D>() {
     }
 
     // SCC - Strongly Connected Components (by Kosaraju)
-    fun findSCC(): ArrayList<ArrayList<Vertex<D>>> {
+    fun findSCC(): MutableSet<MutableSet<Vertex<D>>> {
         val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
         val stack = ArrayDeque<Vertex<D>>()
         val component = arrayListOf<Vertex<D>>()
-        val sccList: ArrayList<ArrayList<Vertex<D>>> = arrayListOf()
+        val sccList: MutableSet<MutableSet<Vertex<D>>> = mutableSetOf()
 
         fun auxiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
             visited[srcVertex] = true
             componentList.add(srcVertex)
             adjacencyMap[srcVertex]?.forEach { vertex2 ->
-                if (visited[vertex2] != null && visited[vertex2] != true) {
+                if (visited[vertex2] != true) {
                     auxiliaryDFS(vertex2, componentList)
                 }
             }
             stack.add(srcVertex)
         }
 
-        for (vertex in vertices) {
-            if (visited[vertex] != null && visited[vertex] != true) auxiliaryDFS(vertex, component)
+        vertices.forEach { vertex ->
+            if (visited[vertex] != true) auxiliaryDFS(vertex, component)
         }
 
         reverseGraph()
         visited.clear()
         component.clear()
 
+        fun reverseDFS(vertex: Vertex<D>, componentList: MutableSet<Vertex<D>>) {
+            visited[vertex] = true
+            componentList.add(vertex)
+            adjacencyMap[vertex]?.forEach { vertex2 ->
+                if (visited[vertex2] != true) {
+                    reverseDFS(vertex2, componentList)
+                }
+            }
+        }
+
         while (stack.isNotEmpty()) {
             val vertex = stack.removeLast()
-            if (visited[vertex] != null && visited[vertex] != true) {
-                val currentComponent = arrayListOf<Vertex<D>>()
-                auxiliaryDFS(vertex, currentComponent)
+            if (visited[vertex] != true) {
+                val currentComponent = mutableSetOf<Vertex<D>>()
+                reverseDFS(vertex, currentComponent)
                 sccList.add(currentComponent)
             }
         }
@@ -92,10 +102,10 @@ open class DirectedGraph<D> : Graph<D>() {
 
     private fun reverseGraph() {
         val reversedAdjacencyMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
-        for (vertex in vertices) {
-            adjacencyMap[vertex]?.forEach { vertex2 ->
-                reversedAdjacencyMap[vertex2] = reversedAdjacencyMap[vertex2] ?: mutableSetOf()
-                reversedAdjacencyMap[vertex2]?.add(vertex)
+        vertices.forEach { reversedAdjacencyMap[it] = mutableSetOf() }
+        adjacencyMap.forEach { (from, toList) ->
+            toList.forEach { to ->
+                reversedAdjacencyMap[to]?.add(from)
             }
         }
         adjacencyMap.clear()
