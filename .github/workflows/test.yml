@@ -6,6 +6,8 @@ on:
 
 jobs:
   build:
+    if: github.actor!= 'github-classroom[bot]' # to ignore Feedback branch
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
