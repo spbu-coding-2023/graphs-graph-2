@@ -3,7 +3,9 @@ package model
 import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import util.annotations.TestAllDirectedGraphs
 import util.emptyEdgesSet
 import util.emptyVerticesList
@@ -429,12 +431,165 @@ class DirectedGraphTest {
             @TestAllDirectedGraphs
             fun `non-existing edge should throw an exception`(graph: DirectedGraph<Int>) {
                 assertThrows(NoSuchElementException::class.java) {
-                    graph.removeEdge(Edge(Vertex(0,0), Vertex(1, 1)))
+                    graph.removeEdge(Edge(Vertex(0, 0), Vertex(1, 1)))
                 }
             }
         }
     }
 
     @Nested
-    inner class FindSCCTest {}
+    inner class FindSCCTest {
+        @Nested
+        inner class `SCC should return not empty array`() {
+            @TestAllDirectedGraphs
+            fun `graph has two connected vertices`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v1)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `complex graph`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v3, v4)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph has multiple SCCs`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v1)
+                graph.addEdge(v3, v4)
+                graph.addEdge(v4, v3)
+                graph.addEdge(v5, v1)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v3, v4), mutableSetOf(v1, v2), mutableSetOf(v5))
+
+                assertEquals(expectedValue, actualValue)
+            }
+        }
+
+        @Nested
+        inner class `SCC should return single-element SCCs`() {
+
+            @TestAllDirectedGraphs
+            fun `graph has single vertex`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph with multiple disconnected vertices`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1), mutableSetOf(v2), mutableSetOf(v3), mutableSetOf(v4))
+
+                assertEquals(expectedValue, actualValue)
+            }
+        }
+        @Nested
+        inner class `Additional edge cases`() {
+
+            @TestAllDirectedGraphs
+            fun `empty graph`() {
+                val graph = DirectedGraph<Int>()
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf<MutableSet<Vertex<Int>>>()
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Disabled("Our model doesn't support edge from vertex to itself, check DirectedGraph.kt")
+            @TestAllDirectedGraphs
+            fun `graph with self-loops`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                graph.addEdge(v1, v1)
+                graph.addEdge(v2, v2)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1), mutableSetOf(v2))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `linear graph`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v3), mutableSetOf(v2), mutableSetOf(v1))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph with cycles and tail`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v4, v3)
+                graph.addEdge(v4, v5)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4), mutableSetOf(v5))
+
+                assertEquals(expectedValue, actualValue)
+            }
+        }
+    }
 }
