@@ -79,52 +79,57 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         return path.reversed()
     }
 
-    // SPFA variant
-    fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>> {
-        val distanceList = MutableList(vertices.size) { Int.MAX_VALUE }
-        val queue: Queue<Vertex<D>> = ArrayDeque()
-        val isInQueueList = MutableList(vertices.size) { false }
-        val parentList = MutableList<Vertex<D>?>(vertices.size) { null }
+    // returns null if path doesn't exist
+    fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>>? {
+        val NEG_INF = -1000000
 
-        distanceList[srcVertex.id] = 0
-        queue.add(srcVertex)
-        isInQueueList[srcVertex.id] = true
+        val distance = MutableList(vertices.size) { Int.MAX_VALUE }
+        val predecessor = MutableList<Vertex<D>?>(vertices.size) { null }
 
-        while (queue.isNotEmpty()) {
-            val currentVertex = queue.remove()
-            isInQueueList[currentVertex.id] = false
+        distance[srcVertex.id] = 0
 
-            val currentVertexDistance = distanceList[currentVertex.id]
+        for (i in 0..vertices.size - 1) {
+            for (edge in edges) {
+                val v1 = edge.vertex1
+                val v2 = edge.vertex2
 
-            for (edge in getOutgoingEdges(currentVertex)) {
-                val neighbour = if (currentVertex == edge.vertex1) edge.vertex2 else edge.vertex1
+                if (distance[v1.id] != Int.MAX_VALUE && distance[v2.id] > distance[v1.id] + getWeight(edge)) {
+                    // distance will equal negative infinity if there is negative cycle
+                    distance[v2.id] = maxOf(distance[v1.id] + getWeight(edge), NEG_INF)
 
-                if (distanceList[neighbour.id] > distanceList[currentVertex.id] + getWeight(edge)) {
-                    distanceList[neighbour.id] = distanceList[currentVertex.id] + getWeight(edge)
-
-                    parentList[neighbour.id] = currentVertex
-
-                    if (!isInQueueList[neighbour.id]) {
-                        queue.add(neighbour)
-                        isInQueueList[neighbour.id] = true
-                    }
+                    predecessor[v2.id] = v1
                 }
             }
         }
 
-        // path doesn't exist
-        if (parentList[destVertex.id] == null) return emptyList()
+        // check for negative cycles, determine if path to destVertex exists
+        for (i in 0..vertices.size - 1) {
+            for (edge in edges) {
+                val v1 = edge.vertex1
+                val v2 = edge.vertex2
 
+                if (distance[v1.id] != Int.MAX_VALUE && distance[v2.id] > distance[v1.id] + getWeight(edge)) {
+                    distance[v2.id] = NEG_INF
+
+                }
+            }
+        }
+
+        // there is a negative cycle on the way, so path doesn't exist
+        if (distance[destVertex.id] == NEG_INF) return null
+
+        if (srcVertex == destVertex) return emptyList()
+
+        // reconstruct the path from srcVertex to destVertex
         val path: MutableList<Pair<Vertex<D>, Edge<D>>> = mutableListOf()
-
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
-            val parent = parentList[currentVertex.id]
-                ?: throw NoSuchElementException("Vertex (${currentVertex.id}, ${currentVertex.data}) has no parent :(")
+            val currentPredecessor = predecessor[currentVertex.id]
+                ?: return null // path doesn't exist
 
-            path.add(parent to getEdge(parent, currentVertex))
+            path.add(currentVertex to getEdge(currentPredecessor, currentVertex))
 
-            currentVertex = parent
+            currentVertex = currentPredecessor
         }
 
         return path.reversed()
