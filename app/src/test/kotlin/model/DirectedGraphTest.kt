@@ -495,6 +495,95 @@ class DirectedGraphTest {
 
                 assertEquals(expectedValue, actualValue)
             }
+
+            @TestAllDirectedGraphs
+            fun `graph with nested cycles`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+                val v6 = graph.addVertex(6)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v3, v4)
+                graph.addEdge(v4, v5)
+                graph.addEdge(v5, v6)
+                graph.addEdge(v6, v4)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4, v5, v6))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph with cross connections`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+                val v6 = graph.addVertex(6)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v3, v4)
+                graph.addEdge(v4, v5)
+                graph.addEdge(v5, v6)
+                graph.addEdge(v6, v4)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4, v5, v6))
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `graph with disconnected subgraphs`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+                val v6 = graph.addVertex(6)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v1)
+                graph.addEdge(v3, v4)
+                graph.addEdge(v4, v3)
+                graph.addEdge(v5, v6)
+                graph.addEdge(v6, v5)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2), mutableSetOf(v3, v4), mutableSetOf(v5, v6))
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Disabled("Our model doesn't support edge from vertex to itself, check DirectedGraph.kt")
+            @TestAllDirectedGraphs
+            fun `graph with single vertex cycle`() {
+                val graph = DirectedGraph<Int>()
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.addEdge(v1, v2)
+                graph.addEdge(v2, v3)
+                graph.addEdge(v3, v1)
+                graph.addEdge(v3, v3)
+
+                val actualValue = graph.findSCC()
+                val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3))
+
+                assertEquals(expectedValue, actualValue)
+            }
         }
 
         @Nested
