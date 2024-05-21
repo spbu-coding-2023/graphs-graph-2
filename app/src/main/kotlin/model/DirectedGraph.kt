@@ -63,7 +63,7 @@ open class DirectedGraph<D> : Graph<D>() {
         fun auxiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
             visited[srcVertex] = true
             componentList.add(srcVertex)
-            adjacencyMap[srcVertex]?.forEach { vertex2 ->
+            getNeighbours(srcVertex).forEach { vertex2 ->
                 if (visited[vertex2] != true) {
                     auxiliaryDFS(vertex2, componentList)
                 }
@@ -82,7 +82,7 @@ open class DirectedGraph<D> : Graph<D>() {
         fun reverseDFS(vertex: Vertex<D>, componentList: MutableSet<Vertex<D>>) {
             visited[vertex] = true
             componentList.add(vertex)
-            adjacencyMap[vertex]?.forEach { vertex2 ->
+            getNeighbours(vertex).forEach { vertex2 ->
                 if (visited[vertex2] != true) {
                     reverseDFS(vertex2, componentList)
                 }
