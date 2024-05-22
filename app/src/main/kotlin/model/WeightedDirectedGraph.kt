@@ -78,4 +78,60 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         }
         return path.reversed()
     }
+
+    // returns null if path doesn't exist
+    fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Edge<D>, Vertex<D>>>? {
+        val NEG_INF = -1000000
+
+        val distance = MutableList(vertices.size) { Int.MAX_VALUE }
+        val predecessor = MutableList<Vertex<D>?>(vertices.size) { null }
+
+        distance[srcVertex.id] = 0
+
+        for (i in 0..vertices.size - 1) {
+            for (edge in edges) {
+                val v1 = edge.vertex1
+                val v2 = edge.vertex2
+
+                if (distance[v1.id] != Int.MAX_VALUE && distance[v2.id] > distance[v1.id] + getWeight(edge)) {
+                    // distance will equal negative infinity if there is negative cycle
+                    distance[v2.id] = maxOf(distance[v1.id] + getWeight(edge), NEG_INF)
+
+                    predecessor[v2.id] = v1
+                }
+            }
+        }
+
+        // check for negative cycles, determine if path to destVertex exists
+        for (i in 0..vertices.size - 1) {
+            for (edge in edges) {
+                val v1 = edge.vertex1
+                val v2 = edge.vertex2
+
+                if (distance[v1.id] != Int.MAX_VALUE && distance[v2.id] > distance[v1.id] + getWeight(edge)) {
+                    distance[v2.id] = NEG_INF
+
+                }
+            }
+        }
+
+        // there is a negative cycle on the way, so path doesn't exist
+        if (distance[destVertex.id] == NEG_INF) return null
+
+        if (srcVertex == destVertex) return emptyList()
+
+        // reconstruct the path from srcVertex to destVertex
+        val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
+        var currentVertex = destVertex
+        while (currentVertex != srcVertex) {
+            val currentPredecessor = predecessor[currentVertex.id]
+                ?: return null // path doesn't exist
+
+            path.add(getEdge(currentPredecessor, currentVertex) to currentVertex)
+
+            currentVertex = currentPredecessor
+        }
+
+        return path.reversed()
+    }
 }

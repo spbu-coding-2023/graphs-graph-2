@@ -4,6 +4,7 @@ import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
+import util.setupDirectedGraphWithCycle
 import util.setupWeightedDirected
 
 class WeightedDirectedGraphTest {
@@ -301,6 +302,172 @@ class WeightedDirectedGraphTest {
                 val actualResult = graph.findShortestPathDijkstra(v2, v0)
 
                 actualResult?.isEmpty()?.let { assertTrue(it) }
+            }
+        }
+    }
+
+    @Nested
+    inner class findShortestPathFordBellmanTest {
+        @Nested
+        inner class `Path exists` {
+            @Test
+            fun `path between neighbours should consist of one edge`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val edge = graph.addEdge(v0, v1, 12345)
+
+                val actualValue = graph.findShortestPathFordBellman(v0, v1)
+                val expectedValue = listOf(edge to v1)
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `shortest path should be returned`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v0 = defaultVertices[0]
+                val v1 = defaultVertices[1]
+                val v2 = defaultVertices[2]
+                val v4 = defaultVertices[4]
+
+                val actualValue = graph.findShortestPathFordBellman(v0, v4)
+                val expectedValue = listOf(
+                    graph.getEdge(v0, v1) to v1,
+                    graph.getEdge(v1, v2) to v2,
+                    graph.getEdge(v2, v4) to v4
+                )
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `path from vertex to itself should exist and be empty`() {
+                val v0 = graph.addVertex(69)
+
+                val actualValue = graph.findShortestPathFordBellman(v0, v0)
+                val expectedValue = emptyList<Pair<Edge<Int>, Vertex<Int>>>()
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `graph shouldn't change`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v3 = defaultVertices[3]
+                val v4 = defaultVertices[4]
+
+                val expectedGraph = graphStructure
+
+                graph.findShortestPathFordBellman(v3, v4)
+
+                val actualGraph = graphStructure
+
+                assertEquals(expectedGraph, actualGraph)
+            }
+        }
+
+        @Nested
+        inner class `Path doesn't exist` {
+            @Test
+            fun `there is simply no path between vertices`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v1 = defaultVertices[1]
+                val v5 = defaultVertices[5]
+
+                val actualValue = graph.findShortestPathFordBellman(v1, v5)
+                val expectedValue = null
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `order of arguments should matter`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v0 = defaultVertices[0]
+                val v2 = defaultVertices[2]
+
+                val actualValue = graph.findShortestPathFordBellman(v2, v0)
+                val expectedValue = null
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `there is a negative cycle on the path`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v0 = defaultVertices[0]
+                val v8 = defaultVertices[8]
+
+                val actualValue = graph.findShortestPathFordBellman(v0, v8)
+                val expectedValue = null
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `srcVertex is a part of negative cycle`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v6 = defaultVertices[6]
+                val v8 = defaultVertices[8]
+
+                val actualValue = graph.findShortestPathFordBellman(v6, v8)
+                val expectedValue = null
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @Test
+            fun `vertex without outgoing edges shouldn't have any paths`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v0 = defaultVertices[0]
+                val v1 = defaultVertices[1]
+                val v2 = defaultVertices[2]
+                val v3 = defaultVertices[3]
+                val v4 = defaultVertices[4]
+                val v5 = defaultVertices[5]
+                val v6 = defaultVertices[6]
+                val v7 = defaultVertices[7]
+                val v8 = defaultVertices[8]
+
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v0))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v1))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v2))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v3))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v4))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v5))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v6))
+                assertEquals(null, graph.findShortestPathFordBellman(v8, v7))
+            }
+
+            @Test
+            fun `graph shouldn't change`() {
+                val graphStructure = setupDirectedGraphWithCycle(graph)
+                val defaultVertices = graphStructure.first
+
+                val v1 = defaultVertices[1]
+                val v8 = defaultVertices[8]
+
+                val expectedGraph = graphStructure
+
+                graph.findShortestPathFordBellman(v8, v1)
+
+                val actualGraph = graphStructure
+
+                assertEquals(expectedGraph, actualGraph)
             }
         }
     }
