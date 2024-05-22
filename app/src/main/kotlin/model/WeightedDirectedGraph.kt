@@ -30,7 +30,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
     fun getWeight(edge: Edge<D>): Int {
         val weight = weightMap[edge]
             ?: throw NoSuchElementException(
-                "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data})" +
+                "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data}) " +
                     "and (${edge.vertex2.id}, ${edge.vertex2.data})"
             )
 

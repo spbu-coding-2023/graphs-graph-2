@@ -4,6 +4,7 @@ import java.util.*
 import java.util.ArrayDeque
 import kotlin.NoSuchElementException
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 abstract class Graph<D> {
     protected val vertices: ArrayList<Vertex<D>> = arrayListOf()
@@ -89,11 +90,10 @@ abstract class Graph<D> {
 
     abstract fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
 
-
     /* For every vertex, calculates normalized closeness centrality, based on which the key vertices are picked.
      * Formula was taken from "Efficient Top-k Closeness Centrality Search" by Paul W. Olsen et al.,
      * yet an easier algorithm for traversal was chosen. */
-    fun findKeyVertices(): Map<Vertex<D>, Double> {
+    fun findKeyVertices(): Set<Vertex<D>> {
         val graphSize = vertices.size
 
         val distanceMap = getWeightMap()
@@ -111,7 +111,9 @@ abstract class Graph<D> {
             centralityMap[currVertex] = currCentrality
         }
 
-        return centralityMap
+        val keyVertices = pickMostKeyVertices(centralityMap, graphSize)
+
+        return keyVertices
     }
 
     /* Uses modified Dijkstra's algorithm to calculate the sum of all weights (distances)
@@ -196,5 +198,26 @@ abstract class Graph<D> {
             ((reachableNum - 1) * (reachableNum - 1)) / ((graphSize - 1) * sumOfDistances).toDouble()
 
         return centrality
+    }
+
+    private fun pickMostKeyVertices(centralityMap: Map<Vertex<D>, Double>, graphSize: Int): Set<Vertex<D>> {
+        val keyVertices = mutableSetOf<Vertex<D>>()
+
+        val percent = 0.2
+        val keyVerticesNum = (graphSize * percent).roundToInt()     // rounds up
+
+        var currKeyVerticesNum = 0
+
+        val vertexCentralityPairs = centralityMap.toList()
+        val vertexCentralityPairsSorted = vertexCentralityPairs.sortedByDescending { it.second }
+
+        for ((vertex, _) in vertexCentralityPairsSorted) {
+            if (currKeyVerticesNum >= keyVerticesNum) break
+
+            keyVertices.add(vertex)
+            currKeyVerticesNum++
+        }
+
+        return keyVertices
     }
 }
