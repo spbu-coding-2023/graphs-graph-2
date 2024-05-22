@@ -91,12 +91,12 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
     fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Edge<D>, Vertex<D>>>? {
         val NEG_INF = -1000000
 
-        val distance = MutableList(vertices.size) { Int.MAX_VALUE }
-        val predecessor = MutableList<Vertex<D>?>(vertices.size) { null }
+        val distance = MutableList(getVertices().size) { Int.MAX_VALUE }
+        val predecessor = MutableList<Vertex<D>?>(getVertices().size) { null }
 
         distance[srcVertex.id] = 0
 
-        for (i in 0..vertices.size - 1) {
+        for (i in 0..getVertices().size - 1) {
             for (edge in edges) {
                 val v1 = edge.vertex1
                 val v2 = edge.vertex2
@@ -111,8 +111,8 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         }
 
         // check for negative cycles, determine if path to destVertex exists
-        for (i in 0..vertices.size - 1) {
-            for (edge in edges) {
+        for (i in 0..getVertices().size - 1) {
+            for (edge in getEdges()) {
                 val v1 = edge.vertex1
                 val v2 = edge.vertex2
 

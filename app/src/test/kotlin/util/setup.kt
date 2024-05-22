@@ -6,7 +6,7 @@ import model.abstractGraph.Vertex
 import model.WeightedUndirectedGraph
 import model.WeightedDirectedGraph
 
-fun setup(graph: Graph<Int>): Pair<List<Vertex<Int>>, Set<Edge<Int>>> {
+fun setupAbstractGraph(graph: Graph<Int>): Pair<List<Vertex<Int>>, Set<Edge<Int>>> {
     val v0 = graph.addVertex(0)
     val v1 = graph.addVertex(1)
     val v2 = graph.addVertex(2)

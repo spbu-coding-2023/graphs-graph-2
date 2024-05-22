@@ -5,11 +5,10 @@ import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import util.annotations.TestAllDirectedGraphs
 import util.emptyEdgesSet
 import util.emptyVerticesList
-import util.setup
+import util.setupAbstractGraph
 
 class DirectedGraphTest {
     @Nested
@@ -18,7 +17,7 @@ class DirectedGraphTest {
         inner class `Edge is in the graph` {
             @TestAllDirectedGraphs
             fun `edge should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -34,7 +33,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v2 = defaultVerticesList[2]
@@ -53,7 +52,7 @@ class DirectedGraphTest {
         inner class `Edge isn't in the graph` {
             @TestAllDirectedGraphs
             fun `order of arguments should matter`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -79,7 +78,7 @@ class DirectedGraphTest {
         inner class `Vertex is in the graph` {
             @TestAllDirectedGraphs
             fun `neighbours should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -96,7 +95,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -127,7 +126,7 @@ class DirectedGraphTest {
         inner class `Vertex is in the graph` {
             @TestAllDirectedGraphs
             fun `outgoing edges should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -144,7 +143,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v4 = defaultVerticesList[4]
@@ -177,7 +176,7 @@ class DirectedGraphTest {
             inner class `Vertices are different` {
                 @TestAllDirectedGraphs
                 fun `Added edge should be returned`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -191,7 +190,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `Edge should be added to graph`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
                     val defaultEdgesSet = graphStructure.second
 
@@ -208,7 +207,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `one vertex has to be added to the other's adjacency map value`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -227,7 +226,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `edge has to be added to first vertex's outgoing edges map value`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -246,7 +245,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `adding already existing edge shouldn't change anything`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -270,7 +269,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `second vertex's map values shouldn't change`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -293,7 +292,7 @@ class DirectedGraphTest {
             inner class `Vertices are the same` {
                 @TestAllDirectedGraphs
                 fun `exception should be thrown`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v2 = defaultVerticesList[2]
@@ -309,7 +308,7 @@ class DirectedGraphTest {
         inner class `One of the vertices isn't in the graph` {
             @TestAllDirectedGraphs
             fun `first vertex isn't in the graph`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -321,7 +320,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `second vertex isn't in the graph`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -346,7 +345,7 @@ class DirectedGraphTest {
         inner class `Edge is in the graph` {
             @TestAllDirectedGraphs
             fun `removed edge should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v1 = defaultVerticesList[1]
@@ -362,7 +361,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `edge should be removed from graph`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
                 val defaultEdgesSet = graphStructure.second
 
@@ -380,7 +379,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `second vertex should be removed from first's adjacency map value`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v1 = defaultVerticesList[1]
@@ -397,7 +396,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `edge should be removed from first vertex's outgoing edges map value`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v2 = defaultVerticesList[2]
@@ -417,7 +416,7 @@ class DirectedGraphTest {
         inner class `Edge isn't in the graph` {
             @TestAllDirectedGraphs
             fun `wrong order of the arguments should throw an exception`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v3 = defaultVerticesList[3]

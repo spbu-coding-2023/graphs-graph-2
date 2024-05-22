@@ -3,6 +3,9 @@ package model
 import model.abstractGraph.Edge
 import model.abstractGraph.Graph
 import model.abstractGraph.Vertex
+import kotlin.NoSuchElementException
+import kotlin.collections.ArrayDeque
+import kotlin.collections.ArrayList
 
 open class DirectedGraph<D> : Graph<D>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {
@@ -71,7 +74,7 @@ open class DirectedGraph<D> : Graph<D>() {
             stack.add(srcVertex)
         }
 
-        vertices.forEach { vertex ->
+        getVertices().forEach { vertex ->
             if (visited[vertex] != true) auxiliaryDFS(vertex, component)
         }
 
@@ -102,11 +105,93 @@ open class DirectedGraph<D> : Graph<D>() {
 
     private fun reverseEdgesMap(): Map<Vertex<D>, MutableSet<Vertex<D>>> {
         val reversedEdgesMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
-        vertices.forEach { reversedEdgesMap[it] = mutableSetOf() }
-        edges.forEach { edge ->
+        getVertices().forEach { reversedEdgesMap[it] = mutableSetOf() }
+        getEdges().forEach { edge ->
             reversedEdgesMap[edge.vertex2]?.add(edge.vertex1)
         }
         return reversedEdgesMap
     }
-}
 
+    fun findCyclesJohnson(srcVertex: Vertex<D>): Set<List<Pair<Edge<D>, Vertex<D>>>> {
+        if (getOutgoingEdges(srcVertex).isEmpty()) return emptySet()
+
+        val sccs = findSCC()
+        val vertexSCC = sccs.find { srcVertex in it }
+            ?: throw NoSuchElementException("Vertex (${srcVertex.id}, ${srcVertex.data}) isn't in any of the SCCs")
+
+        if (vertexSCC.size == 1) return emptySet()
+
+        // create SCC subgraph
+        val subGraph = this
+        for (edge in getEdges()) {
+            if (edge.vertex1 in vertexSCC || edge.vertex2 in vertexSCC) {
+                subGraph.removeEdge(edge)
+            }
+        }
+
+        val blockedSet = mutableSetOf<Vertex<D>>()
+        val blockedMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
+        val stack = ArrayDeque<Vertex<D>>()
+        val verticesCycles = mutableSetOf<List<Vertex<D>>>()
+
+        fun DFSToFindCycles(currentVertex: Vertex<D>): Boolean {
+            var cycleIsFound = false
+
+            stack.addLast(currentVertex)
+            blockedSet.add(currentVertex)
+
+            for (neighbour in getNeighbours(currentVertex)) {
+                if (neighbour == srcVertex) {
+                    // cycle is found
+                    stack.addLast(srcVertex)
+
+                    val cycleOfVertices = mutableSetOf<Vertex<D>>()
+                    cycleOfVertices.addAll(stack)
+                    verticesCycles.add(cycleOfVertices.reversed())
+
+                    stack.removeLast()
+
+                    cycleIsFound = true
+                } else if (neighbour !in blockedSet) {
+                    cycleIsFound = cycleIsFound || DFSToFindCycles(neighbour)
+                }
+            }
+
+            fun unblock(vertex: Vertex<D>) {
+                blockedSet.remove(vertex)
+                blockedMap[vertex]?.forEach { unblock(it) }
+                blockedMap.remove(vertex)
+            }
+
+            if (cycleIsFound) unblock(currentVertex)
+            else {
+                for (neighbour in getNeighbours(currentVertex)) {
+                    blockedMap[neighbour]?.add(currentVertex)
+                        ?: blockedMap.put(neighbour, mutableSetOf(currentVertex))
+                }
+            }
+
+            stack.removeLast()
+
+            return cycleIsFound
+        }
+
+        DFSToFindCycles(srcVertex)
+
+        val cycles = mutableSetOf<List<Pair<Edge<D>, Vertex<D>>>>()
+        for (verticesCycle in verticesCycles) {
+            val cycle = mutableListOf<Pair<Edge<D>, Vertex<D>>>()
+
+            for (i in 0..verticesCycle.size - 2) {
+                val v1 = verticesCycle[i]
+                val v2 = verticesCycle[i + 1]
+
+                cycle.add(getEdge(v1, v2) to v2)
+            }
+
+            cycles.add(cycle)
+        }
+
+        return cycles
+    }
+}
