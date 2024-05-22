@@ -124,7 +124,7 @@ open class DirectedGraph<D> : Graph<D>() {
         // create SCC subgraph
         val subGraph = this
         for (edge in getEdges()) {
-            if (edge.vertex1 in vertexSCC || edge.vertex2 in vertexSCC) {
+            if (edge.vertex1 !in vertexSCC || edge.vertex2 !in vertexSCC) {
                 subGraph.removeEdge(edge)
             }
         }
@@ -140,7 +140,7 @@ open class DirectedGraph<D> : Graph<D>() {
             stack.addLast(currentVertex)
             blockedSet.add(currentVertex)
 
-            for (neighbour in getNeighbours(currentVertex)) {
+            for (neighbour in subGraph.getNeighbours(currentVertex)) {
                 if (neighbour == srcVertex) {
                     // cycle is found
                     stack.addLast(srcVertex)
@@ -165,7 +165,7 @@ open class DirectedGraph<D> : Graph<D>() {
 
             if (cycleIsFound) unblock(currentVertex)
             else {
-                for (neighbour in getNeighbours(currentVertex)) {
+                for (neighbour in subGraph.getNeighbours(currentVertex)) {
                     blockedMap[neighbour]?.add(currentVertex)
                         ?: blockedMap.put(neighbour, mutableSetOf(currentVertex))
                 }
