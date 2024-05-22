@@ -90,6 +90,8 @@ abstract class Graph<D> {
 
     abstract fun getEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D>
 
+    open fun hasNegativeEdges() = false
+
     /* For every vertex, calculates normalized closeness centrality, based on which the key vertices are picked.
      * Formula was taken from "Efficient Top-k Closeness Centrality Search" by Paul W. Olsen et al.,
      * yet an easier algorithm for traversal was chosen. */
