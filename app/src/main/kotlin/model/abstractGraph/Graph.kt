@@ -58,6 +58,16 @@ abstract class Graph<D> {
 
     fun getVertices() = vertices.toList()
 
+    /* In undirected graph, returns a map with every edge as a key and 1 as a value
+     * In a directed graph, returns copy of weightMap property */
+    open fun getWeightMap(): Map<Edge<D>, Int> {
+        val weightMap = mutableMapOf<Edge<D>, Int>()
+
+        for (edge in edges) weightMap[edge] = 1
+
+        return weightMap
+    }
+
     fun getNeighbours(vertex: Vertex<D>): List<Vertex<D>> {
         val neighbours = adjacencyMap[vertex]
             ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")

@@ -31,12 +31,14 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
     fun getWeight(edge: Edge<D>): Int {
         val weight = weightMap[edge]
             ?: throw NoSuchElementException(
-                "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data}) " +
+                "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data})" +
                     "and (${edge.vertex2.id}, ${edge.vertex2.data})"
             )
 
         return weight
     }
+
+    override fun getWeightMap() = weightMap.toMap()
 
     fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>>? {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
