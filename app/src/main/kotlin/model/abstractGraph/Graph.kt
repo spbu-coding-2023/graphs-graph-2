@@ -95,12 +95,11 @@ abstract class Graph<D> {
     /* For every vertex, calculates normalized closeness centrality, based on which the key vertices are picked.
      * Formula was taken from "Efficient Top-k Closeness Centrality Search" by Paul W. Olsen et al.,
      * yet an easier algorithm for traversal was chosen. */
-    fun findKeyVertices(): Set<Vertex<D>> {
+    fun findKeyVertices(): Set<Vertex<D>>? {
         val graphSize = vertices.size
 
         val distanceMap = getWeightMap()
-        if (!distanceMap.values.all { it >= 0 })
-            throw IllegalArgumentException("Cannot run key vertices finding algorithm for graph with negative edges.")
+        if (this.hasNegativeEdges()) return null
 
         val centralityMap = mutableMapOf<Vertex<D>, Double>()
 
