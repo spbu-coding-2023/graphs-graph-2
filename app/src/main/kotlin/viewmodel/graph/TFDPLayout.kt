@@ -42,28 +42,21 @@ class TFDPLayout(
                 forceY += dy.value / distance * attraction
             }
             forces[k] = Pair(forceX, forceY)
-            println("${forceX} ${forceY}")
-            println("${forces[k].first} ${forces[k].second}")
             k++
         }
 
         k = 0
         vertices.onEach { // update positions
             val vi = it
-//            for (x in forces) println("${x.first} ${x.second}")
             vi.x.value += forces[k].first.dp
             vi.y.value += forces[k].second.dp
             k++
         }
 
         for (vi in vertices) { // check borders
-            vi.x.value = vi.x.value.coerceIn(0.dp, (width.toFloat() / 2 - 360 - vi.radius.value * 2).dp)
-            println(vi.x.value)
-            vi.y.value = vi.y.value.coerceIn(0.dp, (height.toFloat() / 2 - vi.radius.value * 2).dp)
-            println(vi.y.value)
-            println()
+            vi.x.value = vi.x.value.coerceIn(0.dp, (width.toFloat() - 360 - vi.radius.value * 2).dp)
+            vi.y.value = vi.y.value.coerceIn(0.dp, (height.toFloat() - vi.radius.value * 2).dp)
+            println("${vi.x.value} ${vi.y.value}")
         }
-
-        println("------------")
     }
 }
