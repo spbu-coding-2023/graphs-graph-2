@@ -38,6 +38,14 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         return weight
     }
 
+    override fun getWeightMap() = weightMap.toMap()
+
+    override fun hasNegativeEdges(): Boolean {
+        val edgeWeighs = getWeightMap().values
+
+        return edgeWeighs.any { it < 0 }
+    }
+
     fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>>? {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
