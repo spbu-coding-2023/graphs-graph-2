@@ -5,11 +5,11 @@ import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import util.annotations.TestAllDirectedGraphs
 import util.emptyEdgesSet
 import util.emptyVerticesList
-import util.setup
+import util.setupAbstractGraph
+import util.setupGraphForFindingCycles
 
 class DirectedGraphTest {
     @Nested
@@ -18,7 +18,7 @@ class DirectedGraphTest {
         inner class `Edge is in the graph` {
             @TestAllDirectedGraphs
             fun `edge should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -34,7 +34,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v2 = defaultVerticesList[2]
@@ -53,7 +53,7 @@ class DirectedGraphTest {
         inner class `Edge isn't in the graph` {
             @TestAllDirectedGraphs
             fun `order of arguments should matter`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -79,7 +79,7 @@ class DirectedGraphTest {
         inner class `Vertex is in the graph` {
             @TestAllDirectedGraphs
             fun `neighbours should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -96,7 +96,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -127,7 +127,7 @@ class DirectedGraphTest {
         inner class `Vertex is in the graph` {
             @TestAllDirectedGraphs
             fun `outgoing edges should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -144,7 +144,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v4 = defaultVerticesList[4]
@@ -177,7 +177,7 @@ class DirectedGraphTest {
             inner class `Vertices are different` {
                 @TestAllDirectedGraphs
                 fun `Added edge should be returned`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -191,7 +191,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `Edge should be added to graph`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
                     val defaultEdgesSet = graphStructure.second
 
@@ -208,7 +208,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `one vertex has to be added to the other's adjacency map value`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -227,7 +227,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `edge has to be added to first vertex's outgoing edges map value`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -246,7 +246,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `adding already existing edge shouldn't change anything`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -270,7 +270,7 @@ class DirectedGraphTest {
 
                 @TestAllDirectedGraphs
                 fun `second vertex's map values shouldn't change`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -293,7 +293,7 @@ class DirectedGraphTest {
             inner class `Vertices are the same` {
                 @TestAllDirectedGraphs
                 fun `exception should be thrown`(graph: DirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v2 = defaultVerticesList[2]
@@ -309,7 +309,7 @@ class DirectedGraphTest {
         inner class `One of the vertices isn't in the graph` {
             @TestAllDirectedGraphs
             fun `first vertex isn't in the graph`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -321,7 +321,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `second vertex isn't in the graph`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -346,7 +346,7 @@ class DirectedGraphTest {
         inner class `Edge is in the graph` {
             @TestAllDirectedGraphs
             fun `removed edge should be returned`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v1 = defaultVerticesList[1]
@@ -362,7 +362,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `edge should be removed from graph`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
                 val defaultEdgesSet = graphStructure.second
 
@@ -380,7 +380,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `second vertex should be removed from first's adjacency map value`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v1 = defaultVerticesList[1]
@@ -397,7 +397,7 @@ class DirectedGraphTest {
 
             @TestAllDirectedGraphs
             fun `edge should be removed from first vertex's outgoing edges map value`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v2 = defaultVerticesList[2]
@@ -417,7 +417,7 @@ class DirectedGraphTest {
         inner class `Edge isn't in the graph` {
             @TestAllDirectedGraphs
             fun `wrong order of the arguments should throw an exception`(graph: DirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v3 = defaultVerticesList[3]
@@ -440,10 +440,9 @@ class DirectedGraphTest {
     @Nested
     inner class FindSCCTest {
         @Nested
-        inner class `SCC should return not empty array`() {
+        inner class `SCC should return not empty array` {
             @TestAllDirectedGraphs
-            fun `graph has two connected vertices`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph has two connected vertices`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
@@ -457,8 +456,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `complex graph`() {
-                val graph = DirectedGraph<Int>()
+            fun `complex graph`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -476,8 +474,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `graph has multiple SCCs`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph has multiple SCCs`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -497,8 +494,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `graph with nested cycles`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with nested cycles`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -521,8 +517,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `graph with cross connections`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with cross connections`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -545,8 +540,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `graph with disconnected subgraphs`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with disconnected subgraphs`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -568,8 +562,7 @@ class DirectedGraphTest {
 
             @Disabled("Our model doesn't support edge from vertex to itself, check DirectedGraph.kt")
             @TestAllDirectedGraphs
-            fun `graph with single vertex cycle`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with single vertex cycle`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -587,10 +580,9 @@ class DirectedGraphTest {
         }
 
         @Nested
-        inner class `SCC should return single-element SCCs`() {
+        inner class `SCC should return single-element SCCs` {
             @TestAllDirectedGraphs
-            fun `graph has single vertex`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph has single vertex`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
 
                 val actualValue = graph.findSCC()
@@ -600,8 +592,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `graph with multiple disconnected vertices`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with multiple disconnected vertices`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -613,11 +604,11 @@ class DirectedGraphTest {
                 assertEquals(expectedValue, actualValue)
             }
         }
+
         @Nested
         inner class `Additional edge cases`() {
             @TestAllDirectedGraphs
-            fun `empty graph`() {
-                val graph = DirectedGraph<Int>()
+            fun `empty graph`(graph: DirectedGraph<Int>) {
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf<MutableSet<Vertex<Int>>>()
@@ -627,8 +618,7 @@ class DirectedGraphTest {
 
             @Disabled("Our model doesn't support edge from vertex to itself, check DirectedGraph.kt")
             @TestAllDirectedGraphs
-            fun `graph with self-loops`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with self-loops`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
@@ -642,8 +632,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `linear graph`() {
-                val graph = DirectedGraph<Int>()
+            fun `linear graph`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -658,8 +647,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `graph with cycles and tail`() {
-                val graph = DirectedGraph<Int>()
+            fun `graph with cycles and tail`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -678,11 +666,11 @@ class DirectedGraphTest {
                 assertEquals(expectedValue, actualValue)
             }
         }
+
         @Nested
-        inner class `Side-effects check`() {
+        inner class `Side-effects check` {
             @TestAllDirectedGraphs
-            fun `check vertices in complex graph`() {
-                val graph = DirectedGraph<Int>()
+            fun `check vertices in complex graph`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -702,8 +690,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `check edges in complex graph`() {
-                val graph = DirectedGraph<Int>()
+            fun `check edges in complex graph`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -725,8 +712,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `check edges in graph with cycles and tail`() {
-                val graph = DirectedGraph<Int>()
+            fun `check edges in graph with cycles and tail`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -749,8 +735,7 @@ class DirectedGraphTest {
             }
 
             @TestAllDirectedGraphs
-            fun `check vertices graph with cycles and tail`() {
-                val graph = DirectedGraph<Int>()
+            fun `check vertices graph with cycles and tail`(graph: DirectedGraph<Int>) {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
@@ -771,6 +756,161 @@ class DirectedGraphTest {
 
                 assertEquals(expectedValue, actualValue)
             }
+        }
+    }
+
+//    [[(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@1bab8268, model.abstractGraph.Vertex@44a59da3)],
+//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6986852, model.abstractGraph.Vertex@42a15bdc), (model.abstractGraph.Edge@704deff2, model.abstractGraph.Vertex@44a59da3)],
+//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6986852, model.abstractGraph.Vertex@42a15bdc), (model.abstractGraph.Edge@404bbcbd, model.abstractGraph.Vertex@27508c5d), (model.abstractGraph.Edge@658c5a19, model.abstractGraph.Vertex@44a59da3)],
+//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6e01f9b0, model.abstractGraph.Vertex@6f6745d6), (model.abstractGraph.Edge@6c61a903, model.abstractGraph.Vertex@27508c5d), (model.abstractGraph.Edge@658c5a19, model.abstractGraph.Vertex@44a59da3)],
+//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@a307a8c, model.abstractGraph.Vertex@4f704591), (model.abstractGraph.Edge@2b9ed6da, model.abstractGraph.Vertex@6f6745d6), (model.abstractGraph.Edge@6c61a903, model.abstractGraph.Vertex@27508c5d), (model.abstractGraph.Edge@658c5a19, model.abstractGraph.Vertex@44a59da3)]]
+
+
+//    [[(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6986852, model.abstractGraph.Vertex@42a15bdc), (model.abstractGraph.Edge@704deff2, model.abstractGraph.Vertex@44a59da3)], [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@1bab8268, model.abstractGraph.Vertex@44a59da3)]]
+    @Nested
+    inner class FindCyclesTest {
+        @Nested
+        inner class `There are some cycles` {
+            @TestAllDirectedGraphs
+            fun `all cycles should be returned`(graph: DirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+                val v4 = graph.addVertex(4)
+                val v5 = graph.addVertex(5)
+                val v6 = graph.addVertex(6)
+                val v7 = graph.addVertex(7)
+                val v8 = graph.addVertex(8)
+
+                val e01 = graph.addEdge(v0, v1)
+                val e07 = graph.addEdge(v0, v7)
+                val e04 = graph.addEdge(v0, v4)
+                val e18 = graph.addEdge(v1, v8)
+                val e12 = graph.addEdge(v1, v2)
+                val e20 = graph.addEdge(v2, v0)
+                val e21 = graph.addEdge(v2, v1)
+                val e25 = graph.addEdge(v2, v5)
+                val e23 = graph.addEdge(v2, v3)
+                val e53 = graph.addEdge(v5, v3)
+                val e34 = graph.addEdge(v3, v4)
+                val e41 = graph.addEdge(v4, v1)
+                val e78 = graph.addEdge(v7, v8)
+                val e87 = graph.addEdge(v8, v7)
+
+                val expectedCycle1 = listOf(
+                    e12 to v2,
+                    e21 to v1
+                )
+
+                val expectedCycle2 = listOf(
+                    e12 to v2,
+                    e20 to v0,
+                    e01 to v1
+                )
+
+                val expectedCycle3 = listOf(
+                    e12 to v2,
+                    e20 to v0,
+                    e04 to v4,
+                    e41 to v1
+                )
+
+                val expectedCycle4 = listOf(
+                    e12 to v2,
+                    e23 to v3,
+                    e34 to v4,
+                    e41 to v1
+                )
+
+                val expectedCycle5 = listOf(
+                    e12 to v2,
+                    e25 to v5,
+                    e53 to v3,
+                    e34 to v4,
+                    e41 to v1
+                )
+
+                val actualValue = graph.findCycles(v1)
+                val expectedValue = setOf(
+                    expectedCycle1,
+                    expectedCycle2,
+                    expectedCycle3,
+                    expectedCycle4,
+                    expectedCycle5
+                )
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `SCC of 2 vertices should have one cycle`(graph: DirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                val e01 = graph.addEdge(v0, v1)
+                val e12 = graph.addEdge(v1, v2)
+                val e21 = graph.addEdge(v2, v1)
+                val e23 = graph.addEdge(v2, v3)
+
+                val actualValue = graph.findCycles(v1)
+                val expectedValue = setOf(
+                    listOf(
+                        e12 to v2,
+                        e21 to v1
+                    )
+                )
+
+                assertEquals(expectedValue, actualValue)
+            }
+        }
+
+        @Nested
+        inner class `There are no cycles` {
+            @TestAllDirectedGraphs
+            fun `vertex without outgoing edges shouldn't have cycles`(graph: DirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+
+                val e01 = graph.addEdge(v0, v1)
+
+                val actualValue = graph.findCycles(v1)
+                val expectedValue = emptySet<List<Pair<Edge<Int>, Vertex<Int>>>>()
+
+                assertEquals(expectedValue, actualValue)
+            }
+
+            @TestAllDirectedGraphs
+            fun `SCC of 1 vertex shouldn't have cycles`(graph: DirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+
+                val e01 = graph.addEdge(v0, v1)
+
+                val actualValue = graph.findCycles(v0)
+                val expectedValue = emptySet<List<Pair<Edge<Int>, Vertex<Int>>>>()
+
+                assertEquals(expectedValue, actualValue)
+            }
+        }
+
+        @TestAllDirectedGraphs
+        fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
+            val v0 = graph.addVertex(0)
+            val v1 = graph.addVertex(1)
+
+            val e01 = graph.addEdge(v0, v1)
+            val e10 = graph.addEdge(v1, v0)
+
+            val expectedGraph = graph.getVertices() to graph.getEdges().toSet()
+
+            graph.findCycles(v1)
+
+            val actualGraph = graph.getVertices() to graph.getEdges().toSet()
+
+            assertEquals(expectedGraph, actualGraph)
         }
     }
 }

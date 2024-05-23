@@ -45,7 +45,7 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         return edgeWeighs.any { it < 0 }
     }
 
-    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Vertex<D>, Edge<D>>>? {
+    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Edge<D>, Vertex<D>>>? {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(srcVertex to 0) }
@@ -73,14 +73,14 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         }
 
         // Reconstruct the path from srcVertex to destVertex
-        val path: MutableList<Pair<Vertex<D>, Edge<D>>> = mutableListOf()
+        val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
             val predecessor = predecessorMap[currentVertex]
                 ?: return null // path doesn't exist
 
             val currentEdge = getEdge(predecessor, currentVertex)
-            path.add(Pair(currentVertex, currentEdge))
+            path.add(currentEdge to currentVertex)
 
             currentVertex = predecessor
         }
@@ -91,12 +91,12 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
     fun findShortestPathFordBellman(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Edge<D>, Vertex<D>>>? {
         val NEG_INF = -1000000
 
-        val distance = MutableList(vertices.size) { Int.MAX_VALUE }
-        val predecessor = MutableList<Vertex<D>?>(vertices.size) { null }
+        val distance = MutableList(getVertices().size) { Int.MAX_VALUE }
+        val predecessor = MutableList<Vertex<D>?>(getVertices().size) { null }
 
         distance[srcVertex.id] = 0
 
-        for (i in 0..vertices.size - 1) {
+        for (i in 0..getVertices().size - 1) {
             for (edge in edges) {
                 val v1 = edge.vertex1
                 val v2 = edge.vertex2
@@ -111,8 +111,8 @@ class WeightedDirectedGraph<D> : DirectedGraph<D>() {
         }
 
         // check for negative cycles, determine if path to destVertex exists
-        for (i in 0..vertices.size - 1) {
-            for (edge in edges) {
+        for (i in 0..getVertices().size - 1) {
+            for (edge in getEdges()) {
                 val v1 = edge.vertex1
                 val v2 = edge.vertex2
 

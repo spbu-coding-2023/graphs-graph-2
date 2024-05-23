@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllUndirectedGraphs
-import util.emptyEdgesSet
-import util.emptyVerticesList
-import util.setup
+import util.setupAbstractGraph
 
 class UndirectedGraphTest {
     @Nested
@@ -17,7 +15,7 @@ class UndirectedGraphTest {
         inner class `Edge is in the graph` {
             @TestAllUndirectedGraphs
             fun `edge should be returned`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -25,15 +23,15 @@ class UndirectedGraphTest {
 
                 val newEdge = graph.addEdge(v0, v2)
 
-                val actualValue = newEdge
-                val expectedValue = graph.getEdge(v0, v2)
+                val actualValue = graph.getEdge(v0, v2)
+                val expectedValue = newEdge
 
                 assertEquals(expectedValue, actualValue)
             }
 
             @TestAllUndirectedGraphs
             fun `order of the arguments shouldn't matter`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -44,7 +42,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `graph shouldn't change`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v2 = defaultVerticesList[2]
@@ -76,7 +74,7 @@ class UndirectedGraphTest {
         inner class `Vertex is in the graph` {
             @TestAllUndirectedGraphs
             fun `neighbours should be returned`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -93,7 +91,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `graph shouldn't change`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -124,7 +122,7 @@ class UndirectedGraphTest {
         inner class `Vertex is in the graph` {
             @TestAllUndirectedGraphs
             fun `outgoing edges should be returned`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -145,7 +143,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `graph shouldn't change`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v4 = defaultVerticesList[4]
@@ -178,7 +176,7 @@ class UndirectedGraphTest {
             inner class `Vertices are different` {
                 @TestAllUndirectedGraphs
                 fun `Added edge should be returned`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -192,7 +190,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `Edge should be added to graph`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
                     val defaultEdgesSet = graphStructure.second
 
@@ -209,7 +207,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `vertices have to be added to each other's adjacency map values`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -232,7 +230,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `edge has to be added to both vertices' outgoing edges map values`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v0 = defaultVerticesList[0]
@@ -261,7 +259,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `adding already existing edge shouldn't change graph`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -277,7 +275,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `adding already existing edge shouldn't change adjacency map`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -297,7 +295,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `adding already existing edge shouldn't change outgoing edges map`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -317,7 +315,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `adding edge with reversed arguments shouldn't change graph`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -333,7 +331,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `adding edge with reversed arguments shouldn't change adjacency map`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -353,7 +351,7 @@ class UndirectedGraphTest {
 
                 @TestAllUndirectedGraphs
                 fun `adding edge with reversed arguments shouldn't change outgoing edges map`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v1 = defaultVerticesList[1]
@@ -376,7 +374,7 @@ class UndirectedGraphTest {
             inner class `Vertices are the same` {
                 @TestAllUndirectedGraphs
                 fun `exception should be thrown`(graph: UndirectedGraph<Int>) {
-                    val graphStructure = setup(graph)
+                    val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
                     val v2 = defaultVerticesList[2]
@@ -392,7 +390,7 @@ class UndirectedGraphTest {
         inner class `One of the vertices isn't in the graph` {
             @TestAllUndirectedGraphs
             fun `first vertex isn't in the graph`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -404,7 +402,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `second vertex isn't in the graph`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -429,7 +427,7 @@ class UndirectedGraphTest {
         inner class `Edge is in the graph` {
             @TestAllUndirectedGraphs
             fun `removed edge should be returned`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v1 = defaultVerticesList[1]
@@ -445,7 +443,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `order of the arguments shouldn't matter`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v1 = defaultVerticesList[1]
@@ -461,7 +459,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `edge should be removed from graph`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
                 val defaultEdgesSet = graphStructure.second
 
@@ -479,7 +477,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `vertices should be removed from each other's adjacency map values`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
@@ -503,7 +501,7 @@ class UndirectedGraphTest {
 
             @TestAllUndirectedGraphs
             fun `edge should be removed from vertices' outgoing edges map values`(graph: UndirectedGraph<Int>) {
-                val graphStructure = setup(graph)
+                val graphStructure = setupAbstractGraph(graph)
                 val defaultVerticesList = graphStructure.first
 
                 val v0 = defaultVerticesList[0]
