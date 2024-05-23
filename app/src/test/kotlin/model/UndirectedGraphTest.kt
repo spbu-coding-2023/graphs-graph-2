@@ -5,6 +5,7 @@ import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Nested
+import util.annotations.TestAllDirectedGraphs
 import util.annotations.TestAllUndirectedGraphs
 import util.setupAbstractGraph
 
@@ -688,6 +689,31 @@ class UndirectedGraphTest {
                 val actualBridges = graph.findBridges()
 
                 assertEquals(expectedBridges, actualBridges)
+            }
+        }
+    }
+
+    @Nested
+    inner class FindKeyVerticesTest {
+        @Nested
+        inner class `One vertex is picked over another`() {
+            @TestAllUndirectedGraphs
+            fun `if it can reach other vertices with fewer edges`(graph: UndirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v1)
+                    addEdge(v0, v2)
+                    addEdge(v0, v3)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
             }
         }
     }

@@ -5,6 +5,7 @@ import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import util.annotations.TestAllDirectedGraphs
 import util.emptyEdgesSet
 import util.emptyVerticesList
@@ -759,14 +760,52 @@ class DirectedGraphTest {
         }
     }
 
-//    [[(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@1bab8268, model.abstractGraph.Vertex@44a59da3)],
-//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6986852, model.abstractGraph.Vertex@42a15bdc), (model.abstractGraph.Edge@704deff2, model.abstractGraph.Vertex@44a59da3)],
-//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6986852, model.abstractGraph.Vertex@42a15bdc), (model.abstractGraph.Edge@404bbcbd, model.abstractGraph.Vertex@27508c5d), (model.abstractGraph.Edge@658c5a19, model.abstractGraph.Vertex@44a59da3)],
-//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6e01f9b0, model.abstractGraph.Vertex@6f6745d6), (model.abstractGraph.Edge@6c61a903, model.abstractGraph.Vertex@27508c5d), (model.abstractGraph.Edge@658c5a19, model.abstractGraph.Vertex@44a59da3)],
-//    [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@a307a8c, model.abstractGraph.Vertex@4f704591), (model.abstractGraph.Edge@2b9ed6da, model.abstractGraph.Vertex@6f6745d6), (model.abstractGraph.Edge@6c61a903, model.abstractGraph.Vertex@27508c5d), (model.abstractGraph.Edge@658c5a19, model.abstractGraph.Vertex@44a59da3)]]
+    @Nested
+    inner class FindKeyVerticesTest {
+        @Nested
+        inner class `One vertex is picked over another`() {
+            @TestAllDirectedGraphs
+            fun `if it can reach more vertices`(graph: DirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
 
+                graph.apply {
+                    addEdge(v0, v1)
+                    addEdge(v0, v2)
+                    addEdge(v0, v3)
+                    addEdge(v1, v2)
+                }
 
-//    [[(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@6986852, model.abstractGraph.Vertex@42a15bdc), (model.abstractGraph.Edge@704deff2, model.abstractGraph.Vertex@44a59da3)], [(model.abstractGraph.Edge@1acaf3d, model.abstractGraph.Vertex@27e47833), (model.abstractGraph.Edge@1bab8268, model.abstractGraph.Vertex@44a59da3)]]
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @TestAllDirectedGraphs
+            fun `if it can reach other vertices with fewer edges`(graph: DirectedGraph<Int>) {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v0, v2)
+                    addEdge(v0, v3)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+        }
+    }
+
     @Nested
     inner class FindCyclesTest {
         @Nested

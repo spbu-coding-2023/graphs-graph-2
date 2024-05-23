@@ -4,6 +4,7 @@ import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
+import util.annotations.TestAllDirectedGraphs
 import util.setupDirectedGraphWithCycle
 import util.setupWeightedDirected
 
@@ -307,9 +308,96 @@ class WeightedDirectedGraphTest {
     }
 
     @Nested
+    inner class FindKeyVerticesTest {
+        @Nested
+        inner class `One vertex is picked over another`() {
+            @Test
+            fun `if it can reach more vertices`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v1, 1)
+                    addEdge(v0, v2, 1)
+                    addEdge(v0, v3, 1)
+                    addEdge(v1, v2, 1)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if it can reach other vertices with fewer edges`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v2, 1)
+                    addEdge(v0, v3, 1)
+                    addEdge(v1, v2, 1)
+                    addEdge(v2, v3, 1)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if its sum of distances to other vertices is less`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v2, 1)
+                    addEdge(v0, v3, 1)
+                    addEdge(v1, v2, 2)
+                    addEdge(v2, v3, 2)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+        }
+
+        @Nested
+        inner class `Returns null`() {
+            @Test
+            fun `if graph has negative edges`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                graph.apply {
+                    addEdge(v0, v1, 1)
+                    addEdge(v0, v2, -1)
+                }
+
+                val actualResult = graph.findKeyVertices()
+
+                assertNull(actualResult)
+            }
+        }
+    }
+
+    @Nested
     inner class findShortestPathFordBellmanTest {
+
         @Nested
         inner class `Path exists` {
+
             @Test
             fun `path between neighbours should consist of one edge`() {
                 val v0 = graph.addVertex(0)
@@ -351,7 +439,6 @@ class WeightedDirectedGraphTest {
 
                 assertEquals(expectedValue, actualValue)
             }
-
             @Test
             fun `graph shouldn't change`() {
                 val graphStructure = setupDirectedGraphWithCycle(graph)
@@ -372,6 +459,7 @@ class WeightedDirectedGraphTest {
 
         @Nested
         inner class `Path doesn't exist` {
+
             @Test
             fun `there is simply no path between vertices`() {
                 val graphStructure = setupDirectedGraphWithCycle(graph)
@@ -452,7 +540,6 @@ class WeightedDirectedGraphTest {
                 assertEquals(null, graph.findShortestPathFordBellman(v8, v6))
                 assertEquals(null, graph.findShortestPathFordBellman(v8, v7))
             }
-
             @Test
             fun `graph shouldn't change`() {
                 val graphStructure = setupDirectedGraphWithCycle(graph)
