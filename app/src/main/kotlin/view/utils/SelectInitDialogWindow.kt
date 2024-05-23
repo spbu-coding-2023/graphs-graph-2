@@ -1,4 +1,4 @@
-package view
+package view.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,8 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import model.abstractGraph.Graph
-import view.tabScreen.FileControlTab
 import viewmodel.graph.CreateGraphViewModel
 
 
