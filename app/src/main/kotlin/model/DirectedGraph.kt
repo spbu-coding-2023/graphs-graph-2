@@ -112,7 +112,7 @@ open class DirectedGraph<D> : Graph<D>() {
         return reversedEdgesMap
     }
 
-    fun findCyclesJohnson(srcVertex: Vertex<D>): Set<List<Pair<Edge<D>, Vertex<D>>>> {
+    fun findCycles(srcVertex: Vertex<D>): Set<List<Pair<Edge<D>, Vertex<D>>>> {
         if (getOutgoingEdges(srcVertex).isEmpty()) return emptySet()
 
         val sccs = findSCC()
