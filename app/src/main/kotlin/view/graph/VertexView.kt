@@ -14,56 +14,68 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import viewmodel.WindowViewModel
 import viewmodel.graph.VertexViewModel
+import kotlin.math.min
+import kotlin.ranges.coerceIn
 
 @Composable
-fun <D> VertexView(viewModel: VertexViewModel<D>) {
-    val coroutineScope = rememberCoroutineScope()
+fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
+    val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
     val windowVM = WindowViewModel()
-    val density = LocalDensity.current.density
     windowVM.SetCurrentDimensions()
+    val density = LocalDensity.current.density
+
+    val maxRadius = 50.dp // TODO: move to shared const file
+    val minRadius = 7.dp
+
+    val adjustedX = (viewModel.x.value)
+    val adjustedY = (viewModel.y.value)
+    val adjustedRadius = (viewModel.radius * scale).coerceIn(minRadius, maxRadius)
 
     Box(
-        modifier =
-            Modifier.offset {
-                    IntOffset(viewModel.x.value.roundToPx(), viewModel.y.value.roundToPx())
-                }
-                .size(viewModel.radius * 2)
-                .background(
-                    if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
-                    shape = CircleShape
-                )
-                .clip(CircleShape)
-                .pointerInput(Unit) {
-                    coroutineScope.launch {
-                        detectDragGestures { change, dragAmount ->
-                            viewModel.onDrag(
-                                DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()),
-                                windowVM, density
-                            )
-                            change.consume()
-                        }
-                        detectTapGestures(
-                            onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
+        modifier = Modifier
+            .offset { IntOffset(adjustedX.roundToPx(), adjustedY.roundToPx()) }
+            .size(adjustedRadius * 2)
+            .background(
+                if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
+                shape = CircleShape
+            )
+            .clip(CircleShape)
+            .pointerInput(Unit) {
+                coroutineScope.launch {
+                    detectDragGestures { change, dragAmount ->
+                        viewModel.onDrag(
+                            DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()),
+                            windowVM, density, scale
                         )
+                        change.consume()
                     }
-                },
+                }
+                detectTapGestures(
+                    onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
+                )
+            },
         contentAlignment = Alignment.Center
     ) {
         if (viewModel.dataVisible.value) {
             Text(modifier = Modifier.align(Alignment.Center), text = viewModel.getVertexData)
         }
         if (viewModel.idVisible.value) {
-            Text(modifier = Modifier.align(Alignment.Center).zIndex(3f), text = viewModel.getVertexID.toString(), color = Color.Black, style = MaterialTheme.typography.body1.copy(fontSize = 20.sp))
+            Text(
+                modifier = Modifier.align(Alignment.Center).zIndex(3f),
+                text = viewModel.getVertexID.toString(),
+                color = Color.Black,
+                style = MaterialTheme.typography.body1.copy(fontSize = 20.sp)
+            )
         }
     }
 }
