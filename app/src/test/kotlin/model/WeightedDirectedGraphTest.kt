@@ -120,7 +120,7 @@ class WeightedDirectedGraphTest {
                 val e5 = graph.addEdge(v3, v2, 20)
                 val e6 = graph.addEdge(v3, v4, 60)
 
-                val expectedResult = listOf<Pair<Vertex<Int>, Edge<Int>>>(Pair(v1, e0), Pair(v2, e3), Pair(v4, e4))
+                val expectedResult = listOf(e0 to v1, e3 to v2, e4 to v4)
                 val actualResult = graph.findShortestPathDijkstra(v0, v4)
 
                 assertEquals(expectedResult, actualResult)
@@ -137,7 +137,7 @@ class WeightedDirectedGraphTest {
                 val e1 = graph.addEdge(v1, v2, 5)
                 val e2 = graph.addEdge(v0, v2, 10)
 
-                val expectedResult = listOf(Pair(v2, e2))
+                val expectedResult = listOf(e2 to v2)
                 val actualResult = graph.findShortestPathDijkstra(v0, v2)
                 assertEquals(expectedResult, actualResult)
             }
@@ -154,8 +154,8 @@ class WeightedDirectedGraphTest {
                 val e2 = graph.addEdge(v1, v3, 1)
                 val e3 = graph.addEdge(v2, v3, 1)
 
-                val expectedResult1 = listOf(Pair(v1, e0), Pair(v3, e2))
-                val expectedResult2 = listOf(Pair(v2, e1), Pair(v3, e3))
+                val expectedResult1 = listOf(e0 to v1, e2 to v3)
+                val expectedResult2 = listOf(e1 to v2, e3 to v3)
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v3)
 
@@ -169,7 +169,7 @@ class WeightedDirectedGraphTest {
 
                 val e0 = graph.addEdge(v0, v1, 5)
 
-                val expectedResult = listOf(Pair(v1, e0))
+                val expectedResult = listOf(e0 to v1)
                 val actualResult = graph.findShortestPathDijkstra(v0, v1)
 
                 assertEquals(expectedResult, actualResult)
@@ -187,7 +187,7 @@ class WeightedDirectedGraphTest {
                 val e1 = graph.addEdge(v1, v2, -2)
                 val e2 = graph.addEdge(v2, v3, -3)
 
-                val expectedResult = listOf(Pair(v1, e0), Pair(v2, e1), Pair(v3, e2))
+                val expectedResult = listOf(e0 to v1, e1 to v2, e2 to v3)
                 val actualResult = graph.findShortestPathDijkstra(v0, v3)
 
                 assertEquals(expectedResult, actualResult)
@@ -207,8 +207,8 @@ class WeightedDirectedGraphTest {
                 val e3 = graph.addEdge(v2, v3, 1)
                 val e4 = graph.addEdge(v3, v4, 1)
 
-                val expectedResult1 = listOf(Pair(v1, e0), Pair(v3, e2), Pair(v4, e4))
-                val expectedResult2 = listOf(Pair(v2, e1), Pair(v3, e3), Pair(v4, e4))
+                val expectedResult1 = listOf(e0 to v1, e2 to v3, e4 to v4)
+                val expectedResult2 = listOf(e1 to v2, e3 to v3, e4 to v4)
                 val actualResult = graph.findShortestPathDijkstra(v0, v4)
 
                 Assertions.assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
@@ -226,7 +226,7 @@ class WeightedDirectedGraphTest {
                 val e2 = graph.addEdge(v2, v0, 3)
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v2)
-                val expectedResult = listOf(Pair(v2, e2))
+                val expectedResult = listOf(e2 to v2)
 
                 assertEquals(expectedResult, actualResult)
             }
@@ -241,7 +241,7 @@ class WeightedDirectedGraphTest {
                 val e0 = graph.addEdge(v0, v1, 0)
                 val e1 = graph.addEdge(v1, v2, 0)
 
-                val expectedResult = listOf(Pair(v1, e0), Pair(v2, e1))
+                val expectedResult = listOf(e0 to v1, e1 to v2)
                 val actualResult = graph.findShortestPathDijkstra(v0, v2)
                 assertEquals(expectedResult, actualResult)
             }
