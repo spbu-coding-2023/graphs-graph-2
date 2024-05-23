@@ -11,11 +11,16 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.zIndex
 import viewmodel.WindowViewModel
 import viewmodel.graph.EdgeViewModel
+import kotlin.math.max
+import kotlin.math.min
 
 @Composable
-fun <D> EdgeView(viewModel: EdgeViewModel<D>) {
+fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
     val windowVM = WindowViewModel()
     windowVM.SetCurrentDimensions()
+
+    val maxStrokeWidth = 30f// TODO: move to shared const file
+    val minStrokeWidth = 3f
 
     val firstVertexCenter = viewModel.calculateFirstVertexCenter()
     val secondVertexCenter = viewModel.calculateSecondVertexCenter()
@@ -25,12 +30,12 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>) {
     val secondVertexCenterX = secondVertexCenter.first
     val secondVertexCenterY = secondVertexCenter.second
 
-    val arrowPoints = viewModel.calculateArrowPoints()
+    val arrowPoints = viewModel.calculateArrowPoints(scale)
 
     Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
         drawLine(
             color = Color.LightGray,
-            strokeWidth = 5f,
+            strokeWidth = (5f * scale * 1.5f).coerceIn(minStrokeWidth, maxStrokeWidth),
             start =
             Offset(
                 firstVertexCenterX.toPx(),
