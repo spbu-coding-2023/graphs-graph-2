@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.unit.Dp
 import kotlin.math.sqrt
 
+// TODO: move to a seperate const file
 const val ARROW_SIZE = 20f
 const val ARROW_DEPTH = 2.5f
 const val SQRT_3 = 1.732f
@@ -16,16 +17,16 @@ class EdgeViewModel<D>(
 
     private val radius = firstVertex.radius
 
-    internal fun calculateFirstVertexCenter(): Pair<Dp, Dp> {
-        val x = firstVertex.x.value + radius
-        val y = firstVertex.y.value + radius
+    internal fun calculateFirstVertexCenter(scale: Float): Pair<Dp, Dp> {
+        val x = firstVertex.x.value + radius * scale
+        val y = firstVertex.y.value + radius * scale
 
         return Pair(x, y)
     }
 
-    internal fun calculateSecondVertexCenter(): Pair<Dp, Dp> {
-        val x = secondVertex.x.value + radius
-        val y = secondVertex.y.value + radius
+    internal fun calculateSecondVertexCenter(scale: Float): Pair<Dp, Dp> {
+        val x = secondVertex.x.value + radius * scale
+        val y = secondVertex.y.value + radius * scale
 
         return Pair(x, y)
     }
@@ -33,11 +34,11 @@ class EdgeViewModel<D>(
     internal fun calculateArrowPoints(scale: Float): List<Pair<Dp, Dp>> {
         if (!isDirected.value) return listOf()
 
-        val firstVertexCenterX = calculateFirstVertexCenter().first
-        val firstVertexCenterY = calculateFirstVertexCenter().second
+        val firstVertexCenterX = calculateFirstVertexCenter(scale).first
+        val firstVertexCenterY = calculateFirstVertexCenter(scale).second
 
-        val secondVertexCenterX = calculateSecondVertexCenter().first
-        val secondVertexCenterY = calculateSecondVertexCenter().second
+        val secondVertexCenterX = calculateSecondVertexCenter(scale).first
+        val secondVertexCenterY = calculateSecondVertexCenter(scale).second
 
         val vectorX = secondVertexCenterX - firstVertexCenterX
         val vectorY = secondVertexCenterY - firstVertexCenterY
@@ -54,14 +55,14 @@ class EdgeViewModel<D>(
         val bX = normedVectorX * SQRT_3 / 2 + normedVectorY * 1 / 2
         val bY = -normedVectorX * 1 / 2 + normedVectorY * SQRT_3 / 2
 
-        val arrowEndPointX = secondVertexCenterX - normedVectorX * (radius.value * scale * 2 - ARROW_DEPTH)
-        val arrowEndPointY = secondVertexCenterY - normedVectorY * (radius.value * scale * 2 - ARROW_DEPTH)
+        val arrowEndPointX = secondVertexCenterX - normedVectorX * (radius.value - ARROW_DEPTH) * scale
+        val arrowEndPointY = secondVertexCenterY - normedVectorY * (radius.value - ARROW_DEPTH) * scale
 
-        val arrowLeftPointX = arrowEndPointX - aX * ARROW_SIZE
-        val arrowLeftPointY = arrowEndPointY - aY * ARROW_SIZE
+        val arrowLeftPointX = arrowEndPointX - aX * ARROW_SIZE * scale
+        val arrowLeftPointY = arrowEndPointY - aY * ARROW_SIZE * scale
 
-        val arrowRightPointX = arrowEndPointX - bX * ARROW_SIZE
-        val arrowRightPointY = arrowEndPointY - bY * ARROW_SIZE
+        val arrowRightPointX = arrowEndPointX - bX * ARROW_SIZE * scale
+        val arrowRightPointY = arrowEndPointY - bY * ARROW_SIZE * scale
 
         return listOf(
             Pair(arrowEndPointX, arrowEndPointY),

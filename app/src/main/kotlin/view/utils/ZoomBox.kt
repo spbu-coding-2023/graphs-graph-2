@@ -21,11 +21,15 @@ fun ZoomBox(currentScale: MutableState<Float>) {
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Bottom
         ) {
-            FloatingActionButton(onClick = { currentScale.value *= 1.1f }) {
+            FloatingActionButton(onClick = {
+                currentScale.value = (1.1f * currentScale.value).coerceIn(0.7f, 1.9f) // TODO: move to const
+            }) {
                 Text("+")
             }
             Spacer(modifier = Modifier.height(8.dp))
-            FloatingActionButton(onClick = { currentScale.value /= 1.1f }) {
+            FloatingActionButton(onClick = {
+                currentScale.value = (currentScale.value / 1.1f).coerceIn(0.7f, 1.9f)
+            }) {
                 Text("-")
             }
         }

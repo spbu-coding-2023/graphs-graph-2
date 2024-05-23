@@ -34,7 +34,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
     windowVM.SetCurrentDimensions()
     val density = LocalDensity.current.density
 
-    val maxRadius = 50.dp // TODO: move to shared const file
+    val maxRadius = 35.dp // TODO: move to shared const file
     val minRadius = 7.dp
 
     val adjustedX = (viewModel.x.value)

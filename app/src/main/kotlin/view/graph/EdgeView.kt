@@ -19,11 +19,11 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
     val windowVM = WindowViewModel()
     windowVM.SetCurrentDimensions()
 
-    val maxStrokeWidth = 30f// TODO: move to shared const file
-    val minStrokeWidth = 3f
+    val maxStrokeWidth = 12f// TODO: move to shared const file
+    val minStrokeWidth = 4f
 
-    val firstVertexCenter = viewModel.calculateFirstVertexCenter()
-    val secondVertexCenter = viewModel.calculateSecondVertexCenter()
+    val firstVertexCenter = viewModel.calculateFirstVertexCenter(scale)
+    val secondVertexCenter = viewModel.calculateSecondVertexCenter(scale)
 
     val firstVertexCenterX = firstVertexCenter.first
     val firstVertexCenterY = firstVertexCenter.second
@@ -35,7 +35,7 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
     Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
         drawLine(
             color = Color.LightGray,
-            strokeWidth = (5f * scale * 1.5f).coerceIn(minStrokeWidth, maxStrokeWidth),
+            strokeWidth = (5f * scale).coerceIn(minStrokeWidth, maxStrokeWidth),
             start =
             Offset(
                 firstVertexCenterX.toPx(),
