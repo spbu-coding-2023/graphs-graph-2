@@ -145,15 +145,15 @@ open class DirectedGraph<D> : Graph<D>() {
                     // cycle is found
                     stack.addLast(srcVertex)
 
-                    val cycleOfVertices = mutableSetOf<Vertex<D>>()
+                    val cycleOfVertices = mutableListOf<Vertex<D>>()
                     cycleOfVertices.addAll(stack)
-                    verticesCycles.add(cycleOfVertices.reversed())
+                    verticesCycles.add(cycleOfVertices)
 
                     stack.removeLast()
 
                     cycleIsFound = true
                 } else if (neighbour !in blockedSet) {
-                    cycleIsFound = cycleIsFound || DFSToFindCycles(neighbour)
+                    cycleIsFound = DFSToFindCycles(neighbour) || cycleIsFound
                 }
             }
 
