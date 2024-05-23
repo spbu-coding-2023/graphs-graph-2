@@ -9,8 +9,8 @@ const val ARROW_DEPTH = 2.5f
 const val SQRT_3 = 1.732f
 
 class EdgeViewModel<D>(
-    private val firstVertex: VertexViewModel<D>,
-    private val secondVertex: VertexViewModel<D>,
+    val firstVertex: VertexViewModel<D>,
+    val secondVertex: VertexViewModel<D>,
     private val isDirected: State<Boolean>
 ) {
 
@@ -30,7 +30,7 @@ class EdgeViewModel<D>(
         return Pair(x, y)
     }
 
-    internal fun calculateArrowPoints(): List<Pair<Dp, Dp>> {
+    internal fun calculateArrowPoints(scale: Float): List<Pair<Dp, Dp>> {
         if (!isDirected.value) return listOf()
 
         val firstVertexCenterX = calculateFirstVertexCenter().first
@@ -54,8 +54,8 @@ class EdgeViewModel<D>(
         val bX = normedVectorX * SQRT_3 / 2 + normedVectorY * 1 / 2
         val bY = -normedVectorX * 1 / 2 + normedVectorY * SQRT_3 / 2
 
-        val arrowEndPointX = secondVertexCenterX - normedVectorX * (radius.value - ARROW_DEPTH)
-        val arrowEndPointY = secondVertexCenterY - normedVectorY * (radius.value - ARROW_DEPTH)
+        val arrowEndPointX = secondVertexCenterX - normedVectorX * (radius.value * scale * 2 - ARROW_DEPTH)
+        val arrowEndPointY = secondVertexCenterY - normedVectorY * (radius.value * scale * 2 - ARROW_DEPTH)
 
         val arrowLeftPointX = arrowEndPointX - aX * ARROW_SIZE
         val arrowLeftPointY = arrowEndPointY - aY * ARROW_SIZE

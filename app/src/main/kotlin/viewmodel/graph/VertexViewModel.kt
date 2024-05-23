@@ -16,18 +16,17 @@ class VertexViewModel<D>(
     var dataVisible: State<Boolean>,
     var idVisible: State<Boolean>,
     val vertex: Vertex<D>,
-    val radius: Dp = 30.dp,
+    val radius: Dp = 20.dp,
 ) {
     var isSelected = mutableStateOf(false)
 
     val getVertexData
         get() = vertex.data.toString()
 
-    fun onDrag(dragAmount: DpOffset, currentWindowVM: WindowViewModel, density: Float) {
-        val screenScaleFactor = density
+    fun onDrag(dragAmount: DpOffset, currentWindowVM: WindowViewModel, density: Float, scale: Float) {
 
-        val maxX = currentWindowVM.getWidth / screenScaleFactor - 360.dp - radius * 2
-        val maxY = currentWindowVM.getHeight / screenScaleFactor - radius * 2
+        val maxX = currentWindowVM.getWidth - 360.dp - radius * 2
+        val maxY = currentWindowVM.getHeight - radius * 2
 
         // calculate the new position after dragging
         val newX = (x.value + dragAmount.x).coerceIn(0.dp, maxX)
