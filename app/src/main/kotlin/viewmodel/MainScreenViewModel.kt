@@ -1,6 +1,7 @@
 package viewmodel
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import model.abstractGraph.Graph
 import viewmodel.graph.GraphViewModel
@@ -11,17 +12,16 @@ class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
     val showVerticesIds = mutableStateOf(false)
     val graphType = mutableStateOf(currentGraphType)
 
-    fun setDirectedState(currentGraphType: String): MutableState<Boolean> {
-        println(currentGraphType.contains("Directed"))
-        println(currentGraphType)
+    fun setDirectionState(currentGraphType: String): MutableState<Boolean> {
         if (currentGraphType.contains("Directed")) return mutableStateOf(true)
         return mutableStateOf(false)
     }
 
 
-    val graphViewModel = GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectedState(currentGraphType))
+    val graphViewModel =
+        GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectionState(currentGraphType))
 
-    init { // here will be a placement-function call
+    init {
         TFDPLayout().place(740.0, 650.0, graphViewModel.verticesVM)
     }
 

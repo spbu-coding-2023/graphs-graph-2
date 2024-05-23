@@ -11,12 +11,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -24,9 +26,10 @@ import kotlinx.coroutines.launch
 fun SelectTabRow(
     currentPageState: PagerState,
     index: Int,
-    coroutineScope: CoroutineScope,
     title: String
 ) {
+    val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
+
     Tab(
         selected = currentPageState.currentPage == index,
         onClick = { coroutineScope.launch { currentPageState.animateScrollToPage(index) } },
