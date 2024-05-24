@@ -18,13 +18,12 @@ import viewmodel.graph.GraphViewModel
 
 @Composable
 fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
-    var showDialog by remember { mutableStateOf(false) }
+    var showVertexAddDialog by remember { mutableStateOf(false) }
     var vertexData by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var connectVertexId by remember { mutableStateOf("") }
     var firstVertexId by remember { mutableStateOf("") }
     var secondVertexId by remember { mutableStateOf("") }
-    var displayId by remember { mutableStateOf(false) }
     var secondVertexData by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
@@ -56,7 +55,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
             Column(modifier = Modifier.width(120.dp).fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(70.dp),
-                    onClick = { if (vertexData.isNotEmpty()) showDialog = true },
+                    onClick = { if (vertexData.isNotEmpty()) showVertexAddDialog = true },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text("add")
@@ -110,8 +109,20 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
             Column(modifier = Modifier.width(110.dp).fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(70.dp),
-                    onClick = {},
-                    // TODO add edge
+                    onClick = {
+                        if (graphVM.graph.getVertices()
+                                .any { it.id == firstVertexId.toInt() } && graphVM.graph.getVertices()
+                                .any { it.id == secondVertexId.toInt() }
+                        ) {
+                            graphVM.addEdge(firstVertexId.toInt(), secondVertexId.toInt())
+
+                            graphVM.updateIsRequired.value = true
+                            secondVertexId = ""
+                            firstVertexId = ""
+                        } else {
+                            // TODO: show error window
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text("add")
@@ -121,14 +132,13 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
         Row(
             modifier = Modifier.fillMaxWidth().padding(5.dp).clickable {
-                displayId = !displayId
+                graphVM.showVerticesID.value = !graphVM.showVerticesID.value
             },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = displayId,
-                onCheckedChange = { displayId = it },
-                // TODO display ids
+                checked = graphVM.showVerticesID.value,
+                onCheckedChange = { graphVM.showVerticesID.value = it },
                 colors =
                 CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colors.primary,
@@ -136,14 +146,14 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                 )
             )
             Text(
-                text = "Checkbox Text",
+                text = "Show ID",
                 modifier = Modifier.padding(start = 10.dp, bottom = 3.dp).align(Alignment.CenterVertically)
             )
 
         }
     }
 
-    if (showDialog) {
+    if (showVertexAddDialog) {
         Dialog(onDismissRequest = {}) {
             vertexData = ""
 
@@ -181,9 +191,11 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 val secondId = graphVM.addVertex(secondVertexData)
                                 graphVM.addEdge(firstId, secondId)
 
-                                showDialog = false
+                                graphVM.updateIsRequired.value = true
+
+                                showVertexAddDialog = false
                                 errorMessage = ""
-                                connectVertexId = ""
+                                secondVertexData = ""
                             }
 
                         }
@@ -228,7 +240,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 val firstId = graphVM.addVertex(vertexData)
                                 graphVM.addEdge(firstId, connectVertexId.toInt())
 
-                                showDialog = false
+                                graphVM.updateIsRequired.value = true
+
+                                showVertexAddDialog = false
                                 errorMessage = ""
                                 connectVertexId = ""
                             }

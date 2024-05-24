@@ -1,4 +1,4 @@
-package view
+package view.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +21,7 @@ class SelectInitDialogWindow(
 ) {
     var showGraphDialog by mutableStateOf(false)
     var showCreateGraphDialog by mutableStateOf(false)
+    var showImportTab by mutableStateOf(false)
 
     @Composable
     fun GraphInitDialogWindow(
@@ -65,7 +66,10 @@ class SelectInitDialogWindow(
 
                         Button(modifier = Modifier.width(145.dp).height(50.dp),
                             colors = ButtonDefaults.buttonColors(Color.Blue),
-                            onClick = { showGraphDialog = false }
+                            onClick = {
+                                showGraphDialog = false
+                                showImportTab = true
+                            }
                         ) {
                             Text("Import", color = Color.White)
                         }
@@ -77,5 +81,9 @@ class SelectInitDialogWindow(
         if (showCreateGraphDialog) {
             CreateGraphDialogWindow(CreateGraphViewModel())
         }
+
+//        if (showImportTab) {
+//            ImportGraphDialogWindow()
+//        }
     }
 }

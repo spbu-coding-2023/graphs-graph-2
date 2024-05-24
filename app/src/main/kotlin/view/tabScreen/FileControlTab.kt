@@ -8,6 +8,6 @@ import androidx.compose.ui.Modifier
 import viewmodel.graph.GraphViewModel
 
 @Composable
-fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
+fun <D> FileControlTab(graphVM: GraphViewModel<D>? = null) {
     Column(modifier = Modifier.fillMaxSize()) { Text("hahahhahh 3rd tab") }
 }
