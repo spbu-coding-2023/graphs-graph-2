@@ -6,7 +6,7 @@ import model.WeightedDirectedGraph
 import model.WeightedUndirectedGraph
 import model.abstractGraph.Graph
 
-class JsonIO {
+class JsonSaverAndReader {
     fun saveToJson() {}
 
     private fun <D> readGraphContent(graph: Graph<D>): GraphContent<D> {
@@ -34,11 +34,11 @@ class JsonIO {
                     edgesEndsIds[id1 to id2] = graph.getWeight(edge)
                 }
 
-                else -> edgesEndsIds[id1 to id2]
+                else -> edgesEndsIds[id1 to id2] = null
             }
         }
 
-        val graphContent = GraphContent<D>(
+        val graphContent = GraphContent(
             isDirected,
             isWeighted,
             verticesData,

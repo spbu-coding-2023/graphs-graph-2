@@ -1,5 +1,8 @@
 package model.io.json
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class GraphContent<D>(
     val isDirected: Boolean,
     val isWeighted: Boolean,
