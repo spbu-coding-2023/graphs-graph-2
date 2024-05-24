@@ -94,9 +94,7 @@ class WeightedDirectedGraphTest {
 
             graph.removeEdge(edge)
 
-            assertThrows(NoSuchElementException::class.java) {
-                graph.getWeight(edge)
-            }
+            assertThrows(NoSuchElementException::class.java) { graph.getWeight(edge) }
         }
     }
 
@@ -159,7 +157,7 @@ class WeightedDirectedGraphTest {
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v3)
 
-                Assertions.assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
+                assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
             }
 
             @Test
@@ -211,7 +209,7 @@ class WeightedDirectedGraphTest {
                 val expectedResult2 = listOf(e1 to v2, e3 to v3, e4 to v4)
                 val actualResult = graph.findShortestPathDijkstra(v0, v4)
 
-                Assertions.assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
+                assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
             }
 
             @Test
@@ -249,7 +247,6 @@ class WeightedDirectedGraphTest {
 
         @Nested
         inner class `No path should be returned`() {
-
             @Test
             fun `no path exists in directed graph`() {
                 val graph = WeightedDirectedGraph<Int>()
@@ -271,9 +268,11 @@ class WeightedDirectedGraphTest {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
-                graph.addEdge(v0, v1, 1)
-                graph.addEdge(v1, v2, 2)
-                graph.addEdge(v2, v0, 2)
+                graph.apply {
+                    addEdge(v0, v1, 1)
+                    addEdge(v1, v2, 2)
+                    addEdge(v2, v0, 2)
+                }
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v0)
 
@@ -296,12 +295,95 @@ class WeightedDirectedGraphTest {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
-                val e0 = graph.addEdge(v0, v1, 0)
-                val e1 = graph.addEdge(v1, v2, 0)
+                graph.addEdge(v0, v1, 0)
+                graph.addEdge(v1, v2, 0)
 
                 val actualResult = graph.findShortestPathDijkstra(v2, v0)
 
                 actualResult?.isEmpty()?.let { assertTrue(it) }
+            }
+        }
+    }
+
+    @Nested
+    inner class FindKeyVerticesTest {
+        @Nested
+        inner class `One vertex is picked over another`() {
+            @Test
+            fun `if it can reach more vertices`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v1, 1)
+                    addEdge(v0, v2, 1)
+                    addEdge(v0, v3, 1)
+                    addEdge(v1, v2, 1)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if it can reach other vertices with fewer edges`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v2, 1)
+                    addEdge(v0, v3, 1)
+                    addEdge(v1, v2, 1)
+                    addEdge(v2, v3, 1)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+
+            @Test
+            fun `if its sum of distances to other vertices is less`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+                val v3 = graph.addVertex(3)
+
+                graph.apply {
+                    addEdge(v0, v2, 1)
+                    addEdge(v0, v3, 1)
+                    addEdge(v1, v2, 2)
+                    addEdge(v2, v3, 2)
+                }
+
+                val expectedResult = setOf(v0)
+                val actualResult = graph.findKeyVertices()
+
+                assertEquals(expectedResult, actualResult)
+            }
+        }
+
+        @Nested
+        inner class `Returns null`() {
+            @Test
+            fun `if graph has negative edges`() {
+                val v0 = graph.addVertex(0)
+                val v1 = graph.addVertex(1)
+                val v2 = graph.addVertex(2)
+
+                graph.addEdge(v0, v1, 1)
+                graph.addEdge(v0, v2, -1)
+
+                val actualResult = graph.findKeyVertices()
+
+                assertNull(actualResult)
             }
         }
     }
@@ -333,11 +415,12 @@ class WeightedDirectedGraphTest {
                 val v4 = defaultVertices[4]
 
                 val actualValue = graph.findShortestPathFordBellman(v0, v4)
-                val expectedValue = listOf(
-                    graph.getEdge(v0, v1) to v1,
-                    graph.getEdge(v1, v2) to v2,
-                    graph.getEdge(v2, v4) to v4
-                )
+                val expectedValue =
+                    listOf(
+                        graph.getEdge(v0, v1) to v1,
+                        graph.getEdge(v1, v2) to v2,
+                        graph.getEdge(v2, v4) to v4
+                    )
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -361,9 +444,7 @@ class WeightedDirectedGraphTest {
                 val v4 = defaultVertices[4]
 
                 val expectedGraph = graphStructure
-
                 graph.findShortestPathFordBellman(v3, v4)
-
                 val actualGraph = graphStructure
 
                 assertEquals(expectedGraph, actualGraph)
@@ -381,9 +462,8 @@ class WeightedDirectedGraphTest {
                 val v5 = defaultVertices[5]
 
                 val actualValue = graph.findShortestPathFordBellman(v1, v5)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -395,9 +475,8 @@ class WeightedDirectedGraphTest {
                 val v2 = defaultVertices[2]
 
                 val actualValue = graph.findShortestPathFordBellman(v2, v0)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -409,9 +488,8 @@ class WeightedDirectedGraphTest {
                 val v8 = defaultVertices[8]
 
                 val actualValue = graph.findShortestPathFordBellman(v0, v8)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -423,9 +501,8 @@ class WeightedDirectedGraphTest {
                 val v8 = defaultVertices[8]
 
                 val actualValue = graph.findShortestPathFordBellman(v6, v8)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -443,14 +520,14 @@ class WeightedDirectedGraphTest {
                 val v7 = defaultVertices[7]
                 val v8 = defaultVertices[8]
 
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v0))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v1))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v2))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v3))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v4))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v5))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v6))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v7))
+                assertNull(graph.findShortestPathFordBellman(v8, v0))
+                assertNull(graph.findShortestPathFordBellman(v8, v1))
+                assertNull(graph.findShortestPathFordBellman(v8, v2))
+                assertNull(graph.findShortestPathFordBellman(v8, v3))
+                assertNull(graph.findShortestPathFordBellman(v8, v4))
+                assertNull(graph.findShortestPathFordBellman(v8, v5))
+                assertNull(graph.findShortestPathFordBellman(v8, v6))
+                assertNull(graph.findShortestPathFordBellman(v8, v7))
             }
 
             @Test
@@ -462,9 +539,7 @@ class WeightedDirectedGraphTest {
                 val v8 = defaultVertices[8]
 
                 val expectedGraph = graphStructure
-
                 graph.findShortestPathFordBellman(v8, v1)
-
                 val actualGraph = graphStructure
 
                 assertEquals(expectedGraph, actualGraph)
