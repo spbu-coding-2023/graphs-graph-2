@@ -1,13 +1,34 @@
 package model.io.json
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlin.io.path.Path
 import model.DirectedGraph
 import model.UndirectedGraph
 import model.WeightedDirectedGraph
 import model.WeightedUndirectedGraph
 import model.abstractGraph.Graph
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 class JsonSaverAndReader {
-    fun saveToJson() {}
+    fun <D> saveToJson(graph: Graph<D>, pathString: String) {
+        val graphContent = readGraphContent(graph)
+
+        val jsonString = Json.encodeToString(graphContent)
+
+        Path(pathString).writeText(jsonString)
+    }
+
+    fun <D> readFromJson(pathString: String): Graph<D> {
+        val jsonString = Path(pathString).readText()
+
+        val graphContent = Json.decodeFromString<GraphContent<D>>(jsonString)
+
+        val graph = createGraphFromContent(graphContent)
+
+        return graph
+    }
 
     private fun <D> readGraphContent(graph: Graph<D>): GraphContent<D> {
         val isDirected = graph is DirectedGraph
@@ -47,8 +68,6 @@ class JsonSaverAndReader {
 
         return graphContent
     }
-
-    fun readFromJson() {}
 
     private fun <D> createGraphFromContent(graphContent: GraphContent<D>): Graph<D> {
         val isDirected = graphContent.isDirected
