@@ -156,13 +156,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showVertexAddDialog) {
-        Dialog(
-            onDismissRequest = {
-                showVertexAddDialog = false
-            }
-        ) {
-            vertexData = ""
-
+        Dialog(onDismissRequest = {}) {
             Column(
                 modifier =
                 Modifier
@@ -206,6 +200,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 showVertexAddDialog = false
                                 errorMessage = ""
                                 secondVertexData = ""
+                                vertexData = ""
                             }
 
                         }
@@ -255,6 +250,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 showVertexAddDialog = false
                                 errorMessage = ""
                                 connectVertexId = ""
+                                vertexData = ""
                             }
                         }
                     ) {
