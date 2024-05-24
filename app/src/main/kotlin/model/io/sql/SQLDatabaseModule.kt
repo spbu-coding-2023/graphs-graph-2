@@ -1,8 +1,10 @@
 package model.io.sql
 
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.*
-import kotlinx.coroutines.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import view.utils.ErrorWindow
@@ -12,8 +14,6 @@ import viewmodel.graph.GraphViewModel
 import viewmodel.graph.SetupGraphViewModel
 import java.io.File
 import java.sql.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 object SQLDatabaseModule {
     private const val DB_DIRECTORY = "database"
