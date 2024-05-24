@@ -5,12 +5,10 @@ import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import util.annotations.TestAllDirectedGraphs
 import util.emptyEdgesSet
 import util.emptyVerticesList
 import util.setupAbstractGraph
-import util.setupGraphForFindingCycles
 
 class DirectedGraphTest {
     @Nested
@@ -463,10 +461,12 @@ class DirectedGraphTest {
                 val v3 = graph.addVertex(3)
                 val v4 = graph.addVertex(4)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v3, v4)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v3, v4)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4))
@@ -482,11 +482,13 @@ class DirectedGraphTest {
                 val v4 = graph.addVertex(4)
                 val v5 = graph.addVertex(5)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v1)
-                graph.addEdge(v3, v4)
-                graph.addEdge(v4, v3)
-                graph.addEdge(v5, v1)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v1)
+                    addEdge(v3, v4)
+                    addEdge(v4, v3)
+                    addEdge(v5, v1)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v3, v4), mutableSetOf(v1, v2), mutableSetOf(v5))
@@ -503,13 +505,15 @@ class DirectedGraphTest {
                 val v5 = graph.addVertex(5)
                 val v6 = graph.addVertex(6)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v3, v4)
-                graph.addEdge(v4, v5)
-                graph.addEdge(v5, v6)
-                graph.addEdge(v6, v4)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v3, v4)
+                    addEdge(v4, v5)
+                    addEdge(v5, v6)
+                    addEdge(v6, v4)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4, v5, v6))
@@ -526,13 +530,15 @@ class DirectedGraphTest {
                 val v5 = graph.addVertex(5)
                 val v6 = graph.addVertex(6)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v3, v4)
-                graph.addEdge(v4, v5)
-                graph.addEdge(v5, v6)
-                graph.addEdge(v6, v4)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v3, v4)
+                    addEdge(v4, v5)
+                    addEdge(v5, v6)
+                    addEdge(v6, v4)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4, v5, v6))
@@ -549,12 +555,14 @@ class DirectedGraphTest {
                 val v5 = graph.addVertex(5)
                 val v6 = graph.addVertex(6)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v1)
-                graph.addEdge(v3, v4)
-                graph.addEdge(v4, v3)
-                graph.addEdge(v5, v6)
-                graph.addEdge(v6, v5)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v1)
+                    addEdge(v3, v4)
+                    addEdge(v4, v3)
+                    addEdge(v5, v6)
+                    addEdge(v6, v5)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v1, v2), mutableSetOf(v3, v4), mutableSetOf(v5, v6))
@@ -568,10 +576,12 @@ class DirectedGraphTest {
                 val v2 = graph.addVertex(2)
                 val v3 = graph.addVertex(3)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v3, v3)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v3, v3)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3))
@@ -600,7 +610,13 @@ class DirectedGraphTest {
                 val v4 = graph.addVertex(4)
 
                 val actualValue = graph.findSCC()
-                val expectedValue = mutableSetOf(mutableSetOf(v1), mutableSetOf(v2), mutableSetOf(v3), mutableSetOf(v4))
+                val expectedValue =
+                    mutableSetOf(
+                        mutableSetOf(v1),
+                        mutableSetOf(v2),
+                        mutableSetOf(v3),
+                        mutableSetOf(v4)
+                    )
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -655,11 +671,13 @@ class DirectedGraphTest {
                 val v4 = graph.addVertex(4)
                 val v5 = graph.addVertex(5)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v4, v3)
-                graph.addEdge(v4, v5)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v4, v3)
+                    addEdge(v4, v5)
+                }
 
                 val actualValue = graph.findSCC()
                 val expectedValue = mutableSetOf(mutableSetOf(v1, v2, v3), mutableSetOf(v4), mutableSetOf(v5))
@@ -677,12 +695,13 @@ class DirectedGraphTest {
                 val v3 = graph.addVertex(3)
                 val v4 = graph.addVertex(4)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v3, v4)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v3, v4)
+                }
 
-                val edgesBeforeReverse = graph.getEdges()
                 val expectedValue = graph.getVertices()
                 graph.findSCC()
                 val actualValue = graph.getVertices()
@@ -697,16 +716,15 @@ class DirectedGraphTest {
                 val v3 = graph.addVertex(3)
                 val v4 = graph.addVertex(4)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v3, v4)
-
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v3, v4)
+                }
 
                 val expectedValue = graph.getEdges()
-
                 graph.findSCC()
-
                 val actualValue = graph.getEdges()
 
                 assertEquals(expectedValue, actualValue)
@@ -720,16 +738,16 @@ class DirectedGraphTest {
                 val v4 = graph.addVertex(4)
                 val v5 = graph.addVertex(5)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v4, v3)
-                graph.addEdge(v4, v5)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v4, v3)
+                    addEdge(v4, v5)
+                }
 
                 val expectedValue = graph.getEdges()
-
                 graph.findSCC()
-
                 val actualValue = graph.getEdges()
 
                 assertEquals(expectedValue, actualValue)
@@ -743,16 +761,16 @@ class DirectedGraphTest {
                 val v4 = graph.addVertex(4)
                 val v5 = graph.addVertex(5)
 
-                graph.addEdge(v1, v2)
-                graph.addEdge(v2, v3)
-                graph.addEdge(v3, v1)
-                graph.addEdge(v4, v3)
-                graph.addEdge(v4, v5)
+                graph.apply {
+                    addEdge(v1, v2)
+                    addEdge(v2, v3)
+                    addEdge(v3, v1)
+                    addEdge(v4, v3)
+                    addEdge(v4, v5)
+                }
 
                 val expectedValue = graph.getVertices()
-
                 graph.findSCC()
-
                 val actualValue = graph.getVertices()
 
                 assertEquals(expectedValue, actualValue)
@@ -837,47 +855,21 @@ class DirectedGraphTest {
                 val e78 = graph.addEdge(v7, v8)
                 val e87 = graph.addEdge(v8, v7)
 
-                val expectedCycle1 = listOf(
-                    e12 to v2,
-                    e21 to v1
-                )
-
-                val expectedCycle2 = listOf(
-                    e12 to v2,
-                    e20 to v0,
-                    e01 to v1
-                )
-
-                val expectedCycle3 = listOf(
-                    e12 to v2,
-                    e20 to v0,
-                    e04 to v4,
-                    e41 to v1
-                )
-
-                val expectedCycle4 = listOf(
-                    e12 to v2,
-                    e23 to v3,
-                    e34 to v4,
-                    e41 to v1
-                )
-
-                val expectedCycle5 = listOf(
-                    e12 to v2,
-                    e25 to v5,
-                    e53 to v3,
-                    e34 to v4,
-                    e41 to v1
-                )
+                val expectedCycle1 = listOf(e12 to v2, e21 to v1)
+                val expectedCycle2 = listOf(e12 to v2, e20 to v0, e01 to v1)
+                val expectedCycle3 = listOf(e12 to v2, e20 to v0, e04 to v4, e41 to v1)
+                val expectedCycle4 = listOf(e12 to v2, e23 to v3, e34 to v4, e41 to v1)
+                val expectedCycle5 = listOf(e12 to v2, e25 to v5, e53 to v3, e34 to v4, e41 to v1)
 
                 val actualValue = graph.findCycles(v1)
-                val expectedValue = setOf(
-                    expectedCycle1,
-                    expectedCycle2,
-                    expectedCycle3,
-                    expectedCycle4,
-                    expectedCycle5
-                )
+                val expectedValue =
+                    setOf(
+                        expectedCycle1,
+                        expectedCycle2,
+                        expectedCycle3,
+                        expectedCycle4,
+                        expectedCycle5
+                    )
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -895,12 +887,7 @@ class DirectedGraphTest {
                 val e23 = graph.addEdge(v2, v3)
 
                 val actualValue = graph.findCycles(v1)
-                val expectedValue = setOf(
-                    listOf(
-                        e12 to v2,
-                        e21 to v1
-                    )
-                )
+                val expectedValue = setOf(listOf(e12 to v2, e21 to v1))
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -913,7 +900,7 @@ class DirectedGraphTest {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
 
-                val e01 = graph.addEdge(v0, v1)
+                graph.addEdge(v0, v1)
 
                 val actualValue = graph.findCycles(v1)
                 val expectedValue = emptySet<List<Pair<Edge<Int>, Vertex<Int>>>>()
@@ -926,7 +913,7 @@ class DirectedGraphTest {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
 
-                val e01 = graph.addEdge(v0, v1)
+                graph.addEdge(v0, v1)
 
                 val actualValue = graph.findCycles(v0)
                 val expectedValue = emptySet<List<Pair<Edge<Int>, Vertex<Int>>>>()
@@ -940,13 +927,11 @@ class DirectedGraphTest {
             val v0 = graph.addVertex(0)
             val v1 = graph.addVertex(1)
 
-            val e01 = graph.addEdge(v0, v1)
-            val e10 = graph.addEdge(v1, v0)
+            graph.addEdge(v0, v1)
+            graph.addEdge(v1, v0)
 
             val expectedGraph = graph.getVertices() to graph.getEdges().toSet()
-
             graph.findCycles(v1)
-
             val actualGraph = graph.getVertices() to graph.getEdges().toSet()
 
             assertEquals(expectedGraph, actualGraph)

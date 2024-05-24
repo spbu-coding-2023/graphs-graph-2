@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import util.annotations.TestAllDirectedGraphs
-import util.annotations.TestAllUndirectedGraphs
 import util.setupWeightedUndirected
 
 class WeightedUndirectedGraphTest {
@@ -266,7 +264,7 @@ class WeightedUndirectedGraphTest {
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v3)
 
-                assertEquals(actualResult, null)
+                assertNull(actualResult)
             }
 
             @Test
@@ -303,10 +301,10 @@ class WeightedUndirectedGraphTest {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
 
-                graph.addEdge(v0, v1, 5)
-                val lightEdge = graph.addEdge(v0, v1, 3)
+                val e01Heavy = graph.addEdge(v0, v1, 5)
+                val e01Light = graph.addEdge(v0, v1, 3)
 
-                val expectedReturn = listOf(lightEdge)
+                val expectedReturn = listOf(e01Light)
                 val actualReturn = graph.findMinSpanningTree()
 
                 assertEquals(expectedReturn, actualReturn)
@@ -317,10 +315,10 @@ class WeightedUndirectedGraphTest {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
 
-                graph.addEdge(v0, v1, -5)
-                val lightEdge = graph.addEdge(v0, v1, -10)
+                val e01Heavy = graph.addEdge(v0, v1, -5)
+                val e01Light = graph.addEdge(v0, v1, -10)
 
-                val expectedReturn = listOf(lightEdge)
+                val expectedReturn = listOf(e01Light)
                 val actualReturn = graph.findMinSpanningTree()
 
                 assertEquals(expectedReturn, actualReturn)
@@ -331,10 +329,10 @@ class WeightedUndirectedGraphTest {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
 
-                graph.addEdge(v0, v1, 5)
-                val zeroEdge = graph.addEdge(v0, v1, 0)
+                val e01Pos = graph.addEdge(v0, v1, 5)
+                val e01Zero = graph.addEdge(v0, v1, 0)
 
-                val expectedReturn = listOf(zeroEdge)
+                val expectedReturn = listOf(e01Zero)
                 val actualReturn = graph.findMinSpanningTree()
 
                 assertEquals(expectedReturn, actualReturn)
@@ -345,11 +343,11 @@ class WeightedUndirectedGraphTest {
                 val v0 = graph.addVertex(0)
                 val v1 = graph.addVertex(1)
 
-                graph.addEdge(v0, v1, 5)
-                graph.addEdge(v0, v1, 0)
-                val negativeEdge = graph.addEdge(v0, v1, -5)
+                val e01Pos = graph.addEdge(v0, v1, 5)
+                val e01Zero = graph.addEdge(v0, v1, 0)
+                val e01Neg = graph.addEdge(v0, v1, -5)
 
-                val expectedReturn = listOf(negativeEdge)
+                val expectedReturn = listOf(e01Neg)
                 val actualReturn = graph.findMinSpanningTree()
 
                 assertEquals(expectedReturn, actualReturn)
@@ -369,7 +367,7 @@ class WeightedUndirectedGraphTest {
                 val e12 = graph.addEdge(v1, v2, 1)
                 val e23 = graph.addEdge(v2, v3, 1)
 
-                val cycleEdge30 = graph.addEdge(v3, v0, 5)
+                val e30 = graph.addEdge(v3, v0, 5)
 
                 val expectedReturn = setOf(e01, e12, e23)
                 val actualReturn = graph.findMinSpanningTree().toSet()
@@ -388,12 +386,12 @@ class WeightedUndirectedGraphTest {
                 val v3 = graph.addVertex(3)
                 val v4 = graph.addVertex(4)
 
-                val e01 = graph.addEdge(v0, v1, 1)
-                val e02 = graph.addEdge(v0, v2, 10)
+                val eva01 = graph.addEdge(v0, v1, 1)
+                val eva02 = graph.addEdge(v0, v2, 10)
                 val e23 = graph.addEdge(v2, v3, 0)
                 val e24 = graph.addEdge(v2, v4, -20)
 
-                val expectedResult = setOf(e24, e23, e01, e02)
+                val expectedResult = setOf(e24, e23, eva01, eva02)
                 val actualResult = graph.findMinSpanningTree().toSet()
 
                 assertEquals(expectedResult, actualResult)
@@ -412,10 +410,8 @@ class WeightedUndirectedGraphTest {
 
             @Test
             fun `if graph has no edges`() {
-                graph.apply {
-                    addVertex(0)
-                    addVertex(1)
-                }
+                graph.addVertex(0)
+                graph.addVertex(1)
 
                 val expectedResult = listOf<Edge<Int>>()
                 val actualResult = graph.findMinSpanningTree()
@@ -497,10 +493,8 @@ class WeightedUndirectedGraphTest {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
-                graph.apply {
-                    addEdge(v0, v1, 1)
-                    addEdge(v0, v2, -1)
-                }
+                graph.addEdge(v0, v1, 1)
+                graph.addEdge(v0, v2, -1)
 
                 val actualResult = graph.findKeyVertices()
 

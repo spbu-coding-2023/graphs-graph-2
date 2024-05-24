@@ -5,7 +5,6 @@ import model.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Nested
-import util.annotations.TestAllDirectedGraphs
 import util.annotations.TestAllUndirectedGraphs
 import util.setupAbstractGraph
 
@@ -133,11 +132,7 @@ class UndirectedGraphTest {
                 val v4 = defaultVerticesList[4]
 
                 val actualValue = graph.getOutgoingEdges(v3).toSet()
-                val expectedValue = setOf(
-                    graph.getEdge(v3, v4),
-                    graph.getEdge(v3, v1),
-                    graph.getEdge(v3, v2)
-                )
+                val expectedValue = setOf(graph.getEdge(v3, v4), graph.getEdge(v3, v1), graph.getEdge(v3, v2))
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -246,13 +241,13 @@ class UndirectedGraphTest {
                     val expectedEdges1 = setOf(graph.getEdge(v0, v1), graph.getEdge(v0, v3))
 
                     val actualEdges2 = graph.getOutgoingEdges(v3).toSet()
-                    val expectedEdges2 = setOf(
-                        graph.getEdge(v3, v0),
-                        graph.getEdge(v3, v1),
-                        graph.getEdge(v3, v2),
-                        graph.getEdge(v3, v4)
-                    )
-
+                    val expectedEdges2 =
+                        setOf(
+                            graph.getEdge(v3, v0),
+                            graph.getEdge(v3, v1),
+                            graph.getEdge(v3, v2),
+                            graph.getEdge(v3, v4)
+                        )
 
                     assertEquals(expectedEdges1, actualEdges1)
                     assertEquals(expectedEdges2, actualEdges2)
@@ -515,11 +510,12 @@ class UndirectedGraphTest {
                 graph.removeEdge(edgeToRemove)
 
                 val actualEdges1 = graph.getOutgoingEdges(v1).toSet()
-                val expectedEdges1 = setOf(
-                    graph.getEdge(v1, v0),
-                    graph.getEdge(v1, v3),
-                    graph.getEdge(v1, v4),
-                )
+                val expectedEdges1 =
+                    setOf(
+                        graph.getEdge(v1, v0),
+                        graph.getEdge(v1, v3),
+                        graph.getEdge(v1, v4),
+                    )
 
                 val actualEdges2 = graph.getOutgoingEdges(v2).toSet()
                 val expectedEdges2 = setOf(graph.getEdge(v2, v3))
@@ -534,7 +530,7 @@ class UndirectedGraphTest {
             @TestAllUndirectedGraphs
             fun `non-existing edge should throw an exception`(graph: UndirectedGraph<Int>) {
                 assertThrows(NoSuchElementException::class.java) {
-                    graph.removeEdge(Edge(Vertex(0,0), Vertex(1, 1)))
+                    graph.removeEdge(Edge(Vertex(0, 0), Vertex(1, 1)))
                 }
             }
         }

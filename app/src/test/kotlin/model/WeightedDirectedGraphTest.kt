@@ -4,7 +4,6 @@ import model.abstractGraph.Edge
 import model.abstractGraph.Vertex
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import util.annotations.TestAllDirectedGraphs
 import util.setupDirectedGraphWithCycle
 import util.setupWeightedDirected
 
@@ -95,9 +94,7 @@ class WeightedDirectedGraphTest {
 
             graph.removeEdge(edge)
 
-            assertThrows(NoSuchElementException::class.java) {
-                graph.getWeight(edge)
-            }
+            assertThrows(NoSuchElementException::class.java) { graph.getWeight(edge) }
         }
     }
 
@@ -160,7 +157,7 @@ class WeightedDirectedGraphTest {
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v3)
 
-                Assertions.assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
+                assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
             }
 
             @Test
@@ -212,7 +209,7 @@ class WeightedDirectedGraphTest {
                 val expectedResult2 = listOf(e1 to v2, e3 to v3, e4 to v4)
                 val actualResult = graph.findShortestPathDijkstra(v0, v4)
 
-                Assertions.assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
+                assertTrue(actualResult == expectedResult1 || actualResult == expectedResult2)
             }
 
             @Test
@@ -250,7 +247,6 @@ class WeightedDirectedGraphTest {
 
         @Nested
         inner class `No path should be returned`() {
-
             @Test
             fun `no path exists in directed graph`() {
                 val graph = WeightedDirectedGraph<Int>()
@@ -272,9 +268,11 @@ class WeightedDirectedGraphTest {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
-                graph.addEdge(v0, v1, 1)
-                graph.addEdge(v1, v2, 2)
-                graph.addEdge(v2, v0, 2)
+                graph.apply {
+                    addEdge(v0, v1, 1)
+                    addEdge(v1, v2, 2)
+                    addEdge(v2, v0, 2)
+                }
 
                 val actualResult = graph.findShortestPathDijkstra(v0, v0)
 
@@ -297,8 +295,8 @@ class WeightedDirectedGraphTest {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
-                val e0 = graph.addEdge(v0, v1, 0)
-                val e1 = graph.addEdge(v1, v2, 0)
+                graph.addEdge(v0, v1, 0)
+                graph.addEdge(v1, v2, 0)
 
                 val actualResult = graph.findShortestPathDijkstra(v2, v0)
 
@@ -380,10 +378,8 @@ class WeightedDirectedGraphTest {
                 val v1 = graph.addVertex(1)
                 val v2 = graph.addVertex(2)
 
-                graph.apply {
-                    addEdge(v0, v1, 1)
-                    addEdge(v0, v2, -1)
-                }
+                graph.addEdge(v0, v1, 1)
+                graph.addEdge(v0, v2, -1)
 
                 val actualResult = graph.findKeyVertices()
 
@@ -394,10 +390,8 @@ class WeightedDirectedGraphTest {
 
     @Nested
     inner class findShortestPathFordBellmanTest {
-
         @Nested
         inner class `Path exists` {
-
             @Test
             fun `path between neighbours should consist of one edge`() {
                 val v0 = graph.addVertex(0)
@@ -421,11 +415,12 @@ class WeightedDirectedGraphTest {
                 val v4 = defaultVertices[4]
 
                 val actualValue = graph.findShortestPathFordBellman(v0, v4)
-                val expectedValue = listOf(
-                    graph.getEdge(v0, v1) to v1,
-                    graph.getEdge(v1, v2) to v2,
-                    graph.getEdge(v2, v4) to v4
-                )
+                val expectedValue =
+                    listOf(
+                        graph.getEdge(v0, v1) to v1,
+                        graph.getEdge(v1, v2) to v2,
+                        graph.getEdge(v2, v4) to v4
+                    )
 
                 assertEquals(expectedValue, actualValue)
             }
@@ -439,6 +434,7 @@ class WeightedDirectedGraphTest {
 
                 assertEquals(expectedValue, actualValue)
             }
+
             @Test
             fun `graph shouldn't change`() {
                 val graphStructure = setupDirectedGraphWithCycle(graph)
@@ -448,9 +444,7 @@ class WeightedDirectedGraphTest {
                 val v4 = defaultVertices[4]
 
                 val expectedGraph = graphStructure
-
                 graph.findShortestPathFordBellman(v3, v4)
-
                 val actualGraph = graphStructure
 
                 assertEquals(expectedGraph, actualGraph)
@@ -459,7 +453,6 @@ class WeightedDirectedGraphTest {
 
         @Nested
         inner class `Path doesn't exist` {
-
             @Test
             fun `there is simply no path between vertices`() {
                 val graphStructure = setupDirectedGraphWithCycle(graph)
@@ -469,9 +462,8 @@ class WeightedDirectedGraphTest {
                 val v5 = defaultVertices[5]
 
                 val actualValue = graph.findShortestPathFordBellman(v1, v5)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -483,9 +475,8 @@ class WeightedDirectedGraphTest {
                 val v2 = defaultVertices[2]
 
                 val actualValue = graph.findShortestPathFordBellman(v2, v0)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -497,9 +488,8 @@ class WeightedDirectedGraphTest {
                 val v8 = defaultVertices[8]
 
                 val actualValue = graph.findShortestPathFordBellman(v0, v8)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -511,9 +501,8 @@ class WeightedDirectedGraphTest {
                 val v8 = defaultVertices[8]
 
                 val actualValue = graph.findShortestPathFordBellman(v6, v8)
-                val expectedValue = null
 
-                assertEquals(expectedValue, actualValue)
+                assertNull(actualValue)
             }
 
             @Test
@@ -531,15 +520,16 @@ class WeightedDirectedGraphTest {
                 val v7 = defaultVertices[7]
                 val v8 = defaultVertices[8]
 
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v0))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v1))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v2))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v3))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v4))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v5))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v6))
-                assertEquals(null, graph.findShortestPathFordBellman(v8, v7))
+                assertNull(graph.findShortestPathFordBellman(v8, v0))
+                assertNull(graph.findShortestPathFordBellman(v8, v1))
+                assertNull(graph.findShortestPathFordBellman(v8, v2))
+                assertNull(graph.findShortestPathFordBellman(v8, v3))
+                assertNull(graph.findShortestPathFordBellman(v8, v4))
+                assertNull(graph.findShortestPathFordBellman(v8, v5))
+                assertNull(graph.findShortestPathFordBellman(v8, v6))
+                assertNull(graph.findShortestPathFordBellman(v8, v7))
             }
+
             @Test
             fun `graph shouldn't change`() {
                 val graphStructure = setupDirectedGraphWithCycle(graph)
@@ -549,9 +539,7 @@ class WeightedDirectedGraphTest {
                 val v8 = defaultVertices[8]
 
                 val expectedGraph = graphStructure
-
                 graph.findShortestPathFordBellman(v8, v1)
-
                 val actualGraph = graphStructure
 
                 assertEquals(expectedGraph, actualGraph)

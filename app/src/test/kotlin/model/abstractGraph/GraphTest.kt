@@ -3,9 +3,9 @@ package model.abstractGraph
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllGraphTypes
-import util.setupAbstractGraph
 import util.emptyEdgesSet
 import util.emptyGraph
+import util.setupAbstractGraph
 
 class GraphTest {
     @Nested
@@ -218,12 +218,7 @@ class GraphTest {
                     val newV2 = newVertices[2]
                     val newV3 = newVertices[3]
 
-                    assertTrue(
-                        newV0 == oldV0 &&
-                        newV1 == oldV1 &&
-                        newV2.id == 2 && newV2.data == 4 &&
-                        newV3 == oldV3
-                    )
+                    assertTrue(newV0 == oldV0 && newV1 == oldV1 && newV2.id == 2 && newV2.data == 4 && newV3 == oldV3)
                 }
 
                 @TestAllGraphTypes
@@ -247,12 +242,13 @@ class GraphTest {
                     val newV3 = newVertices[3]
 
                     val actualEdges = graph.getEdges().toSet()
-                    val expectedEdges = setOf(
-                        graph.getEdge(newV0, newV1),
-                        graph.getEdge(newV3, newV2),
-                        graph.getEdge(newV2, newV1),
-                        graph.getEdge(newV3, newV1)
-                    )
+                    val expectedEdges =
+                        setOf(
+                            graph.getEdge(newV0, newV1),
+                            graph.getEdge(newV3, newV2),
+                            graph.getEdge(newV2, newV1),
+                            graph.getEdge(newV3, newV1)
+                        )
 
                     assertEquals(expectedEdges, actualEdges)
                 }
@@ -264,7 +260,7 @@ class GraphTest {
             @TestAllGraphTypes
             fun `removing vertex from an empty graph should cause exception`(graph: Graph<Int>) {
                 assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(0,0))
+                    graph.removeVertex(Vertex(0, 0))
                 }
             }
 
@@ -273,7 +269,7 @@ class GraphTest {
                 setupAbstractGraph(graph)
 
                 assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(1904,-360))
+                    graph.removeVertex(Vertex(1904, -360))
                 }
             }
 
@@ -282,7 +278,7 @@ class GraphTest {
                 setupAbstractGraph(graph)
 
                 assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(6,3))
+                    graph.removeVertex(Vertex(6, 3))
                 }
             }
 
@@ -291,7 +287,7 @@ class GraphTest {
                 setupAbstractGraph(graph)
 
                 assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(0,35))
+                    graph.removeVertex(Vertex(0, 35))
                 }
             }
         }
