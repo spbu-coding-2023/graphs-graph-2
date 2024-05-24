@@ -51,7 +51,7 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                 Text(
                     text = viewmodel.graphViewModel.graphType.value.replace(" ", "\nData type: "),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colors.primary,
+                    color = Color.Black,
                     textAlign = TextAlign.Center
                 )
             }
