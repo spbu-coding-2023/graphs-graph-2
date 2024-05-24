@@ -20,9 +20,4 @@ class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
 
     val graphViewModel =
         GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectionState(currentGraphType))
-
-    //    fun setEdgeColor
-    //
-    //    fun setVerticesColor()
-
 }
