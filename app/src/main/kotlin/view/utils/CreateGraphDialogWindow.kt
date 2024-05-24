@@ -115,7 +115,7 @@ fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
                     }
 
                     Column(modifier = Modifier.width(250.dp).height(200.dp)) {
-                        Text("Select the weightnes*:")
+                        Text("Select the weightiness:")
 
                         Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
 
