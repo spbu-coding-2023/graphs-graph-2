@@ -21,10 +21,6 @@ class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
     val graphViewModel =
         GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectionState(currentGraphType))
 
-    init {
-        TFDPLayout().place(740.0, 650.0, graphViewModel.verticesVM)
-    }
-
     //    fun setEdgeColor
     //
     //    fun setVerticesColor()
