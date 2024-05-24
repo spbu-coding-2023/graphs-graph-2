@@ -1,11 +1,9 @@
 package viewmodel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import model.graphs.abstractGraph.Graph
 import viewmodel.graph.GraphViewModel
-import viewmodel.graph.TFDPLayout
 
 class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
     val showVerticesData = mutableStateOf(false)
