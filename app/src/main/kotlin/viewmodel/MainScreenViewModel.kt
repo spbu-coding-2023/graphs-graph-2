@@ -17,7 +17,6 @@ class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
         return mutableStateOf(false)
     }
 
-
     val graphViewModel =
         GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectionState(currentGraphType))
 }
