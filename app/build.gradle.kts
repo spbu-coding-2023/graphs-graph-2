@@ -1,6 +1,12 @@
+val kotlinxCoroutinesVersion: String by project
+val neo4jDriverVersion: String by project
+val composeVersion: String by project
+val junitVersion: String by project
+val koinVersion: String by project
+
 plugins {
-    kotlin("jvm") version "1.9.22"
-    id("org.jetbrains.compose") version "1.6.2"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.compose)
 }
 
 repositories {
@@ -11,24 +17,30 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("io.insert-koin:koin-core:3.4.2")
+    testImplementation("org.jetbrains.compose.ui:ui-test-junit4:$composeVersion")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation(libs.koin.core)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxCoroutinesVersion")
 
     implementation("org.xerial:sqlite-jdbc:3.41.2.2")
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("ch.qos.logback:logback-classic:1.4.12")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
-    testImplementation("org.jetbrains.compose.ui:ui-test-junit4:1.6.2")
+    implementation("org.neo4j.driver:neo4j-java-driver:$neo4jDriverVersion")
 }
-
 
 compose.desktop {
     application {
         mainClass = "MainKt"
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
