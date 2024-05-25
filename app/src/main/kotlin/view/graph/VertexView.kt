@@ -54,8 +54,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
                 coroutineScope.launch {
                     detectDragGestures { change, dragAmount ->
                         viewModel.onDrag(
-                            DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()),
-                            windowVM, density, scale
+                            DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp())
                         )
                         change.consume()
                     }
