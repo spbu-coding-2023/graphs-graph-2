@@ -23,12 +23,10 @@ class VertexViewModel<D>(
     val getVertexData
         get() = vertex.data.toString()
 
-    fun onDrag(dragAmount: DpOffset, currentWindowVM: WindowViewModel, density: Float, scale: Float) {
-        // calculate the new position after dragging
+    fun onDrag(dragAmount: DpOffset) {
         val newX = x.value + dragAmount.x
         val newY = y.value + dragAmount.y
 
-        // update the position
         x.value = newX
         y.value = newY
     }
