@@ -1,33 +1,34 @@
 package viewmodel.graph
 
+import model.io.sql.SQLDatabaseModule
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import model.graphs.DirectedGraph
 import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
-import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import viewmodel.MainScreenViewModel
 
 class SetupGraphViewModel {
     sealed class GraphType {
-        object Integer : GraphType()
-        object UInteger : GraphType()
-        object String : GraphType()
+        data object Integer : GraphType()
+        data object UInteger : GraphType()
+        data object String : GraphType()
     }
 
     sealed class GraphStructure {
-        object Directed : GraphStructure()
-        object Undirected : GraphStructure()
+        data object Directed : GraphStructure()
+        data object Undirected : GraphStructure()
     }
 
     sealed class Weight {
-        object Weighted : Weight()
-        object Unweighted : Weight()
+        data object Weighted : Weight()
+        data object Unweighted : Weight()
     }
 
     @Composable
-    fun createGraph(
+    fun createGraphAndApplyScreen(
         storedData: GraphType,
         graphStructure: GraphStructure,
         weight: Weight
@@ -89,7 +90,8 @@ class SetupGraphViewModel {
                             is GraphType.UInteger -> MainScreen(MainScreenViewModel(
                                 UndirectedGraph<UInt>(),
                                 "UndirectedGraph UInt"))
-                            is GraphType.String -> MainScreen(MainScreenViewModel(
+                            is GraphType.String ->
+                                MainScreen(MainScreenViewModel(
                                 UndirectedGraph<String>(),
                                 "UndirectedGraph String"))
                         }
@@ -99,27 +101,41 @@ class SetupGraphViewModel {
         }
     }
 
-    fun <D> createGraphObject(
+    @Suppress("UNCHECKED_CAST")
+    fun <D>createGraphObject(
         storedData: GraphType,
         graphStructure: GraphStructure,
-        weight: Weight
-    ): Graph<D> {
-        @Suppress("UNCHECKED_CAST")
-        return when (weight) {
+        weight: Weight,
+        graphId: Int,
+        graphVMState: MutableState<GraphViewModel<D>?>
+    ) {
+        when (weight) {
             is Weight.Weighted -> {
                 when (graphStructure) {
                     is GraphStructure.Directed -> {
                         when (storedData) {
-                            is GraphType.Integer -> WeightedDirectedGraph<Int>() as Graph<D>
-                            is GraphType.UInteger -> WeightedDirectedGraph<UInt>() as Graph<D>
-                            is GraphType.String -> WeightedDirectedGraph<String>() as Graph<D>
+                            is GraphType.Integer -> {
+                                SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
+                            }
+                            is GraphType.UInteger -> {
+                                SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
+                            }
+                            is GraphType.String -> {
+                                SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
+                            }
                         }
                     }
                     is GraphStructure.Undirected -> {
                         when (storedData) {
-                            is GraphType.Integer -> WeightedUndirectedGraph<Int>() as Graph<D>
-                            is GraphType.UInteger -> WeightedUndirectedGraph<UInt>() as Graph<D>
-                            is GraphType.String -> WeightedUndirectedGraph<String>() as Graph<D>
+                            is GraphType.Integer -> {
+                                SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
+                            }
+                            is GraphType.UInteger -> {
+                                SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
+                            }
+                            is GraphType.String -> {
+                                SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
+                            }
                         }
                     }
                 }
@@ -128,16 +144,28 @@ class SetupGraphViewModel {
                 when (graphStructure) {
                     is GraphStructure.Directed -> {
                         when (storedData) {
-                            is GraphType.Integer -> DirectedGraph<Int>() as Graph<D>
-                            is GraphType.UInteger -> DirectedGraph<UInt>() as Graph<D>
-                            is GraphType.String -> DirectedGraph<String>() as Graph<D>
+                            is GraphType.Integer -> {
+                                SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
+                            }
+                            is GraphType.UInteger -> {
+                                SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
+                            }
+                            is GraphType.String -> {
+                                SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
+                            }
                         }
                     }
                     is GraphStructure.Undirected -> {
                         when (storedData) {
-                            is GraphType.Integer -> UndirectedGraph<Int>() as Graph<D>
-                            is GraphType.UInteger -> UndirectedGraph<UInt>() as Graph<D>
-                            is GraphType.String -> UndirectedGraph<String>() as Graph<D>
+                            is GraphType.Integer -> {
+                                SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
+                            }
+                            is GraphType.UInteger -> {
+                                SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
+                            }
+                            is GraphType.String -> {
+                                SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
+                            }
                         }
                     }
                 }

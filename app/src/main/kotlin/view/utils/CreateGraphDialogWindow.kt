@@ -18,8 +18,7 @@ import viewmodel.graph.SetupGraphViewModel
 
 @Composable
 fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
-
-    var closeDialog = remember { mutableStateOf(false) }
+    val closeDialog = remember { mutableStateOf(false) }
     val selectedStoredDataIndex = remember { mutableStateOf(0) }
     val selectedOrientationIndex = remember { mutableStateOf(0) }
     val selectedWeightinessIndex = remember { mutableStateOf(0) }
@@ -173,7 +172,7 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
         }
     }
     if (createGraphClicked.value) {
-        onCreateGraphClicked(
+        createGraphFromTypesIndices(
             viewModel,
             selectedStoredDataIndex.value,
             selectedOrientationIndex.value,
@@ -184,7 +183,7 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
 
 
 @Composable
-fun onCreateGraphClicked(
+fun createGraphFromTypesIndices(
     viewModel: SetupGraphViewModel,
     storedDataIndex: Int,
     orientationIndex: Int,
@@ -209,5 +208,28 @@ fun onCreateGraphClicked(
         else -> SetupGraphViewModel.Weight.Unweighted // default to unweighted
     }
 
-    return viewModel.createGraph(storedData, graphStructure, weight)
+    return viewModel.createGraphAndApplyScreen(storedData, graphStructure, weight)
+}
+
+fun getGraphVMParameter(storedDataType: Int, structureType: Int, weightType: Int): Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight> {
+    val storedData = when (storedDataType) {
+        0 -> SetupGraphViewModel.GraphType.Integer
+        1 -> SetupGraphViewModel.GraphType.UInteger
+        2 -> SetupGraphViewModel.GraphType.String
+        else -> SetupGraphViewModel.GraphType.Integer // default to integer
+    }
+
+    val graphStructure = when (structureType) {
+        0 -> SetupGraphViewModel.GraphStructure.Undirected
+        1 -> SetupGraphViewModel.GraphStructure.Directed
+        else -> SetupGraphViewModel.GraphStructure.Directed // default to directed
+    }
+
+    val weight = when (weightType) {
+        0 -> SetupGraphViewModel.Weight.Weighted
+        1 -> SetupGraphViewModel.Weight.Unweighted
+        else -> SetupGraphViewModel.Weight.Weighted // default to weighted
+    }
+
+    return Triple(storedData, graphStructure, weight)
 }
