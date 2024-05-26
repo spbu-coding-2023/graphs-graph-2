@@ -7,6 +7,7 @@ import model.graphs.DirectedGraph
 import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
+import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import viewmodel.MainScreenViewModel
 
