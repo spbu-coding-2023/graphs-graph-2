@@ -83,7 +83,7 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
         val graphSize = getStoredGraphSize(name)
 
         val wasVertexLoaded = MutableList(graphSize) { false }
-        val addedVerticesList = MutableList<Vertex<String>?>(graphSize) { null }
+        val addedVerticesList = MutableList(graphSize) { Vertex(-1, "-1") }
 
         for (content in graphContents) {
             val id1 = content["id1"].asInt()
@@ -106,17 +106,6 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
 
             val v1 = addedVerticesList[id1]
             val v2 = addedVerticesList[id2]
-
-            if (v1 == null)
-                throw IllegalStateException(
-                    "Vertex with database id $id1 and data $data1 wasn't loaded from database, " +
-                    "but was marked as loaded. Cannot continue graph import."
-                )
-            if (v2 == null)
-                throw IllegalStateException(
-                    "Vertex with database id $id2 and data $data2 wasn't loaded from database, " +
-                    "but was marked as loaded. Cannot continue graph import."
-                )
 
             if (edgeWeight == null) {
                 graph.addEdge(v1, v2)
