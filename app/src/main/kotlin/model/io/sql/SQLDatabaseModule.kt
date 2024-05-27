@@ -14,6 +14,8 @@ import viewmodel.graph.GraphViewModel
 import viewmodel.graph.SetupGraphViewModel
 import java.io.File
 import java.sql.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 object SQLDatabaseModule {
     private const val DB_DIRECTORY = "database"
