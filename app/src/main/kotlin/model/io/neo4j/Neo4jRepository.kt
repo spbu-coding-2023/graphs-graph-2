@@ -14,10 +14,6 @@ const val UNDIR_LABEL = "CONNECTED_TO"
 
 class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
     private val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
-
-    init {
-        driver.verifyConnectivity()
-    }
     private val session = driver.session()
 
     fun getGraphNames(): List<String> {
@@ -28,7 +24,6 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
                 "distinct labels(v) AS label"
             ).list()
         }
-        println(result)
 
         val names = mutableListOf<String>()
         for (record in result) {
