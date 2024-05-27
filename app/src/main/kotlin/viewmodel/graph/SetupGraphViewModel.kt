@@ -108,64 +108,74 @@ class SetupGraphViewModel {
         weight: Weight,
         graphId: Int,
         graphVMState: MutableState<GraphViewModel<D>?>
-    ) {
-        when (weight) {
-            is Weight.Weighted -> {
-                when (graphStructure) {
-                    is GraphStructure.Directed -> {
-                        when (storedData) {
-                            is GraphType.Integer -> {
-                                SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
-                            }
-                            is GraphType.UInteger -> {
-                                SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
-                            }
-                            is GraphType.String -> {
-                                SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
-                            }
+    ) = when (weight) {
+        is Weight.Weighted -> {
+            when (graphStructure) {
+                is GraphStructure.Directed -> {
+                    when (storedData) {
+                        is GraphType.Integer -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(),
+                                graphId, graphVMState as MutableState<GraphViewModel<Int>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.UInteger -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(),
+                                graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)  as GraphViewModel<D>?
+                        }
+                        is GraphType.String -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(WeightedDirectedGraph(),
+                                graphId, graphVMState as MutableState<GraphViewModel<String>?>)  as GraphViewModel<D>?
                         }
                     }
-                    is GraphStructure.Undirected -> {
-                        when (storedData) {
-                            is GraphType.Integer -> {
-                                SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
-                            }
-                            is GraphType.UInteger -> {
-                                SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
-                            }
-                            is GraphType.String -> {
-                                SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
-                            }
+                }
+                is GraphStructure.Undirected -> {
+                    when (storedData) {
+                        is GraphType.Integer -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(),
+                                graphId, graphVMState as MutableState<GraphViewModel<Int>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.UInteger -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(),
+                                graphId, graphVMState as MutableState<GraphViewModel<UInt>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.String -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(WeightedUndirectedGraph(),
+                                graphId, graphVMState as MutableState<GraphViewModel<String>?>) as GraphViewModel<D>?
                         }
                     }
                 }
             }
-            is Weight.Unweighted -> {
-                when (graphStructure) {
-                    is GraphStructure.Directed -> {
-                        when (storedData) {
-                            is GraphType.Integer -> {
-                                SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
-                            }
-                            is GraphType.UInteger -> {
-                                SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
-                            }
-                            is GraphType.String -> {
-                                SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
-                            }
+        }
+        is Weight.Unweighted -> {
+            when (graphStructure) {
+                is GraphStructure.Directed -> {
+                    when (storedData) {
+                        is GraphType.Integer -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId,
+                                graphVMState as MutableState<GraphViewModel<Int>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.UInteger -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId,
+                                graphVMState as MutableState<GraphViewModel<UInt>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.String -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(DirectedGraph(), graphId,
+                                graphVMState as MutableState<GraphViewModel<String>?>) as GraphViewModel<D>?
                         }
                     }
-                    is GraphStructure.Undirected -> {
-                        when (storedData) {
-                            is GraphType.Integer -> {
-                                SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<Int>?>)
-                            }
-                            is GraphType.UInteger -> {
-                                SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<UInt>?>)
-                            }
-                            is GraphType.String -> {
-                                SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId, graphVMState as MutableState<GraphViewModel<String>?>)
-                            }
+                }
+                is GraphStructure.Undirected -> {
+                    when (storedData) {
+                        is GraphType.Integer -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId,
+                                graphVMState as MutableState<GraphViewModel<Int>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.UInteger -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId,
+                                graphVMState as MutableState<GraphViewModel<UInt>?>) as GraphViewModel<D>?
+                        }
+                        is GraphType.String -> {
+                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(UndirectedGraph(), graphId,
+                                graphVMState as MutableState<GraphViewModel<String>?>) as GraphViewModel<D>?
                         }
                     }
                 }

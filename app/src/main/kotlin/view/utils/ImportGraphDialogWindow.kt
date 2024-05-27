@@ -67,6 +67,7 @@ fun ImportGraphDialogWindow() {
                                 onDismissRequest = { expanded.value = false }
                             ) {
                                 graphs.forEach { graphName ->
+                                    // TODO: fix its layout
                                     DropdownMenuItem(
                                         onClick = {
                                             selectedGraphName.value = graphName.second
@@ -103,7 +104,7 @@ fun ImportGraphDialogWindow() {
         }
     }
     if (importFromDBRequired.value) {
-        SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
         importFromDBRequired.value = false
+        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
     }
 }
