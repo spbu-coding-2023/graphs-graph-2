@@ -49,7 +49,7 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                     .height(textBoxHeight + paddingSize)
                     .width(textBoxWidth + paddingSize)
                     .padding(paddingSize)
-                    .testTag(if (isHovered) "FAQBoxHovered" else "FAQBoxNotHovered")
+                    .testTag("FAQBoxHovered")
             ) {
                 Text(
                     text = viewmodel.graphViewModel.graphType.value.replace(" ", "\nData type: "),
@@ -70,6 +70,7 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                 .padding(paddingSize)
                 .background(Color.Transparent)
                 .hoverable(interactionSource = interactionSource)
+                .testTag("FAQBoxNotHovered")
         ) {
             if (!isHovered) {
                 Image(
