@@ -1,14 +1,16 @@
 package model.algorithms.clustering
 
-import model.WeightedDirectedGraph
-import model.WeightedUndirectedGraph
-import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 import model.algorithms.clustering.implementation.Link
 import model.algorithms.clustering.implementation.getPartition
 
 class LouvainClustering {
     fun <D> findClusters(graph: Graph<D>): Set<Set<Vertex<D>>> {
+        if (graph.getVertices().size == 1) return setOf(setOf(graph.getVertices()[0]))
+
         val links = convertToAPIFormat(graph)
 
         val result = getPartition(links)
