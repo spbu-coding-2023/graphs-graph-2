@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import viewmodel.graph.GraphViewModel
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 
@@ -26,20 +25,28 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var graphName by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
-        val padding = 10.dp
         Row(modifier = Modifier.height(0.dp)) {}
 
+        val rowHeight = 75.dp
+        val fieldHeight = 70.dp
+
+        val borderPadding = 10.dp
+        val horizontalGap = 20.dp
+
+        val tabWidth = 360.dp
+        val fieldWidth = (tabWidth / 2) - horizontalGap
+
         Row(
-            modifier = Modifier.height(75.dp).padding(padding),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            modifier = Modifier.height(rowHeight).padding(borderPadding),
+            horizontalArrangement = Arrangement.spacedBy(borderPadding)
         ) {
-            Column(modifier = Modifier.width(360.dp).fillMaxHeight(), Arrangement.Center) {
+            Column(modifier = Modifier.width(tabWidth).fillMaxHeight(), Arrangement.Center) {
                 TextField(
                     value = graphName,
                     onValueChange = { graphName = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(70.dp)
+                        .height(fieldHeight)
                         .clip(RoundedCornerShape(8.dp)),
                     textStyle = TextStyle(fontSize = 14.sp),
                     label = {
@@ -58,21 +65,21 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
         }
 
         Row(
-            modifier = Modifier.height(75.dp).padding(padding),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            modifier = Modifier.height(rowHeight).padding(borderPadding),
+            horizontalArrangement = Arrangement.spacedBy(horizontalGap)
         ) {
-            Column(modifier = Modifier.width(170.dp).fillMaxHeight(), Arrangement.Center) {
+            Column(modifier = Modifier.width(fieldWidth).fillMaxHeight(), Arrangement.Center) {
                 Button(
-                    modifier = Modifier.fillMaxSize().height(70.dp),
+                    modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = { showSaveDialog = true },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text("Save")
                 }
             }
-            Column(modifier = Modifier.width(170.dp).fillMaxHeight(), Arrangement.Center) {
+            Column(modifier = Modifier.width(fieldWidth).fillMaxHeight(), Arrangement.Center) {
                 Button(
-                    modifier = Modifier.fillMaxSize().height(70.dp),
+                    modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = { showLoadDialog = true },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -82,7 +89,11 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
         }
     }
 
-    // probably move to other function
+
+    val dialogueHeight = 300.dp
+    val dialogueWidth = 400.dp
+    val padding = 14.dp
+
     if (showSaveDialog) {
         Dialog(
             onDismissRequest = {
@@ -93,9 +104,9 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 modifier =
                 Modifier
                     .background(Color.White)
-                    .padding(14.dp)
-                    .width(350.dp)
-                    .height(200.dp)
+                    .padding(padding)
+                    .width(dialogueWidth)
+                    .height(dialogueHeight)
             ) {}
         }
     }
@@ -110,9 +121,9 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 modifier =
                 Modifier
                     .background(Color.White)
-                    .padding(14.dp)
-                    .width(350.dp)
-                    .height(200.dp)
+                    .padding(padding)
+                    .width(dialogueWidth)
+                    .height(dialogueHeight)
             ) {}
         }
     }
