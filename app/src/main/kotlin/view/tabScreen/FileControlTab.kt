@@ -81,4 +81,39 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             }
         }
     }
+
+    // probably move to other function
+    if (showSaveDialog) {
+        Dialog(
+            onDismissRequest = {
+                showSaveDialog = false
+            }
+        ) {
+            Column(
+                modifier =
+                Modifier
+                    .background(Color.White)
+                    .padding(14.dp)
+                    .width(350.dp)
+                    .height(200.dp)
+            ) {}
+        }
+    }
+
+    if (showLoadDialog) {
+        Dialog(
+            onDismissRequest = {
+                showLoadDialog = false
+            }
+        ) {
+            Column(
+                modifier =
+                Modifier
+                    .background(Color.White)
+                    .padding(14.dp)
+                    .width(350.dp)
+                    .height(200.dp)
+            ) {}
+        }
+    }
 }
