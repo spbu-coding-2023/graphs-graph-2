@@ -20,7 +20,7 @@ class IntegrationTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `graph is directed, check its view and FAQ button`() {
+    fun `graph is undirected, check its view and FAQ button`() {
         // I'm not sure if we can consider this as an integration test
         // Imho it's an integration test, due to UI's connection with VM + there is more than 2 components (view/vm, or front/back)
 
