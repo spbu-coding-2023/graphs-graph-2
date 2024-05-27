@@ -15,6 +15,8 @@ class EdgeViewModel<D>(
     private val isDirected: State<Boolean>
 ) {
 
+    fun isDirected() = isDirected.value
+
     private val radius = firstVertex.radius
 
     internal fun calculateFirstVertexCenter(scale: Float): Pair<Dp, Dp> {

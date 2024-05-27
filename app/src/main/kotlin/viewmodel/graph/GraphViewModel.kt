@@ -3,9 +3,9 @@ package viewmodel.graph
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import model.abstractGraph.Edge
-import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 
 class GraphViewModel<D>(
     val graph: Graph<D>,

@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import model.abstractGraph.Vertex
+import model.graphs.abstractGraph.Vertex
 import viewmodel.WindowViewModel
 
 class VertexViewModel<D>(

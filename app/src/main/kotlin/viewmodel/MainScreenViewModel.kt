@@ -3,7 +3,7 @@ package viewmodel
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import model.abstractGraph.Graph
+import model.graphs.abstractGraph.Graph
 import viewmodel.graph.GraphViewModel
 import viewmodel.graph.TFDPLayout
 

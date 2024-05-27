@@ -1,8 +1,8 @@
-package model
+package model.graphs
 
-import model.abstractGraph.Edge
-import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 import kotlin.NoSuchElementException
 import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList

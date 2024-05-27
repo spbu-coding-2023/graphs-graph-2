@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,8 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
 
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .testTag("FAQBox"),
         contentAlignment = Alignment.TopEnd
     ) {
 
@@ -47,12 +49,14 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                     .height(textBoxHeight + paddingSize)
                     .width(textBoxWidth + paddingSize)
                     .padding(paddingSize)
+                    .testTag("FAQBoxHovered")
             ) {
                 Text(
                     text = viewmodel.graphViewModel.graphType.value.replace(" ", "\nData type: "),
                     fontSize = 16.sp,
                     color = Color.Black,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.testTag("HoveredText")
                 )
             }
         }
@@ -66,6 +70,7 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                 .padding(paddingSize)
                 .background(Color.Transparent)
                 .hoverable(interactionSource = interactionSource)
+                .testTag("FAQBoxNotHovered")
         ) {
             if (!isHovered) {
                 Image(

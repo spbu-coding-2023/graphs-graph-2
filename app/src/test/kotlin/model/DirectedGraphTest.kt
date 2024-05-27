@@ -1,7 +1,8 @@
 package model
 
-import model.abstractGraph.Edge
-import model.abstractGraph.Vertex
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Vertex
+import model.graphs.DirectedGraph
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested

@@ -1,11 +1,11 @@
 package util
 
-import model.DirectedGraph
-import model.UndirectedGraph
-import model.WeightedDirectedGraph
-import model.WeightedUndirectedGraph
-import model.abstractGraph.Edge
-import model.abstractGraph.Vertex
+import model.graphs.DirectedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Vertex
 
 val emptyDirectedGraph = DirectedGraph<Int>()
 val emptyUndirectedGraph = UndirectedGraph<Int>()
