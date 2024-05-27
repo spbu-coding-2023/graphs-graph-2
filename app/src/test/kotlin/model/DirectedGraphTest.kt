@@ -926,12 +926,33 @@ class DirectedGraphTest {
         fun `graph shouldn't change`(graph: DirectedGraph<Int>) {
             val v0 = graph.addVertex(0)
             val v1 = graph.addVertex(1)
+            val v2 = graph.addVertex(2)
+            val v3 = graph.addVertex(3)
+            val v4 = graph.addVertex(4)
+            val v5 = graph.addVertex(5)
+            val v6 = graph.addVertex(6)
+            val v7 = graph.addVertex(7)
+            val v8 = graph.addVertex(8)
 
-            graph.addEdge(v0, v1)
-            graph.addEdge(v1, v0)
+            val e01 = graph.addEdge(v0, v1)
+            val e07 = graph.addEdge(v0, v7)
+            val e04 = graph.addEdge(v0, v4)
+            val e18 = graph.addEdge(v1, v8)
+            val e12 = graph.addEdge(v1, v2)
+            val e20 = graph.addEdge(v2, v0)
+            val e21 = graph.addEdge(v2, v1)
+            val e25 = graph.addEdge(v2, v5)
+            val e23 = graph.addEdge(v2, v3)
+            val e53 = graph.addEdge(v5, v3)
+            val e34 = graph.addEdge(v3, v4)
+            val e41 = graph.addEdge(v4, v1)
+            val e78 = graph.addEdge(v7, v8)
+            val e87 = graph.addEdge(v8, v7)
 
             val expectedGraph = graph.getVertices() to graph.getEdges().toSet()
+
             graph.findCycles(v1)
+
             val actualGraph = graph.getVertices() to graph.getEdges().toSet()
 
             assertEquals(expectedGraph, actualGraph)
