@@ -201,7 +201,6 @@ class SetupGraphViewModel {
                                 WeightedUndirectedGraph(),
                                 graphId, graphVMState as MutableState<GraphViewModel<String>?>
                             ) as GraphViewModel<D>?
-
                         }
                     }
                 }

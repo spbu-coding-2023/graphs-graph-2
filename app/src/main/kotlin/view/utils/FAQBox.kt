@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,8 +27,7 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .testTag("FAQBox"),
+            .fillMaxSize(),
         contentAlignment = Alignment.TopEnd
     ) {
 
@@ -85,8 +83,13 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
         LaunchedEffect(interactionSource) {
             interactionSource.interactions.collect { interaction ->
                 when (interaction) {
-                    is HoverInteraction.Enter -> isHovered = true
-                    is HoverInteraction.Exit -> isHovered = false
+                    is HoverInteraction.Enter -> {
+                        isHovered = true
+                    }
+
+                    is HoverInteraction.Exit -> {
+                        isHovered = false
+                    }
                 }
             }
         }
