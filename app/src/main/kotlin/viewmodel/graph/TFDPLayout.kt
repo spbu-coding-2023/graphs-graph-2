@@ -7,9 +7,9 @@ import kotlin.math.sqrt
 import androidx.compose.ui.platform.LocalDensity
 
 class TFDPLayout(
-    private val longRangeAttractionConstant: Float = 0.001f, // strength of attractive force (long-range) - B
+    private val longRangeAttractionConstant: Float = 0.0001f, // strength of attractive force (long-range) - B
     private val nearAttractionConstant: Float = 16.0f, // strength of attractive t-force (near) - A
-    private val repulsiveConstant: Float = 2.0f, // extent and magnitude of the repulsive t-force that
+    private val repulsiveConstant: Float = 5.0f, // extent and magnitude of the repulsive t-force that
     // controls the longest distance of neighbors in the layout - Y
 ) {
     fun <V> place(width: Double, height: Double, vertices: Collection<VertexViewModel<V>>) {
@@ -47,8 +47,8 @@ class TFDPLayout(
         k = 0
         vertices.onEach { // update positions
             val vi = it
-            vi.x.value += forces[k].first.dp
-            vi.y.value += forces[k].second.dp
+            vi.x.value += forces[k].first.dp / 2
+            vi.y.value += forces[k].second.dp / 2
             k++
         }
 
