@@ -122,12 +122,26 @@ open class DirectedGraph<D> : Graph<D>() {
         if (vertexSCC.size == 1) return emptySet()
 
         // create SCC subgraph
-        val subGraph = this
+        val subGraph = DirectedGraph<D>()
+
+        // map to restore original vertices
+        val verticesCopiesMap = mutableMapOf<Vertex<D>, Vertex<D>>()
+
+        for (originalVertex in vertexSCC) {
+            val vertexCopy = subGraph.addVertex(originalVertex.data)
+            verticesCopiesMap[vertexCopy] = originalVertex
+        }
+
         for (edge in getEdges()) {
-            if (edge.vertex1 !in vertexSCC || edge.vertex2 !in vertexSCC) {
-                subGraph.removeEdge(edge)
+            if (edge.vertex1 in vertexSCC && edge.vertex2 in vertexSCC) {
+                val vertex1copy = verticesCopiesMap.filterValues { it == edge.vertex1 }.keys.toList()[0]
+                val vertex2copy = verticesCopiesMap.filterValues { it == edge.vertex2 }.keys.toList()[0]
+
+                subGraph.addEdge(vertex1copy, vertex2copy)
             }
         }
+
+        val copyOfSrcVertex = verticesCopiesMap.filterValues { it == srcVertex }.keys.toList()[0]
 
         val blockedSet = mutableSetOf<Vertex<D>>()
         val blockedMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
@@ -141,9 +155,9 @@ open class DirectedGraph<D> : Graph<D>() {
             blockedSet.add(currentVertex)
 
             for (neighbour in subGraph.getNeighbours(currentVertex)) {
-                if (neighbour == srcVertex) {
+                if (neighbour == copyOfSrcVertex) {
                     // cycle is found
-                    stack.addLast(srcVertex)
+                    stack.addLast(copyOfSrcVertex)
 
                     val cycleOfVertices = mutableListOf<Vertex<D>>()
                     cycleOfVertices.addAll(stack)
@@ -153,6 +167,7 @@ open class DirectedGraph<D> : Graph<D>() {
 
                     cycleIsFound = true
                 } else if (neighbour !in blockedSet) {
+                    // next iteration
                     cycleIsFound = DFSToFindCycles(neighbour) || cycleIsFound
                 }
             }
@@ -176,15 +191,19 @@ open class DirectedGraph<D> : Graph<D>() {
             return cycleIsFound
         }
 
-        DFSToFindCycles(srcVertex)
+        DFSToFindCycles(copyOfSrcVertex)
 
         val cycles = mutableSetOf<List<Pair<Edge<D>, Vertex<D>>>>()
         for (verticesCycle in verticesCycles) {
+            val originalVerticesCycle = mutableListOf<Vertex<D>>()
+            for (vertex in verticesCycle) originalVerticesCycle += verticesCopiesMap[vertex]
+                ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the vertices map")
+
             val cycle = mutableListOf<Pair<Edge<D>, Vertex<D>>>()
 
-            for (i in 0..verticesCycle.size - 2) {
-                val v1 = verticesCycle[i]
-                val v2 = verticesCycle[i + 1]
+            for (i in 0..originalVerticesCycle.size - 2) {
+                val v1 = originalVerticesCycle[i]
+                val v2 = originalVerticesCycle[i + 1]
 
                 cycle.add(getEdge(v1, v2) to v2)
             }
