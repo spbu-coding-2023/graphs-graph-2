@@ -16,7 +16,9 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
     private val vertexToIdMap = mutableMapOf<Vertex<D>, Int>()
     private var nextId = 0
 
-    fun saveGraph(graph: Graph<D>, name: String, isDirected: Boolean, isWeighted: Boolean) {
+    fun saveOrReplaceGraph(graph: Graph<D>, name: String, isDirected: Boolean, isWeighted: Boolean) {
+        clearGraph(name)
+
         val vertices = graph.getVertices()
         val edges = graph.getEdges()
 
@@ -53,6 +55,15 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
                     "CREATE (v)-[:$edgeLabel {weight:$weight}]->(u) "
                 )
             }
+        }
+    }
+
+    private fun clearGraph(name: String) {
+        session.executeWrite { tx ->
+            tx.run(
+                "MATCH (v:$name)-[e]->(u:$name) " +
+                "DELETE v, e, u "
+            )
         }
     }
 
