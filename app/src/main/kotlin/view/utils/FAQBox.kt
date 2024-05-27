@@ -85,13 +85,8 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
         LaunchedEffect(interactionSource) {
             interactionSource.interactions.collect { interaction ->
                 when (interaction) {
-                    is HoverInteraction.Enter -> {
-                        isHovered = true
-                    }
-
-                    is HoverInteraction.Exit -> {
-                        isHovered = false
-                    }
+                    is HoverInteraction.Enter -> isHovered = true
+                    is HoverInteraction.Exit -> isHovered = false
                 }
             }
         }
