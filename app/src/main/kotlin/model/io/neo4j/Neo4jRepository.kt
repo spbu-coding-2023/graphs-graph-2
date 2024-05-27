@@ -78,11 +78,7 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
         val isDirected = hasDirection(graphContents[0])
         val isWeighted = hasWeight(graphContents[0])
 
-        val graph: Graph<String> =
-            if (isWeighted && isDirected) WeightedDirectedGraph()
-            else if (isWeighted) WeightedUndirectedGraph()
-            else if (isDirected) DirectedGraph()
-            else UndirectedGraph()
+        val graph = initializeGraph(isWeighted, isDirected)
 
         val graphSize = getStoredGraphSize(name)
 
@@ -134,6 +130,13 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
         }
 
         return graph
+    }
+
+    private fun initializeGraph(isWeighted: Boolean, isDirected: Boolean): Graph<String> {
+        return if (isWeighted && isDirected) WeightedDirectedGraph()
+        else if (isWeighted) WeightedUndirectedGraph()
+        else if (isDirected) DirectedGraph()
+        else UndirectedGraph()
     }
 
     private fun readGraphContents(name: String) = session.executeRead { tx ->
