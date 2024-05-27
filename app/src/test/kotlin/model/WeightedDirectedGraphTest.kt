@@ -1,7 +1,9 @@
 package model
 
-import model.abstractGraph.Edge
-import model.abstractGraph.Vertex
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Vertex
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import util.setupDirectedGraphWithCycle

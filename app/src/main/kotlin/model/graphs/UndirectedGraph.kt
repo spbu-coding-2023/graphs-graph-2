@@ -1,9 +1,9 @@
-package model
+package model.graphs
 
 import kotlin.math.min
-import model.abstractGraph.Edge
-import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 
 open class UndirectedGraph<D> : Graph<D>() {
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>): Edge<D> {

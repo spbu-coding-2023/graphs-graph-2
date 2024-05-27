@@ -1,5 +1,7 @@
 package model.abstractGraph
 
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllGraphTypes

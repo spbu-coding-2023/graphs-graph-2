@@ -7,9 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import kotlinx.coroutines.runBlocking
-import model.UndirectedGraph
+import model.graphs.UndirectedGraph
 import org.junit.Rule
-import org.junit.Before
 import org.junit.Test
 import view.utils.FAQBox
 import viewmodel.MainScreenViewModel

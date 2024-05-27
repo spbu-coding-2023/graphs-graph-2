@@ -1,7 +1,7 @@
 package util.annotations.argumentProviders
 
-import model.DirectedGraph
-import model.WeightedDirectedGraph
+import model.graphs.DirectedGraph
+import model.graphs.WeightedDirectedGraph
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider

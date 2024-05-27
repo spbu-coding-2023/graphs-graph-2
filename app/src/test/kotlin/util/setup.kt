@@ -1,11 +1,11 @@
 package util
 
-import model.DirectedGraph
-import model.abstractGraph.Edge
-import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
-import model.WeightedUndirectedGraph
-import model.WeightedDirectedGraph
+import model.graphs.DirectedGraph
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
+import model.graphs.WeightedUndirectedGraph
+import model.graphs.WeightedDirectedGraph
 
 fun setupAbstractGraph(graph: Graph<Int>): Pair<List<Vertex<Int>>, Set<Edge<Int>>> {
     val v0 = graph.addVertex(0)

@@ -1,4 +1,4 @@
-package model.abstractGraph
+package model.graphs.abstractGraph
 
 import java.util.*
 import java.util.ArrayDeque
