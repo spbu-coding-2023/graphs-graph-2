@@ -6,7 +6,9 @@ import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import org.neo4j.driver.*
+import org.neo4j.driver.AuthTokens
+import org.neo4j.driver.GraphDatabase
+import org.neo4j.driver.Record
 import java.io.Closeable
 
 const val DIR_LABEL = "POINTS_TO"
