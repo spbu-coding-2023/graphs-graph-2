@@ -156,7 +156,13 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showVertexAddDialog) {
-        Dialog(onDismissRequest = {}) {
+        Dialog(
+            onDismissRequest = {
+                showVertexAddDialog = false
+            }
+        ) {
+            vertexData = ""
+
             Column(
                 modifier =
                 Modifier
