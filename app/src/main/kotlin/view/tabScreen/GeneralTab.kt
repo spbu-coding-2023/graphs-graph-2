@@ -165,13 +165,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showVertexAddDialog) {
-        Dialog(
-            onDismissRequest = {
-                showVertexAddDialog = false
-            }
-        ) {
-            vertexData = ""
-
+        Dialog(onDismissRequest = {}) {
             Column(
                 modifier =
                 Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
