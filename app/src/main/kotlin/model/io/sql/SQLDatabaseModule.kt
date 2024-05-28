@@ -116,10 +116,7 @@ object SQLDatabaseModule {
         val selectNamesSQL = insertQueries.split(":")[3]
         val showErrorMessage = remember { mutableStateOf(false) }
         val errorMessage = remember { mutableStateOf("") }
-<<<<<<< HEAD
         graphNames.value = arrayListOf()
-=======
->>>>>>> bae8cff (feat: add error message handle)
 
         try {
             getConnection().use { connection ->
@@ -224,11 +221,7 @@ object SQLDatabaseModule {
                     if (resultSet.next()) {
                         val currentGraphSetup = importGraphInfo(graphId)
                         val graphVMType =
-<<<<<<< HEAD
                             mutableStateOf(currentGraphSetup.first.second.toString() + "Graph" + " " + currentGraphSetup.first.first.toString())
-=======
-                            mutableStateOf(currentGraphSetup.first.second.toString() + "Graph" + " " + currentGraphSetup.first.toString())
->>>>>>> bae8cff (feat: add error message handle)
 
                         val graphVM = GraphViewModel(
                             graph,
