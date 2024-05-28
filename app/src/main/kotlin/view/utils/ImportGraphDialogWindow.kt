@@ -26,11 +26,9 @@ fun ImportGraphDialogWindow() {
     val expanded = remember { mutableStateOf(false) }
     val importFromDBRequired = remember { mutableStateOf(false) }
     val selectedGraphName = remember { mutableStateOf("") }
-    val graphs: ArrayList<Pair<Int, String>>
-    var newGraphVM: GraphViewModel<Any>? = null
-    // TODO: list of graph names by getFromDb
+    val graphs = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
 
-    graphs = SQLDatabaseModule.getGraphNames()
+    SQLDatabaseModule.getGraphNames(graphs)
 
     if (!closeDialog.value) {
         Dialog(
@@ -66,7 +64,7 @@ fun ImportGraphDialogWindow() {
                                 expanded = expanded.value,
                                 onDismissRequest = { expanded.value = false }
                             ) {
-                                graphs.forEach { graphName ->
+                                graphs.value.forEach { graphName ->
                                     // TODO: fix its layout
                                     DropdownMenuItem(
                                         onClick = {
@@ -91,7 +89,6 @@ fun ImportGraphDialogWindow() {
                         modifier = Modifier.width(145.dp).height(50.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
                         onClick = {
-                            // TODO: at this moment it gets a full graph VM but after uses only graph object
                             importFromDBRequired.value = true
                             expanded.value = false
                             closeDialog.value = true
