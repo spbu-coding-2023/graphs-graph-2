@@ -14,32 +14,28 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import maxVertexRadius
+import minVertexRadius
 import viewmodel.WindowViewModel
 import viewmodel.graph.VertexViewModel
-import kotlin.math.min
-import kotlin.ranges.coerceIn
 
 @Composable
 fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
     val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
     val windowVM = WindowViewModel()
     windowVM.SetCurrentDimensions()
-    val density = LocalDensity.current.density
 
-    val maxRadius = 35.dp // TODO: move to shared const file
-    val minRadius = 7.dp
-
-    val adjustedX = (viewModel.x.value)
-    val adjustedY = (viewModel.y.value)
-    val adjustedRadius = (viewModel.radius * scale).coerceIn(minRadius, maxRadius)
+    val adjustedX = viewModel.x.value
+    val adjustedY = viewModel.y.value
+    val adjustedRadius = (viewModel.radius * scale).coerceIn(minVertexRadius, maxVertexRadius)
 
     Box(
         modifier = Modifier

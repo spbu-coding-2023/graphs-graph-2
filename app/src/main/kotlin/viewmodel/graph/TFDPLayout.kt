@@ -13,7 +13,6 @@ class TFDPLayout(
     // controls the longest distance of neighbors in the layout - Y
 ) {
     fun <V> place(width: Double, height: Double, vertices: Collection<VertexViewModel<V>>) {
-//        val forces = Array(vertices.size) { mk.ndarray(mk[0.0, 0.0]) } // TODO
         val forces = Array(vertices.size) { Pair(0f, 0f) }
         var k = 0
 
@@ -54,9 +53,11 @@ class TFDPLayout(
         }
 
         for (vi in vertices) { // check borders
+            if (vi.x.value > (width.toFloat() - 360 - vi.radius.value * 2).dp) vi.x.value = vi.x.value / 2
+            if (vi.y.value > (height.toFloat() - vi.radius.value * 2).dp) vi.y.value = vi.y.value / 2
+
             vi.x.value = vi.x.value.coerceIn(0.dp, (width.toFloat() - 360 - vi.radius.value * 2).dp)
             vi.y.value = vi.y.value.coerceIn(0.dp, (height.toFloat() - vi.radius.value * 2).dp)
-            println("${vi.x.value} ${vi.y.value}")
         }
     }
 }

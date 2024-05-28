@@ -52,7 +52,7 @@ class GraphViewModel<D>(
         return newVertex.id
     }
 
-    fun addEdge(firstId: Int, secondId: Int) {
+    fun addEdge(firstId: Int, secondId: Int, weight: Int = 1) {
         val firstVertex = graph.getVertices().find { it.id == firstId }
             ?: throw NoSuchElementException("No vertex found with id $firstId")
         val secondVertex = graph.getVertices().find { it.id == secondId }
@@ -64,7 +64,7 @@ class GraphViewModel<D>(
             ?: throw NoSuchElementException("No ViewModel found for vertex2")
 
         val newEdge = graph.addEdge(firstVertexVM.vertex, secondVertexVM.vertex)
-
+        graph.getWeightMap()[newEdge] = weight
         updateEdgeViewModels(newEdge)
     }
 

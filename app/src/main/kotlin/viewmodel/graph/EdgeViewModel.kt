@@ -2,12 +2,10 @@ package viewmodel.graph
 
 import androidx.compose.runtime.State
 import androidx.compose.ui.unit.Dp
+import ARROW_DEPTH
+import ARROW_SIZE
+import SQRT_3
 import kotlin.math.sqrt
-
-// TODO: move to a seperate const file
-const val ARROW_SIZE = 20f
-const val ARROW_DEPTH = 2.5f
-const val SQRT_3 = 1.732f
 
 class EdgeViewModel<D>(
     val firstVertex: VertexViewModel<D>,
