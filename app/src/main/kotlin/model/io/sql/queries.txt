@@ -44,3 +44,15 @@ CREATE TABLE IF NOT EXISTS vertices (
     data TEXT,
     FOREIGN KEY (graph_id) REFERENCES graphs(id)
 );:
+
+-- Delete from graphs table
+DELETE FROM graphs WHERE id = ?:
+
+-- Delete from edges table
+DELETE FROM edges WHERE graph_id = ?:
+
+-- Delete from vertices table
+DELETE FROM vertices WHERE graph_id = ?:
+
+-- Rename graph in graph table
+UPDATE graphs SET name = ? WHERE id = ?:
