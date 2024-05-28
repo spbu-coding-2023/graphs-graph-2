@@ -1,11 +1,11 @@
 package model.io.neo4j
 
-import model.DirectedGraph
-import model.UndirectedGraph
-import model.WeightedDirectedGraph
-import model.WeightedUndirectedGraph
-import model.abstractGraph.Graph
-import model.abstractGraph.Vertex
+import model.graphs.DirectedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 import org.neo4j.driver.AuthTokens
 import org.neo4j.driver.GraphDatabase
 import org.neo4j.driver.Record
