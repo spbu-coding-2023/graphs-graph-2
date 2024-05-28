@@ -17,6 +17,8 @@ import viewmodel.graph.GraphViewModel
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
+import java.awt.FileDialog
+import java.awt.Frame
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -112,7 +114,22 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     }
                 }
             }
+
+            if (selectedDatabase == "JSON") {
+                val fileDialog = FileDialog(null as Frame?, "Select File to Open")
+                fileDialog.mode = FileDialog.LOAD
+                Button(
+                    modifier = Modifier.fillMaxSize().height(fieldHeight),
+                    onClick = {
+                        fileDialog.isVisible = true
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.White)
+                ) {
+                    Text("Select File")
+                }
+            }
         }
+
         Row(
             modifier = Modifier.height(rowHeight).padding(borderPadding),
             horizontalArrangement = Arrangement.spacedBy(horizontalGap)
