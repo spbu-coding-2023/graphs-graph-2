@@ -18,11 +18,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showSaveDialog by remember { mutableStateOf(false) }
     var showLoadDialog by remember { mutableStateOf(false) }
     var graphName by remember { mutableStateOf("") }
+    var showEnterPathField by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -64,6 +66,53 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             }
         }
 
+        Row(
+            modifier = Modifier.height(rowHeight).padding(borderPadding),
+            horizontalArrangement = Arrangement.spacedBy(horizontalGap)
+        ) {
+            var expanded by remember { mutableStateOf(false) }
+
+            val databases = arrayOf("SQLite", "Neo4j", "JSON")
+            var selectedDatabase by remember { mutableStateOf(databases[0])}
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = {
+                    expanded = !expanded
+                },
+                modifier = Modifier.width(fieldWidth).fillMaxHeight()
+            ) {
+                TextField(
+                    value = selectedDatabase,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    modifier = Modifier,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant
+                    )
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = {
+                        expanded = false
+                    }
+                ) {
+                    databases.forEach { db ->
+                        DropdownMenuItem(
+                            modifier = Modifier,
+                            onClick = {
+                                selectedDatabase = db
+                                expanded = false
+                            }
+                        ) {
+                            Text(text = db)
+                        }
+                    }
+                }
+            }
+        }
         Row(
             modifier = Modifier.height(rowHeight).padding(borderPadding),
             horizontalArrangement = Arrangement.spacedBy(horizontalGap)
