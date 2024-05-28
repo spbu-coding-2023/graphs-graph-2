@@ -45,46 +45,4 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
 
         return edgeWeighs.any { it < 0 }
     }
-
-    fun findShortestPathDijkstra(srcVertex: Vertex<D>, destVertex: Vertex<D>): List<Pair<Edge<D>, Vertex<D>>>? {
-        val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
-        val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
-        val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(srcVertex to 0) }
-        val visited = mutableSetOf<Pair<Vertex<D>, Int>>()
-
-        if (srcVertex == destVertex) return emptyList()
-
-        distanceMap[srcVertex] = 0
-
-        while (priorityQueue.isNotEmpty()) {
-            val (currentVertex, currentDistance) = priorityQueue.poll()
-            if (visited.add(currentVertex to currentDistance)) {
-                getNeighbours(currentVertex).forEach { adjacent ->
-                    val currentEdge = getEdge(adjacent, currentVertex)
-
-                    val totalDist = currentDistance + getWeight(currentEdge)
-
-                    if (totalDist < distanceMap.getValue(adjacent)) {
-                        distanceMap[adjacent] = totalDist
-                        predecessorMap[adjacent] = currentVertex // Update predecessor
-                        priorityQueue.add(adjacent to totalDist)
-                    }
-                }
-            }
-        }
-
-        // Reconstruct the path from srcVertex to destVertex
-        val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
-        var currentVertex = destVertex
-        while (currentVertex != srcVertex) {
-            val predecessor = predecessorMap[currentVertex]
-                ?: return null // path doesn't exist
-
-            val currentEdge = getEdge(predecessor, currentVertex)
-            path.add(currentEdge to currentVertex)
-
-            currentVertex = predecessor
-        }
-        return path.reversed()
-    }
 }
