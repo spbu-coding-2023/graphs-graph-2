@@ -1,21 +1,17 @@
-package model
+package model.graphs
 
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Vertex
-import model.graphs.WeightedUndirectedGraph
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import util.setupWeightedUndirected
+import util.setupWeightedDirected
 
-class WeightedUndirectedGraphTest {
-    private lateinit var graph: WeightedUndirectedGraph<Int>
+class WeightedDirectedGraphTest {
+    private lateinit var graph: WeightedDirectedGraph<Int>
 
     @BeforeEach
     fun init() {
-        graph = WeightedUndirectedGraph()
+        graph = WeightedDirectedGraph()
     }
 
     @Nested
@@ -24,7 +20,7 @@ class WeightedUndirectedGraphTest {
         inner class `Edge is in the graph` {
             @Test
             fun `edge's weight should be returned`() {
-                val graphStructure = setupWeightedUndirected(graph)
+                val graphStructure = setupWeightedDirected(graph)
                 val defaultVertices = graphStructure.first
 
                 val v1 = defaultVertices[1]
@@ -39,7 +35,7 @@ class WeightedUndirectedGraphTest {
 
             @Test
             fun `graph shouldn't change`() {
-                val graphStructure = setupWeightedUndirected(graph)
+                val graphStructure = setupWeightedDirected(graph)
                 val defaultVertices = graphStructure.first
 
                 val v1 = defaultVertices[1]
@@ -88,7 +84,7 @@ class WeightedUndirectedGraphTest {
     inner class RemoveEdgeTest {
         @Test
         fun `removed edge should be removed from the weight map`() {
-            val graphStructure = setupWeightedUndirected(graph)
+            val graphStructure = setupWeightedDirected(graph)
             val defaultVertices = graphStructure.first
 
             val v1 = defaultVertices[1]
@@ -97,9 +93,7 @@ class WeightedUndirectedGraphTest {
 
             graph.removeEdge(edge)
 
-            assertThrows(NoSuchElementException::class.java) {
-                graph.getWeight(edge)
-            }
+            assertThrows(NoSuchElementException::class.java) { graph.getWeight(edge) }
         }
     }
 }

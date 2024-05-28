@@ -1,20 +1,19 @@
-package model
+package model.graphs
 
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Vertex
-import model.graphs.WeightedDirectedGraph
-import model.graphs.WeightedUndirectedGraph
-import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import util.setupDirectedGraphWithCycle
-import util.setupWeightedDirected
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import util.setupWeightedUndirected
 
-class WeightedDirectedGraphTest {
-    private lateinit var graph: WeightedDirectedGraph<Int>
+class WeightedUndirectedGraphTest {
+    private lateinit var graph: WeightedUndirectedGraph<Int>
 
     @BeforeEach
     fun init() {
-        graph = WeightedDirectedGraph()
+        graph = WeightedUndirectedGraph()
     }
 
     @Nested
@@ -23,7 +22,7 @@ class WeightedDirectedGraphTest {
         inner class `Edge is in the graph` {
             @Test
             fun `edge's weight should be returned`() {
-                val graphStructure = setupWeightedDirected(graph)
+                val graphStructure = setupWeightedUndirected(graph)
                 val defaultVertices = graphStructure.first
 
                 val v1 = defaultVertices[1]
@@ -38,7 +37,7 @@ class WeightedDirectedGraphTest {
 
             @Test
             fun `graph shouldn't change`() {
-                val graphStructure = setupWeightedDirected(graph)
+                val graphStructure = setupWeightedUndirected(graph)
                 val defaultVertices = graphStructure.first
 
                 val v1 = defaultVertices[1]
@@ -87,7 +86,7 @@ class WeightedDirectedGraphTest {
     inner class RemoveEdgeTest {
         @Test
         fun `removed edge should be removed from the weight map`() {
-            val graphStructure = setupWeightedDirected(graph)
+            val graphStructure = setupWeightedUndirected(graph)
             val defaultVertices = graphStructure.first
 
             val v1 = defaultVertices[1]
@@ -96,7 +95,9 @@ class WeightedDirectedGraphTest {
 
             graph.removeEdge(edge)
 
-            assertThrows(NoSuchElementException::class.java) { graph.getWeight(edge) }
+            assertThrows(NoSuchElementException::class.java) {
+                graph.getWeight(edge)
+            }
         }
     }
 }

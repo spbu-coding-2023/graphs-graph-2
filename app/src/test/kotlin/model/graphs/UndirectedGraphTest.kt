@@ -1,8 +1,7 @@
-package model
+package model.graphs
 
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Vertex
-import model.graphs.UndirectedGraph
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Nested

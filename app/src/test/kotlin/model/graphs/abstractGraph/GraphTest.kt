@@ -1,4 +1,4 @@
-package model.abstractGraph
+package model.graphs.abstractGraph
 
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex

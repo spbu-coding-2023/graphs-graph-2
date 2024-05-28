@@ -1,10 +1,8 @@
-package model
+package model.graphs
 
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Vertex
-import model.graphs.DirectedGraph
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllDirectedGraphs
 import util.emptyEdgesSet
