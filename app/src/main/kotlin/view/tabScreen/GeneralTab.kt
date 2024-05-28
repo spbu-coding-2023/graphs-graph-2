@@ -63,10 +63,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     onClick = { if (vertexData.isNotEmpty()) showVertexAddDialog = true },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
-                    Text(
-                        "add\nvertex",
-                        textAlign = TextAlign.Center
-                    )
+                    Text("add")
                 }
             }
         }
@@ -134,10 +131,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
-                    Text(
-                        "add\nedge",
-                        textAlign = TextAlign.Center
-                    )
+                    Text("add")
                 }
             }
         }
@@ -166,7 +160,11 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showVertexAddDialog) {
-        Dialog(onDismissRequest = {}) {
+        Dialog(
+            onDismissRequest = {
+                showVertexAddDialog = false
+            }
+        ) {
             Column(
                 modifier =
                 Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
@@ -205,10 +203,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
 
                                 showVertexAddDialog = false
                                 errorMessage = ""
-                                secondVertexData = ""
                                 vertexData = ""
+                                secondVertexData = ""
                             }
-
                         }
                     ) {
                         Text("Connect")
