@@ -38,7 +38,7 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
         return weight
     }
 
-    override fun getWeightMap() = weightMap.toMap()
+    override fun getWeightMap() = weightMap.toMutableMap()
 
     override fun hasNegativeEdges(): Boolean {
         val edgeWeighs = getWeightMap().values

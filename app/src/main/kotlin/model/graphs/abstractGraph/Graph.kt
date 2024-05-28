@@ -66,7 +66,7 @@ abstract class Graph<D> {
 
     /* In undirected graph, returns a map with every edge as a key and 1 as a value
      * In a directed graph, returns copy of weightMap property */
-    open fun getWeightMap(): Map<Edge<D>, Int> {
+    open fun getWeightMap(): MutableMap<Edge<D>, Int> {
         val weightMap = mutableMapOf<Edge<D>, Int>()
 
         for (edge in edges) weightMap[edge] = 1
