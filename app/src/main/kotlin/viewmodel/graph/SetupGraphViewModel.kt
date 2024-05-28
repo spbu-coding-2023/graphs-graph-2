@@ -90,8 +90,7 @@ class SetupGraphViewModel {
                             is GraphType.UInteger -> MainScreen(MainScreenViewModel(
                                 UndirectedGraph<UInt>(),
                                 "UndirectedGraph UInt"))
-                            is GraphType.String ->
-                                MainScreen(MainScreenViewModel(
+                            is GraphType.String -> MainScreen(MainScreenViewModel(
                                 UndirectedGraph<String>(),
                                 "UndirectedGraph String"))
                         }
