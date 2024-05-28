@@ -109,24 +109,28 @@ object SQLDatabaseModule {
         }
     }
 
-    fun getGraphNames(): ArrayList<Pair<Int, String>> {
+    @Composable
+    fun getGraphNames(graphNames: MutableState<ArrayList<Pair<Int, String>>>) {
         val selectNamesSQL = insertQueries.split(":")[3]
-        val graphNames = arrayListOf<Pair<Int, String>>()
+        val showErrorMessage = remember { mutableStateOf(false) }
+        val errorMessage = remember { mutableStateOf("") }
 
         try {
             getConnection().use { connection ->
                 connection.prepareStatement(selectNamesSQL).use { statement ->
                     val resultSet = statement.executeQuery()
                     while (resultSet.next()) {
-                        graphNames.add(Pair(resultSet.getInt("id"), resultSet.getString("name")))
+                        graphNames.value.add(Pair(resultSet.getInt("id"), resultSet.getString("name")))
                     }
                 }
             }
         } catch (e: SQLException) {
-            // ErrorWindow(e.message.toString(), { System.exit(0) })
+            showErrorMessage.value = true
+            errorMessage.value = e.message.toString()
         }
-
-        return graphNames
+        if (showErrorMessage.value) {
+            ErrorWindow(errorMessage.value, { System.exit(-1) })
+        }
     }
 
 
@@ -135,8 +139,8 @@ object SQLDatabaseModule {
         val graphVMState = remember { mutableStateOf<GraphViewModel<D>?>(null) }
         val showErrorMessage = remember { mutableStateOf(false) }
         val updateIsRequired = remember { mutableStateOf(false) }
-        var currentGraphSetup: Triple<SetupGraphViewModel.GraphType,
-                SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight>? = null
+        var currentGraphSetup: Pair<Triple<SetupGraphViewModel.GraphType,
+                SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight>, String>? = null
 
         try {
             val connection = getConnection()
@@ -158,9 +162,9 @@ object SQLDatabaseModule {
 
             // Execute side-effect to create graph object
             SetupGraphViewModel().createGraphObject(
-                currentGraphSetup!!.first,
-                currentGraphSetup!!.second,
-                currentGraphSetup!!.third,
+                currentGraphSetup?.first?.first as SetupGraphViewModel.GraphType,
+                currentGraphSetup?.first?.second as SetupGraphViewModel.GraphStructure,
+                currentGraphSetup?.first?.third as SetupGraphViewModel.Weight,
                 graphId,
                 graphVMState
             )
@@ -181,15 +185,17 @@ object SQLDatabaseModule {
         graphVMState: MutableState<GraphViewModel<D>?>,
         graphId: Int
     ) {
-        if (showErrorMessage.value) ErrorWindow("Graph with ID $graphId not found.", { System.exit(-1) })
-
+        if (showErrorMessage.value) {
+            ErrorWindow("Graph with ID $graphId not found.", { System.exit(-1) })
+            System.exit(-1)
+        }
         if (graphVMState.value != null) {
             graphVMState.value?.updateIsRequired?.value = true
 
             return MainScreen(
                 MainScreenViewModel(
-                    graphVMState.value!!.graph,
-                    graphVMState.value!!.graphType.value,
+                    graphVMState.value?.graph as Graph<D>,
+                    graphVMState.value?.graphType?.value as String,
                     graphVMState.value
                 )
             )
@@ -212,14 +218,14 @@ object SQLDatabaseModule {
                     if (resultSet.next()) {
                         val currentGraphSetup = importGraphInfo(graphId)
                         val graphVMType =
-                            mutableStateOf(currentGraphSetup.second.toString() + "Graph" + " " + currentGraphSetup.first.toString())
+                            mutableStateOf(currentGraphSetup.first.second.toString() + "Graph" + " " + currentGraphSetup.first.toString())
 
                         val graphVM = GraphViewModel(
                             graph,
                             mutableStateOf(false),
                             mutableStateOf(false),
                             graphVMType,
-                            mutableStateOf(currentGraphSetup.second.toString().contains("Directed"))
+                            mutableStateOf(currentGraphSetup.first.second.toString().contains("Directed"))
                         )
 
                         // Fetch vertices
@@ -241,8 +247,7 @@ object SQLDatabaseModule {
                                 val vertex2Id = edgeResultSet.getInt("vertex2_id")
                                 val weight = edgeResultSet.getInt("weight")
 
-                                graphVM.addEdge(vertex1Id, vertex2Id)
-                                // TODO: add weight
+                                graphVM.addEdge(vertex1Id, vertex2Id, weight)
                             }
                         }
                         graphVMState.value = graphVM
@@ -259,16 +264,17 @@ object SQLDatabaseModule {
     }
 
 
-    private fun importGraphInfo(graphId: Int): Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight> {
+    private fun importGraphInfo(graphId: Int): Pair<Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight>, String> {
         val selectGraphSQL = insertQueries.split(":")[6]
         var graphStructure: Int?
         var graphWeight: Int?
         var storedValueType: Int?
+        val graphName: String?
         getConnection().use { connection ->
             connection.prepareStatement(selectGraphSQL).use { statement ->
                 statement.setInt(1, graphId)
                 val resultSet = statement.executeQuery()
-                // val graphName = resultSet.getString("name") // TODO
+                graphName = resultSet.getString("name")
                 val graphType = resultSet.getString("graph_type")
 
                 graphStructure = if (graphType.contains("Undirected")) 0 else 1
@@ -279,12 +285,12 @@ object SQLDatabaseModule {
                     else if (resultSet.getString("stored_value_type") == "UInt") 1 else 2
             }
         }
-        return graphWeight?.let {
+        return Pair(graphWeight?.let {
             storedValueType?.let { it1 ->
                 graphStructure?.let { it2 ->
                     getGraphVMParameter(it1, it2, it)
                 }
             }
-        } ?: throw NoSuchElementException("")
+        } ?: throw NoSuchElementException("No info found about graph with ID = ${graphId}"), graphName?: throw NoSuchElementException("Graph with ID = ${graphId} has no name"))
     }
 }

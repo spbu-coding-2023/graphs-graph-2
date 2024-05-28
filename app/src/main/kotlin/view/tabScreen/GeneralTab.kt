@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import view.utils.ErrorWindow
 import viewmodel.WindowViewModel
 import viewmodel.graph.GraphViewModel
 
@@ -27,6 +28,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     var secondVertexId by remember { mutableStateOf("") }
     var secondVertexData by remember { mutableStateOf("") }
     var changesWereMade by remember { mutableStateOf(false) }
+    val showErrorWindow = remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -122,7 +124,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                             secondVertexId = ""
                             firstVertexId = ""
                         } else {
-                            // TODO: show error window
+                            showErrorWindow.value = true
                         }
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
@@ -156,20 +158,10 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showVertexAddDialog) {
-        Dialog(
-            onDismissRequest = {
-                showVertexAddDialog = false
-            }
-        ) {
-            vertexData = ""
-
+        Dialog(onDismissRequest = {}) {
             Column(
                 modifier =
-                Modifier
-                    .background(Color.White)
-                    .padding(16.dp)
-                    .width(350.dp)
-                    .height(200.dp)
+                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
             ) {
                 if (graphVM.verticesVM.isEmpty()) {
                     Text("Input data of second vertex to create and connect with")
@@ -273,5 +265,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
         currentWindowVM.SetCurrentDimensions()
 
         graphVM.applyForceDirectedLayout(currentWindowVM.getWidth.value.toDouble(), currentWindowVM.getHeight.value.toDouble())
+    }
+
+    if (showErrorWindow.value) {
+        ErrorWindow("No such Vertex", { showErrorWindow.value = false })
     }
 }
