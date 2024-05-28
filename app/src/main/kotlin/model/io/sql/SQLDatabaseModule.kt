@@ -114,6 +114,7 @@ object SQLDatabaseModule {
         val selectNamesSQL = insertQueries.split(":")[3]
         val showErrorMessage = remember { mutableStateOf(false) }
         val errorMessage = remember { mutableStateOf("") }
+        graphNames.value = arrayListOf()
 
         try {
             getConnection().use { connection ->
@@ -178,7 +179,6 @@ object SQLDatabaseModule {
         if (updateIsRequired.value) return importGraphUI(showErrorMessage, graphVMState, graphId)
     }
 
-
     @Composable
     fun <D> importGraphUI(
         showErrorMessage: MutableState<Boolean>,
@@ -192,13 +192,14 @@ object SQLDatabaseModule {
         if (graphVMState.value != null) {
             graphVMState.value?.updateIsRequired?.value = true
 
-            return MainScreen(
+            MainScreen(
                 MainScreenViewModel(
                     graphVMState.value?.graph as Graph<D>,
                     graphVMState.value?.graphType?.value as String,
                     graphVMState.value
                 )
             )
+
         } else CircularProgressIndicator()
     }
 
@@ -218,7 +219,7 @@ object SQLDatabaseModule {
                     if (resultSet.next()) {
                         val currentGraphSetup = importGraphInfo(graphId)
                         val graphVMType =
-                            mutableStateOf(currentGraphSetup.first.second.toString() + "Graph" + " " + currentGraphSetup.first.toString())
+                            mutableStateOf(currentGraphSetup.first.second.toString() + "Graph" + " " + currentGraphSetup.first.first.toString())
 
                         val graphVM = GraphViewModel(
                             graph,
@@ -291,6 +292,46 @@ object SQLDatabaseModule {
                     getGraphVMParameter(it1, it2, it)
                 }
             }
-        } ?: throw NoSuchElementException("No info found about graph with ID = ${graphId}"), graphName?: throw NoSuchElementException("Graph with ID = ${graphId} has no name"))
+        } ?: throw NoSuchElementException("No info found about graph with ID = ${graphId}"),
+            graphName ?: throw NoSuchElementException("Graph with ID = ${graphId} has no name"))
+    }
+
+    fun deleteGraph(graphId: Int) {
+        val deleteGraphSQL = insertQueries.split(":")[8]
+        val deleteGraphEdgesSQL = insertQueries.split(":")[9]
+        val deleteGraphVerticesSQL = insertQueries.split(":")[10]
+        try {
+            getConnection().use { connection ->
+                connection.prepareStatement(deleteGraphSQL).use { graphstatement ->
+                    graphstatement.setInt(1, graphId)
+                    graphstatement.executeUpdate()
+                }
+                connection.prepareStatement(deleteGraphEdgesSQL).use { edgeStatement ->
+                    edgeStatement.setInt(1, graphId)
+                    edgeStatement.executeUpdate()
+                }
+                connection.prepareStatement(deleteGraphVerticesSQL).use { vertexStatement ->
+                    vertexStatement.setInt(1, graphId)
+                    vertexStatement.executeUpdate()
+                }
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun renameGraph(graphId: Int, newGraphName: String) {
+        val renameGraphSQL = insertQueries.split(":")[11]
+        try {
+            getConnection().use { connection ->
+                connection.prepareStatement(renameGraphSQL).use { graphstatement ->
+                    graphstatement.setString(1, newGraphName)
+                    graphstatement.setInt(2, graphId)
+                    graphstatement.executeUpdate()
+                }
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
     }
 }
