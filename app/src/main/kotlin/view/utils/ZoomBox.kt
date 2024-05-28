@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import scaleFactor
 
 @Composable
 fun ZoomBox(currentScale: MutableState<Float>) {
@@ -22,13 +23,13 @@ fun ZoomBox(currentScale: MutableState<Float>) {
             verticalArrangement = Arrangement.Bottom
         ) {
             FloatingActionButton(onClick = {
-                currentScale.value = (1.1f * currentScale.value).coerceIn(0.7f, 1.9f) // TODO: move to const
+                currentScale.value = (scaleFactor * currentScale.value).coerceIn(0.7f, 1.9f)
             }) {
                 Text("+")
             }
             Spacer(modifier = Modifier.height(8.dp))
             FloatingActionButton(onClick = {
-                currentScale.value = (currentScale.value / 1.1f).coerceIn(0.7f, 1.9f)
+                currentScale.value = (currentScale.value / scaleFactor).coerceIn(0.7f, 1.9f)
             }) {
                 Text("-")
             }
