@@ -17,6 +17,9 @@ import viewmodel.graph.GraphViewModel
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
+import kotlinx.coroutines.delay
+import model.io.sql.SQLDatabaseModule
+import view.utils.ErrorWindow
 import java.awt.FileDialog
 import java.awt.Frame
 
@@ -27,6 +30,11 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showLoadDialog by remember { mutableStateOf(false) }
     var graphName by remember { mutableStateOf("") }
     var showEnterPathField by remember { mutableStateOf(false) }
+    var showErrorWindow by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    val databases = arrayOf("SQLite", "Neo4j", "JSON")
+    var selectedDatabase by remember { mutableStateOf(databases[0]) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -47,7 +55,9 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             Column(modifier = Modifier.width(tabWidth).fillMaxHeight(), Arrangement.Center) {
                 TextField(
                     value = graphName,
-                    onValueChange = { graphName = it },
+                    onValueChange = { newValue ->
+                        graphName = newValue
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(fieldHeight)
@@ -73,9 +83,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             horizontalArrangement = Arrangement.spacedBy(horizontalGap)
         ) {
             var expanded by remember { mutableStateOf(false) }
-
-            val databases = arrayOf("SQLite", "Neo4j", "JSON")
-            var selectedDatabase by remember { mutableStateOf(databases[0])}
 
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -128,6 +135,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     Text("Select File")
                 }
             }
+
         }
 
         Row(
@@ -161,19 +169,39 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     val padding = 14.dp
 
     if (showSaveDialog) {
-        Dialog(
-            onDismissRequest = {
+        if (selectedDatabase == "SQLite") {
+            val existingGraphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
+            SQLDatabaseModule.getGraphNames(existingGraphNamesSQL)
+
+            if (existingGraphNamesSQL.value.any { it.second == graphName }) {
+                showErrorWindow = true
+                errorMessage = "Graph with name: ${graphName} already exists"
+                graphName = ""
                 showSaveDialog = false
+            } else {
+                SQLDatabaseModule.insertGraph(graphVM, graphName, graphVM.graphType.value)
+                Dialog(
+                    onDismissRequest = {
+                        showSaveDialog = false
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .padding(16.dp)
+                            .width(300.dp)
+                            .height(150.dp)
+                    ) {
+                        Text("Graph $graphName loaded successfully!")
+                    }
+                }
+
+                // Automatically dismiss the dialog after 3 seconds
+                LaunchedEffect(Unit) {
+                    delay(3000)
+                    showSaveDialog = false
+                }
             }
-        ) {
-            Column(
-                modifier =
-                Modifier
-                    .background(Color.White)
-                    .padding(padding)
-                    .width(dialogueWidth)
-                    .height(dialogueHeight)
-            ) {}
         }
     }
 
@@ -191,6 +219,15 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     .width(dialogueWidth)
                     .height(dialogueHeight)
             ) {}
+        }
+    }
+
+    if (showErrorWindow) {
+        ErrorWindow(
+            errorMessage
+        ) {
+            showErrorWindow = false
+            errorMessage = ""
         }
     }
 }
