@@ -1,10 +1,7 @@
 package model.graphs.abstractGraph
 
-import java.util.*
-import java.util.ArrayDeque
 import kotlin.NoSuchElementException
 import kotlin.collections.ArrayList
-import kotlin.math.roundToInt
 
 abstract class Graph<D> {
     protected val vertices: ArrayList<Vertex<D>> = arrayListOf()
@@ -64,8 +61,10 @@ abstract class Graph<D> {
 
     fun getVertices() = vertices.toList()
 
-    /* In undirected graph, returns a map with every edge as a key and 1 as a value
-     * In a directed graph, returns copy of weightMap property */
+    /**
+     * In unweighted graph, returns a map with every edge as a key and 1 as a value
+     * In a weighted graph, returns copy of weightMap property
+     */
     open fun getWeightMap(): MutableMap<Edge<D>, Int> {
         val weightMap = mutableMapOf<Edge<D>, Int>()
 
