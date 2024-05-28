@@ -150,6 +150,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showSaveDialog = true
+                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
