@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import maxEdgeRadius
-import minEdgeRadius
+import maxVertexRadius
+import minVertexRadius
 import viewmodel.WindowViewModel
 import viewmodel.graph.VertexViewModel
 
@@ -35,7 +35,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
 
     val adjustedX = viewModel.x.value
     val adjustedY = viewModel.y.value
-    val adjustedRadius = (viewModel.radius * scale).coerceIn(minEdgeRadius, maxEdgeRadius)
+    val adjustedRadius = (viewModel.radius * scale).coerceIn(minVertexRadius, maxVertexRadius)
 
     Box(
         modifier = Modifier
