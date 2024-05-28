@@ -101,7 +101,6 @@ fun ImportGraphDialogWindow() {
         }
     }
     if (importFromDBRequired.value) {
-        importFromDBRequired.value = false
         return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
     }
 }
