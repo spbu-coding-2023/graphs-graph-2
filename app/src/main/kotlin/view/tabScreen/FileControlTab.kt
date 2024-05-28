@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import model.io.sql.SQLDatabaseModule
+import view.utils.EditDBWindow
 import view.utils.ErrorWindow
 import java.awt.FileDialog
 import java.awt.Frame
@@ -32,6 +33,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showEnterPathField by remember { mutableStateOf(false) }
     var showErrorWindow by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+    var showEditDialog by remember { mutableStateOf(false) }
 
     val databases = arrayOf("SQLite", "Neo4j", "JSON")
     var selectedDatabase by remember { mutableStateOf(databases[0]) }
@@ -161,6 +163,20 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 }
             }
         }
+        Row(
+            modifier = Modifier.height(rowHeight).padding(borderPadding),
+            horizontalArrangement = Arrangement.spacedBy(horizontalGap)
+        ) {
+            Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
+                Button(
+                    modifier = Modifier.fillMaxSize().height(fieldHeight),
+                    onClick = { showEditDialog = true },
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
+                ) {
+                    Text("Edit DB")
+                }
+            }
+        }
     }
 
 
@@ -220,6 +236,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     .height(dialogueHeight)
             ) {}
         }
+    }
+
+    if (showEditDialog) {
+        EditDBWindow(selectedDatabase) { showEditDialog = false }
     }
 
     if (showErrorWindow) {
