@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import viewmodel.graph.CreateGraphViewModel
+import viewmodel.graph.SetupGraphViewModel
 
 @Composable
-fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
+fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
 
     var closeDialog = remember { mutableStateOf(false) }
     val selectedStoredDataIndex = remember { mutableStateOf(0) }
@@ -185,28 +185,28 @@ fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
 
 @Composable
 fun onCreateGraphClicked(
-    viewModel: CreateGraphViewModel,
+    viewModel: SetupGraphViewModel,
     storedDataIndex: Int,
     orientationIndex: Int,
     weightnessIndex: Int
 ) {
     val storedData = when (storedDataIndex) {
-        0 -> CreateGraphViewModel.GraphType.Integer
-        1 -> CreateGraphViewModel.GraphType.UInteger
-        2 -> CreateGraphViewModel.GraphType.String
-        else -> CreateGraphViewModel.GraphType.Integer // default to integer
+        0 -> SetupGraphViewModel.GraphType.Integer
+        1 -> SetupGraphViewModel.GraphType.UInteger
+        2 -> SetupGraphViewModel.GraphType.String
+        else -> SetupGraphViewModel.GraphType.Integer // default to integer
     }
 
     val graphStructure = when (orientationIndex) {
-        0 -> CreateGraphViewModel.GraphStructure.Undirected
-        1 -> CreateGraphViewModel.GraphStructure.Directed
-        else -> CreateGraphViewModel.GraphStructure.Undirected // default to undirected
+        0 -> SetupGraphViewModel.GraphStructure.Undirected
+        1 -> SetupGraphViewModel.GraphStructure.Directed
+        else -> SetupGraphViewModel.GraphStructure.Undirected // default to undirected
     }
 
     val weight = when (weightnessIndex) {
-        0 -> CreateGraphViewModel.Weight.Unweighted
-        1 -> CreateGraphViewModel.Weight.Weighted
-        else -> CreateGraphViewModel.Weight.Unweighted // default to unweighted
+        0 -> SetupGraphViewModel.Weight.Unweighted
+        1 -> SetupGraphViewModel.Weight.Weighted
+        else -> SetupGraphViewModel.Weight.Unweighted // default to unweighted
     }
 
     return viewModel.createGraph(storedData, graphStructure, weight)

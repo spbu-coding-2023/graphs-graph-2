@@ -8,7 +8,7 @@ import model.graphs.WeightedUndirectedGraph
 import view.MainScreen
 import viewmodel.MainScreenViewModel
 
-class CreateGraphViewModel {
+class SetupGraphViewModel {
     sealed class GraphType {
         object Integer : GraphType()
         object UInteger : GraphType()

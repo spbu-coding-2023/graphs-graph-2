@@ -13,9 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import model.graphs.abstractGraph.Graph
-import view.tabScreen.FileControlTab
-import viewmodel.graph.CreateGraphViewModel
+import viewmodel.graph.SetupGraphViewModel
 
 
 class SelectInitDialogWindow(
@@ -81,7 +79,7 @@ class SelectInitDialogWindow(
         }
 
         if (showCreateGraphDialog) {
-            CreateGraphDialogWindow(CreateGraphViewModel())
+            CreateGraphDialogWindow(SetupGraphViewModel())
         }
 
 //        if (showImportTab) {
