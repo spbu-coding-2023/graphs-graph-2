@@ -1,7 +1,5 @@
 package model.algorithms
 
-import model.graphs.DirectedGraph
-import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Edge
@@ -25,8 +23,11 @@ class ShortestPathFinder {
         return null
     }
 
-    fun <D> findShortestPathDijkstra(graph: WeightedDirectedGraph<D>, srcVertex: Vertex<D>, destVertex: Vertex<D>):
-            List<Pair<Edge<D>, Vertex<D>>>? {
+    private fun <D> findShortestPathDijkstra(
+        graph: WeightedDirectedGraph<D>,
+        srcVertex: Vertex<D>,
+        destVertex: Vertex<D>
+    ): List<Pair<Edge<D>, Vertex<D>>>? {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(srcVertex to 0) }
@@ -68,8 +69,11 @@ class ShortestPathFinder {
         return path.reversed()
     }
 
-    fun <D> findShortestPathDijkstra(graph: WeightedUndirectedGraph<D>, srcVertex: Vertex<D>, destVertex: Vertex<D>):
-            List<Pair<Edge<D>, Vertex<D>>>? {
+    private fun <D> findShortestPathDijkstra(
+        graph: WeightedUndirectedGraph<D>,
+        srcVertex: Vertex<D>,
+        destVertex: Vertex<D>
+    ): List<Pair<Edge<D>, Vertex<D>>>? {
         val distanceMap = mutableMapOf<Vertex<D>, Int>().withDefault { Int.MAX_VALUE }
         val predecessorMap = mutableMapOf<Vertex<D>, Vertex<D>?>()
         val priorityQueue = PriorityQueue<Pair<Vertex<D>, Int>>(compareBy { it.second }).apply { add(srcVertex to 0) }
@@ -112,8 +116,11 @@ class ShortestPathFinder {
     }
 
     // returns null if path doesn't exist
-    fun <D> findShortestPathFordBellman(graph: WeightedDirectedGraph<D>, srcVertex: Vertex<D>, destVertex: Vertex<D>):
-            List<Pair<Edge<D>, Vertex<D>>>? {
+    private fun <D> findShortestPathFordBellman(
+        graph: WeightedDirectedGraph<D>,
+        srcVertex: Vertex<D>,
+        destVertex: Vertex<D>
+    ): List<Pair<Edge<D>, Vertex<D>>>? {
         val NEG_INF = -1000000
 
         val vertices = graph.getVertices()

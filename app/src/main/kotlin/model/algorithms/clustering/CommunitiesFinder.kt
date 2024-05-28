@@ -7,8 +7,8 @@ import model.graphs.abstractGraph.Vertex
 import model.algorithms.clustering.implementation.Link
 import model.algorithms.clustering.implementation.getPartition
 
-class LouvainClustering {
-    fun <D> findClusters(graph: Graph<D>): Set<Set<Vertex<D>>> {
+class CommunitiesFinder {
+    fun <D> findCommunity(graph: Graph<D>): Set<Set<Vertex<D>>> {
         if (graph.getVertices().size == 1) return setOf(setOf(graph.getVertices()[0]))
 
         val links = convertToAPIFormat(graph)

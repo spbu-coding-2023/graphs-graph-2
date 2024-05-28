@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import util.annotations.TestAllGraphTypes
 import util.setupAbstractGraph
 
-class LouvainClusteringTest {
-    val louvain = LouvainClustering()
+class CommunitiesFinderTest {
+    val louvain = CommunitiesFinder()
 
     @TestAllGraphTypes
     fun `graph of 1 vertex should have one community`(graph: Graph<Int>) {
         val v0 = graph.addVertex(0)
 
-        val actualValue = louvain.findClusters(graph)
+        val actualValue = louvain.findCommunity(graph)
         val expectedValue = setOf(setOf(v0))
 
         assertEquals(expectedValue, actualValue)
@@ -21,7 +21,7 @@ class LouvainClusteringTest {
 
     @TestAllGraphTypes
     fun `empty graph should have no communities`(graph: Graph<Int>) {
-        val actualValue = louvain.findClusters(graph)
+        val actualValue = louvain.findCommunity(graph)
         val expectedValue = emptySet<Set<Vertex<Int>>>()
 
         assertEquals(expectedValue, actualValue)
@@ -31,7 +31,7 @@ class LouvainClusteringTest {
     fun `graph doesn't change`(graph: Graph<Int>) {
         val graphStructure = setupAbstractGraph(graph)
 
-        louvain.findClusters(graph)
+        louvain.findCommunity(graph)
 
         val actualGraph = graph.getVertices() to graph.getEdges().toSet()
         val expectedGraph = graphStructure
