@@ -147,7 +147,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             Column(modifier = Modifier.width(fieldWidth).fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
-                    onClick = { showSaveDialog = true },
+                    onClick = {
+                        showSaveDialog = true
+                        graphName = ""
+                    },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text("Save")
@@ -156,7 +159,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             Column(modifier = Modifier.width(fieldWidth).fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
-                    onClick = { showLoadDialog = true },
+                    onClick = {
+                        showLoadDialog = true
+                        graphName = ""
+                    },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text("Load")
@@ -170,7 +176,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
-                    onClick = { showEditDialog = true },
+                    onClick = {
+                        showEditDialog = true
+                        graphName = ""
+                    },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text("Edit DB")
@@ -206,9 +215,9 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                             .background(Color.White)
                             .padding(16.dp)
                             .width(300.dp)
-                            .height(150.dp)
+                            .height(50.dp)
                     ) {
-                        Text("Graph $graphName loaded successfully!")
+                        Text("Graph '$graphName' loaded successfully!")
                     }
                 }
 

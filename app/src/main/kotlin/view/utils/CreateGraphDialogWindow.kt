@@ -222,13 +222,13 @@ fun getGraphVMParameter(storedDataType: Int, structureType: Int, weightType: Int
     val graphStructure = when (structureType) {
         0 -> SetupGraphViewModel.GraphStructure.Undirected
         1 -> SetupGraphViewModel.GraphStructure.Directed
-        else -> SetupGraphViewModel.GraphStructure.Directed // default to directed
+        else -> SetupGraphViewModel.GraphStructure.Undirected // default to directed
     }
 
     val weight = when (weightType) {
-        0 -> SetupGraphViewModel.Weight.Weighted
-        1 -> SetupGraphViewModel.Weight.Unweighted
-        else -> SetupGraphViewModel.Weight.Weighted // default to weighted
+        0 -> SetupGraphViewModel.Weight.Unweighted
+        1 -> SetupGraphViewModel.Weight.Weighted
+        else -> SetupGraphViewModel.Weight.Unweighted // default to weighted
     }
 
     return Triple(storedData, graphStructure, weight)
