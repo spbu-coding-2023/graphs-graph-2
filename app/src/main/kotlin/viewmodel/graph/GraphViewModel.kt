@@ -1,5 +1,12 @@
 package viewmodel.graph
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
+import model.io.neo4j.Neo4jRepository
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import model.graphs.*
@@ -12,8 +19,10 @@ class GraphViewModel<D>(
     private val showVerticesData: State<Boolean>,
     var showVerticesID: MutableState<Boolean>,
     val graphType: MutableState<String>,
-    private val isDirected: State<Boolean>
+    val isDirected: MutableState<Boolean>,
+    val isWeighted: MutableState<Boolean>
 ) {
+
     val updateIsRequired = mutableStateOf(false)
 
     var _verticesViewModels = mutableMapOf<Vertex<D>, VertexViewModel<D>>()

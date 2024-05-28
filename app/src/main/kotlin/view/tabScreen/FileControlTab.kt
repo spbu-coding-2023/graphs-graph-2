@@ -31,7 +31,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showSaveDialog by remember { mutableStateOf(false) }
     var showLoadDialog by remember { mutableStateOf(false) }
     var graphName by remember { mutableStateOf("") }
-    var showEnterPathField by remember { mutableStateOf(false) }
     var showErrorWindow by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var showEditDialog by remember { mutableStateOf(false) }
@@ -85,6 +84,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             modifier = Modifier.height(rowHeight).padding(borderPadding),
             horizontalArrangement = Arrangement.spacedBy(horizontalGap)
         ) {
+
             var expanded by remember { mutableStateOf(false) }
 
             ExposedDropdownMenuBox(
@@ -96,7 +96,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             ) {
                 TextField(
                     value = selectedDatabase,
-                    onValueChange = {},
+                    onValueChange = { graphName = it },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier,
@@ -138,7 +138,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     Text("Select File")
                 }
             }
-
         }
 
         Row(
@@ -150,6 +149,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showSaveDialog = true
+                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {

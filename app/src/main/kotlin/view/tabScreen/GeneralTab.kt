@@ -234,16 +234,14 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         onClick = {
                             connectVertexId = connectVertexId.replace("\n", "")
 
-                            if (!connectVertexId.all { char -> char.isDigit() }) {
+                            if (connectVertexId.isBlank()) {
+                                errorMessage = "Please enter an ID"
+                            } else if (connectVertexId.toIntOrNull() == null) {
+                                errorMessage = "ID must be an integer"
+                            } else if (!connectVertexId.all { char -> char.isDigit() }) {
                                 errorMessage = "ID should be a numeric"
                             } else if (!graphVM.checkVertexById(connectVertexId.toInt())) {
                                 errorMessage = "There isn't a Vertex with such ID"
-                            } else if (connectVertexId.isBlank()) {
-                                errorMessage = "Please enter an ID"
-                            } else if (
-                                connectVertexId.isNotBlank() && connectVertexId.toIntOrNull() == null
-                            ) {
-                                errorMessage = "ID must be an integer"
                             } else {
                                 val firstId = graphVM.addVertex(vertexData)
                                 graphVM.addEdge(firstId, connectVertexId.toInt())
