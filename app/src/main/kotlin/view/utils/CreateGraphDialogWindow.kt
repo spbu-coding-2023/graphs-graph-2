@@ -115,7 +115,7 @@ fun CreateGraphDialogWindow(viewModel: CreateGraphViewModel) {
                     }
 
                     Column(modifier = Modifier.width(250.dp).height(200.dp)) {
-                        Text("Select the weightnes*:")
+                        Text("Select the weightiness:")
 
                         Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
 
@@ -200,13 +200,13 @@ fun onCreateGraphClicked(
     val graphStructure = when (orientationIndex) {
         0 -> CreateGraphViewModel.GraphStructure.Undirected
         1 -> CreateGraphViewModel.GraphStructure.Directed
-        else -> CreateGraphViewModel.GraphStructure.Directed // default to directed
+        else -> CreateGraphViewModel.GraphStructure.Undirected // default to undirected
     }
 
     val weight = when (weightnessIndex) {
-        0 -> CreateGraphViewModel.Weight.Weighted
-        1 -> CreateGraphViewModel.Weight.Unweighted
-        else -> CreateGraphViewModel.Weight.Weighted // default to weighted
+        0 -> CreateGraphViewModel.Weight.Unweighted
+        1 -> CreateGraphViewModel.Weight.Weighted
+        else -> CreateGraphViewModel.Weight.Unweighted // default to unweighted
     }
 
     return viewModel.createGraph(storedData, graphStructure, weight)

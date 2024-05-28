@@ -156,12 +156,20 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showVertexAddDialog) {
-        Dialog(onDismissRequest = {}) {
+        Dialog(
+            onDismissRequest = {
+                showVertexAddDialog = false
+            }
+        ) {
             vertexData = ""
 
             Column(
                 modifier =
-                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
+                Modifier
+                    .background(Color.White)
+                    .padding(16.dp)
+                    .width(350.dp)
+                    .height(200.dp)
             ) {
                 if (graphVM.verticesVM.isEmpty()) {
                     Text("Input data of second vertex to create and connect with")
