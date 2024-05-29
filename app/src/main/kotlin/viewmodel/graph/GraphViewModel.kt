@@ -37,7 +37,7 @@ class GraphViewModel<D>(
             dataVisible = showVerticesData,
             idVisible = showVerticesID,
             vertex = vertex,
-            )
+        )
     }
 
     fun checkVertexById(id: Int): Boolean {
@@ -68,9 +68,14 @@ class GraphViewModel<D>(
         updateEdgeViewModels(newEdge)
     }
 
-    fun applyForceDirectedLayout(width: Double, height: Double) {
+    fun applyForceDirectedLayout(width: Double, height: Double, a: Double, b: Double, c: Double) {
         val layout = TFDPLayout()
-        layout.place(width, height, verticesVM)
+        layout.place(width, height, verticesVM, 128, a, b, c)
+    }
+
+    fun randomize(width: Double, height: Double) {
+        val layout = TFDPLayout()
+        layout.randomize(width, height, verticesVM)
     }
 
     val verticesVM: List<VertexViewModel<D>> get() = _verticesViewModels.values.toList()

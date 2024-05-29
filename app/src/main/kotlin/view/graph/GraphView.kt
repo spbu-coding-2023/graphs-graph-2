@@ -27,7 +27,6 @@ fun <D> GraphView(viewModel: GraphViewModel<D>, currentScaleState: MutableState<
     val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
 
     val updateRequired = remember { derivedStateOf { viewModel.updateIsRequired } }
-    // val density = LocalDensity.current.density
 
     val transformationState = rememberTransformableState { zoomChange, offsetChange, _ ->
         currentScaleState.value *= zoomChange
@@ -53,7 +52,8 @@ fun <D> GraphView(viewModel: GraphViewModel<D>, currentScaleState: MutableState<
             )
     ) {
         if (updateRequired.value.value) {
-            viewModel.applyForceDirectedLayout(740.0, 650.0)
+            viewModel.randomize(740.0, 650.0)
+            viewModel.applyForceDirectedLayout(740.0, 650.0, 0.1, 8.0, 1.2)
         }
         viewModel.verticesVM.forEach { v -> VertexView(v, currentScaleState.value) }
         viewModel.edgesVM.forEach { e -> EdgeView(e, currentScaleState.value) }
