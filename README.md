@@ -13,7 +13,7 @@ Application that lets you create, save, visualise, analyse and modify 4 differen
 
 ## Usage
 
-Firstly - clone the last release/version of our app. Since our app uses Gradle build system - you can use this commands:
+Firstly - clone the last release/version of our app. Since our app uses Gradle build system - you can use these commands:
 
 | Command                                | Description                                                           |
 |----------------------------------------|-----------------------------------------------------------------------|
