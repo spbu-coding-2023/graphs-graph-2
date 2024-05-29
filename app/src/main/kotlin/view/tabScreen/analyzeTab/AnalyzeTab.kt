@@ -1,4 +1,4 @@
-package view.tabScreen
+package view.tabScreen.analyzeTab
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -7,16 +7,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import view.tabScreen.analyzeTab.algorithmsUI.*
 import viewmodel.graph.GraphViewModel
+
+val rowHeight = 75.dp
+val borderPadding = 10.dp
+val horizontalGap = 20.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
-
-
     val algorithms = arrayOf(
         "Layout",
-        "Clustering",
+        "Communities",
         "Key vertices",
         "Shortest path",
         "Cycles",
@@ -24,17 +27,11 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
         "SCC",
         "Min spanning tree"
     )
+
     var selectedAlgorithm by remember { mutableStateOf(algorithms[0]) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
-
-        val rowHeight = 75.dp
-        val fieldHeight = 70.dp
-
-        val borderPadding = 10.dp
-        val horizontalGap = 20.dp
-
         Row(
             modifier = Modifier.height(rowHeight).padding(borderPadding),
             horizontalArrangement = Arrangement.spacedBy(horizontalGap)
@@ -94,5 +91,15 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
 
         }
 
+        when (selectedAlgorithm) {
+            "Layout" -> { LayoutUI(graphVM) }
+            "Communities" -> { CommunitiesUI(graphVM) }
+            "Key vertices" -> { KeyVerticesUI(graphVM) }
+            "Shortest path" -> { ShortestPathUI(graphVM) }
+            "Cycles" -> { CyclesUI(graphVM) }
+            "Bridges" -> { BridgesUI(graphVM) }
+            "SCC" -> { SCCUI(graphVM) }
+            "Min spanning tree" -> { MinSpanningTreeUI(graphVM) }
+        }
     }
 }
