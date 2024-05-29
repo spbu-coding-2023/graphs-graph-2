@@ -70,7 +70,7 @@ class GraphViewModel<D>(
 
     fun applyForceDirectedLayout(width: Double, height: Double, a: Double, b: Double, c: Double) {
         val layout = TFDPLayout()
-        layout.place(width, height, verticesVM, 64, a, b, c)
+        layout.place(width, height, verticesVM, 128, a, b, c)
     }
 
     fun randomize(width: Double, height: Double) {
