@@ -13,7 +13,7 @@ class CommunitiesFinderTest {
     fun `graph of 1 vertex should have one community`(graph: Graph<Int>) {
         val v0 = graph.addVertex(0)
 
-        val actualValue = louvain.findCommunity(graph)
+        val actualValue = louvain.findCommunities(graph)
         val expectedValue = setOf(setOf(v0))
 
         assertEquals(expectedValue, actualValue)
@@ -21,7 +21,7 @@ class CommunitiesFinderTest {
 
     @TestAllGraphTypes
     fun `empty graph should have no communities`(graph: Graph<Int>) {
-        val actualValue = louvain.findCommunity(graph)
+        val actualValue = louvain.findCommunities(graph)
         val expectedValue = emptySet<Set<Vertex<Int>>>()
 
         assertEquals(expectedValue, actualValue)
@@ -31,7 +31,7 @@ class CommunitiesFinderTest {
     fun `graph doesn't change`(graph: Graph<Int>) {
         val graphStructure = setupAbstractGraph(graph)
 
-        louvain.findCommunity(graph)
+        louvain.findCommunities(graph)
 
         val actualGraph = graph.getVertices() to graph.getEdges().toSet()
         val expectedGraph = graphStructure

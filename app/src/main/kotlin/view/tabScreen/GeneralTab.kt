@@ -100,6 +100,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     value = secondVertexId,
                     onValueChange = { secondVertexId = it },
                     modifier = Modifier.fillMaxWidth().height(70.dp).clip(RoundedCornerShape(8.dp)),
+                    textStyle = TextStyle(fontSize = 12.sp),
                     label = {
                         Text(
                             "2 vertex ID",
