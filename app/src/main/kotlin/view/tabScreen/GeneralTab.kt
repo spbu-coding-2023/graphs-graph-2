@@ -265,15 +265,6 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
             }
         }
     }
-
-    if (changesWereMade) {
-        changesWereMade = false
-        val currentWindowVM = WindowViewModel()
-        currentWindowVM.SetCurrentDimensions()
-
-        graphVM.applyForceDirectedLayout(currentWindowVM.getWidth.value.toDouble(), currentWindowVM.getHeight.value.toDouble())
-    }
-
     if (showErrorWindow.value) {
         ErrorWindow("No such Vertex", { showErrorWindow.value = false })
     }
