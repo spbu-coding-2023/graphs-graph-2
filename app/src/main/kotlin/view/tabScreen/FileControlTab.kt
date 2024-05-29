@@ -21,7 +21,6 @@ import kotlinx.coroutines.delay
 import model.io.neo4j.Neo4jRepositoryHandler
 import model.io.sql.SQLDatabaseModule
 import view.utils.*
-import viewmodel.MainScreenViewModel
 import java.awt.FileDialog
 import java.awt.Frame
 
