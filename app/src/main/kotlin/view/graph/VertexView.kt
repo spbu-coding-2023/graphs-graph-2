@@ -1,6 +1,7 @@
 package view.graph
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -9,8 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Dispatchers
@@ -35,12 +36,16 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
 
     val adjustedX = viewModel.x.value
     val adjustedY = viewModel.y.value
-    val adjustedRadius = (viewModel.radius * scale).coerceIn(minVertexRadius, maxVertexRadius)
+    var adjustedRadius = (viewModel.radius * scale).coerceIn(minVertexRadius, maxVertexRadius)
+
+    val highlightColor by remember { derivedStateOf { viewModel.highlightColor } }
+    val borderColor = highlightColor.value
 
     Box(
         modifier = Modifier
             .offset { IntOffset(adjustedX.roundToPx(), adjustedY.roundToPx()) }
             .size(adjustedRadius * 2)
+            .border(2.dp, borderColor, CircleShape)
             .background(
                 if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
                 shape = CircleShape

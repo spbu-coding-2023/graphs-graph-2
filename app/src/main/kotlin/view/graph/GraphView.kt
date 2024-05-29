@@ -26,12 +26,13 @@ fun <D> GraphView(viewModel: GraphViewModel<D>, currentScaleState: MutableState<
     val offset = remember { mutableStateOf(Offset.Zero) }
     val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
 
-    val updateRequired = remember { derivedStateOf { viewModel.updateIsRequired } }
+    val updateRequired by remember { derivedStateOf { viewModel.updateIsRequired } }
 
     val transformationState = rememberTransformableState { zoomChange, offsetChange, _ ->
         currentScaleState.value *= zoomChange
         offset.value += offsetChange
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

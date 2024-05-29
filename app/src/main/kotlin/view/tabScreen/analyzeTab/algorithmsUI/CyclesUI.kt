@@ -59,4 +59,18 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
             }
         }
     }
+    Row(
+        modifier = Modifier.height(rowHeight).padding(borderPadding),
+        horizontalArrangement = Arrangement.spacedBy(horizontalGap)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
+            Button(
+                modifier = Modifier.fillMaxSize(),
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
+            ) {
+                Text("Highlight next cycle")
+            }
+        }
+    }
 }

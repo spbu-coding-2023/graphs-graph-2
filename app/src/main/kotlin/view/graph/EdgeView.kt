@@ -3,6 +3,9 @@ package view.graph
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -29,6 +32,9 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
     val secondVertexCenterY = secondVertexCenter.second
 
     val arrowPoints = viewModel.calculateArrowPoints(scale)
+
+    val highlightColor by remember { derivedStateOf { viewModel.highlightColor } }
+    val edgeColor = highlightColor.value
 
     Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
         drawLine(
@@ -66,7 +72,7 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
 
             drawPath(
                 path = trianglePath,
-                color = Color.LightGray,
+                color = edgeColor,
                 style = Fill
             )
         }
