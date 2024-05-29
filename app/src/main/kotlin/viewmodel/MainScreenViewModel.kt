@@ -50,7 +50,12 @@ class MainScreenViewModel<D>(
 
     private fun checkIfCredentialsAreValid(uri: String, user: String, password: String): Boolean {
         try {
-            GraphDatabase.driver(uri, AuthTokens.basic(user, password))
+            val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
+            driver.session().executeWrite { tx ->
+                tx.run {
+                    "MATCH (v) RETURN v LIMIT 1"
+                }
+            }
         } catch (e: Exception) {
             return false
         }
