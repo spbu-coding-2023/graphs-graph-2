@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
-import model.io.neo4j.Neo4jRepository
 import model.io.sql.SQLDatabaseModule
 import view.utils.EditDBWindow
 import view.utils.ErrorWindow
@@ -220,7 +219,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
                             .background(Color.White)
                             .padding(16.dp)
                             .width(300.dp)
-                            .height(50.dp)
+                            .height(100.dp)
                     ) {
                         Text("Graph '$graphName' saved successfully!")
                     }
@@ -237,8 +236,35 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
             if (repo == null) {
                 showSaveDialog = false
                 showNeo4jDialog = true
+            } else if (!isValidNeo4jName(graphName)) {
+                showSaveDialog = false
+                showErrorWindow = true
+                errorMessage = "$graphName is an invalid name."
+                graphName = ""
             } else {
                 repo.saveOrReplaceGraph(graphVM.graph, graphName, graphVM.isDirected.value, graphVM.isWeighted.value)
+
+                Dialog(
+                    onDismissRequest = {
+                        showSaveDialog = false
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .padding(16.dp)
+                            .width(300.dp)
+                            .height(100.dp)
+                    ) {
+                        Text("Graph '$graphName' saved successfully!")
+                    }
+                }
+
+                // Automatically dismiss the dialog after 3 seconds
+                LaunchedEffect(Unit) {
+                    delay(3000)
+                    showSaveDialog = false
+                }
             }
         }
     }
@@ -263,4 +289,26 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
             errorMessage = ""
         }
     }
+}
+
+private fun isValidNeo4jName(name: String): Boolean {
+    if (name.isEmpty()) return false
+    for (i in name.indices) {
+        val isValidChar = when (name[i].code) {
+            45 -> {                      // -
+                if (i!= 0) true else false
+            }
+            in 48..57 -> {          // 0-9
+                if (i != 0) true else false
+            }
+            in 65..90 -> true       // A-Z
+            95 -> true                   // _
+            in 97..122 -> true      // a-z
+            else -> false
+        }
+
+        if (isValidChar) continue else return false
+    }
+
+    return true
 }
