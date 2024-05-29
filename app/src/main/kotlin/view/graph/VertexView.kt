@@ -45,7 +45,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
         modifier = Modifier
             .offset { IntOffset(adjustedX.roundToPx(), adjustedY.roundToPx()) }
             .size(adjustedRadius * 2)
-            .border(2.dp, borderColor, CircleShape)
+            .border(5.dp, borderColor, CircleShape)
             .background(
                 if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
                 shape = CircleShape

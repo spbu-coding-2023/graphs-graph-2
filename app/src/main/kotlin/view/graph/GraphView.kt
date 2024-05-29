@@ -52,7 +52,7 @@ fun <D> GraphView(viewModel: GraphViewModel<D>, currentScaleState: MutableState<
                 translationY = offset.value.y
             )
     ) {
-        if (updateRequired.value.value) {
+        if (updateRequired.value) {
             viewModel.randomize(740.0, 650.0)
             viewModel.applyForceDirectedLayout(740.0, 650.0, 0.1, 8.0, 1.2)
         }

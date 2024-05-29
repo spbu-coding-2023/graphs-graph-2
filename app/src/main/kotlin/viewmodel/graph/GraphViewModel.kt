@@ -83,6 +83,7 @@ class GraphViewModel<D>(
     fun findCommunities(): Boolean {
         val communitiesFinder = CommunitiesFinder()
         val communities = communitiesFinder.findCommunities(graph)
+        if (communities.isEmpty()) return false
 
         return highlightVerticesSets(communities)
     }
@@ -90,6 +91,7 @@ class GraphViewModel<D>(
     fun findKeyVertices(): Boolean {
         val keyVerticesFinder = KeyVerticesFinder()
         val keyVertices = keyVerticesFinder.findKeyVertices(graph)
+        if (keyVertices?.isEmpty() ?: false) return false
 
         return highlightVertices(keyVertices)
     }
@@ -98,6 +100,7 @@ class GraphViewModel<D>(
         val bridgesFinder = BridgesFinder()
         if (graph is UndirectedGraph) {
             val bridges = bridgesFinder.findBridges(graph as UndirectedGraph)
+            if (bridges.isEmpty()) return false
 
             return highlightEdges(bridges.toSet())
         }
@@ -112,6 +115,8 @@ class GraphViewModel<D>(
         val cyclesFinder = CyclesFinder()
         if (graph is DirectedGraph) {
             val foundCycles = cyclesFinder.findCycles(graph as DirectedGraph, graph.getVertices()[srcVertexId])
+            if (foundCycles.isEmpty()) return false
+
             cycles = foundCycles.toList()
 
             currentCycleIndex = 0
@@ -125,6 +130,7 @@ class GraphViewModel<D>(
         val minSpanningTreeFinder = MinSpanningTreeFinder()
         if (graph is WeightedUndirectedGraph) {
             val minSpanningTree = minSpanningTreeFinder.findMinSpanningTree(graph as WeightedUndirectedGraph)
+            if (minSpanningTree.isEmpty()) return false
 
             return highlightEdges(minSpanningTree.toSet())
         }
@@ -136,6 +142,7 @@ class GraphViewModel<D>(
         val SCCFinder = SCCFinder()
         if (graph is DirectedGraph) {
             val SCCs = SCCFinder.findSCC(graph as DirectedGraph)
+            if (SCCs.isEmpty()) return false
 
             return highlightVerticesSets(SCCs)
         }
@@ -151,11 +158,14 @@ class GraphViewModel<D>(
 
         if (graph is WeightedDirectedGraph) {
             val shortestPath = shortestPathFinder.findShortestPath(graph as WeightedDirectedGraph, src, dest)
+            if (shortestPath?.isEmpty() ?: false) return false
 
             return highlightPath(shortestPath)
         }
         else if (graph is WeightedUndirectedGraph) {
             val shortestPath = shortestPathFinder.findShortestPath(graph as WeightedUndirectedGraph, src, dest)
+            if (shortestPath?.isEmpty() ?: false) return false
+
             return highlightPath(shortestPath)
         }
 
@@ -164,6 +174,8 @@ class GraphViewModel<D>(
 
     private fun highlightVertices(verticesSet: Set<Vertex<D>>?): Boolean {
         if (verticesSet == null) return false
+
+        clearGraph()
 
         for (vertex in graph.getVertices()) {
             if (vertex in verticesSet) {
@@ -179,6 +191,8 @@ class GraphViewModel<D>(
     private fun highlightEdges(edgesSet: Set<Edge<D>>?): Boolean {
         if (edgesSet == null) return false
 
+        clearGraph()
+
         for (edge in graph.getEdges()) {
             if (edge in edgesSet) {
                 _edgeViewModels[edge]?.highlightColor?.value = Color.Black
@@ -192,6 +206,8 @@ class GraphViewModel<D>(
 
     private fun highlightVerticesSets(verticesSets: Set<Set<Vertex<D>>>?): Boolean {
         if (verticesSets == null) return false
+
+        clearGraph()
 
         val colors = arrayOf(
             Color.Red,
@@ -228,8 +244,10 @@ class GraphViewModel<D>(
     private fun highlightPath(path: List<Pair<Edge<D>, Vertex<D>>>?): Boolean {
         if (path == null) return false
 
-        var verticesNotInPath = graph.getVertices()
-        var edgesNotINPath = graph.getEdges()
+        clearGraph()
+
+        val srcVertex = path.first().first.vertex1
+        _verticesViewModels[srcVertex]?.highlightColor?.value = Color.Black
 
         for (pair in path) {
             val edge = pair.first
@@ -237,16 +255,6 @@ class GraphViewModel<D>(
 
             _edgeViewModels[edge]?.highlightColor?.value = Color.Black
             _verticesViewModels[vertex]?.highlightColor?.value = Color.Black
-
-            verticesNotInPath -= vertex
-            edgesNotINPath -= edge
-        }
-
-        for (vertex in verticesNotInPath) {
-            _verticesViewModels[vertex]?.highlightColor?.value = Color.LightGray
-        }
-        for (edge in edgesNotINPath) {
-            _edgeViewModels[edge]?.highlightColor?.value = Color.LightGray
         }
 
         return true
@@ -257,10 +265,19 @@ class GraphViewModel<D>(
         returnValue = highlightPath(cycles?.get(currentCycleIndex))
 
         val size = cycles?.size
-            ?: throw NullPointerException("cycles property isn't initialised")
+            ?: return false
 
         if (++currentCycleIndex > size - 1) currentCycleIndex = 0
 
         return returnValue
+    }
+
+    fun clearGraph() {
+        for (vertex in graph.getVertices()) {
+            _verticesViewModels[vertex]?.highlightColor?.value = Color.LightGray
+        }
+        for (edge in graph.getEdges()) {
+            _edgeViewModels[edge]?.highlightColor?.value = Color.LightGray
+        }
     }
 }

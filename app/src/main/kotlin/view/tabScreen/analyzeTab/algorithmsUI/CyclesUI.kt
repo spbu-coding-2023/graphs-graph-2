@@ -13,11 +13,14 @@ import androidx.compose.ui.unit.sp
 import view.tabScreen.analyzeTab.borderPadding
 import view.tabScreen.analyzeTab.horizontalGap
 import view.tabScreen.analyzeTab.rowHeight
+import view.utils.ErrorWindow
 import viewmodel.graph.GraphViewModel
 
 @Composable
 fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
     var vertexId by remember { mutableStateOf("") }
+    val showErrorWindow = remember { mutableStateOf(false) }
+    val errorMessage = remember { mutableStateOf("") }
 
     Row(
         modifier = Modifier.height(rowHeight).padding(borderPadding),
@@ -52,7 +55,27 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
         Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
             Button(
                 modifier = Modifier.fillMaxSize(),
-                onClick = {},
+                onClick = {
+                    if (vertexId.isEmpty()) {
+                        errorMessage.value = "Enter vertex's ID"
+                        showErrorWindow.value = true
+                    }
+                    else if (!vertexId.all { char -> char.isDigit() }) {
+                        errorMessage.value = "ID should be a number"
+                        showErrorWindow.value = true
+                    }
+                    else if (vertexId.toInt() > graphVM.graph.getVertices().size - 1) {
+                        errorMessage.value = "No vertex with ID $vertexId"
+                        showErrorWindow.value = true
+                    }
+                    else if (!graphVM.findCycles(vertexId.toInt())) {
+                        errorMessage.value = "No cycles were found"
+                        showErrorWindow.value = true
+                    }
+                    else {
+                        graphVM.highlighNextCycle()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
             ) {
                 Text("Run algorithm")
@@ -66,11 +89,20 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
         Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
             Button(
                 modifier = Modifier.fillMaxSize(),
-                onClick = {},
+                onClick = {
+                    if (!graphVM.highlighNextCycle()) {
+                        errorMessage.value = "Please run algorithm first"
+                        showErrorWindow.value = true
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
             ) {
                 Text("Highlight next cycle")
             }
         }
+    }
+
+    if (showErrorWindow.value) {
+        ErrorWindow(errorMessage.value, { showErrorWindow.value = false })
     }
 }

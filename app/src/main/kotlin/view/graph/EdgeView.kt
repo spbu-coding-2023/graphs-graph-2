@@ -38,7 +38,7 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
 
     Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
         drawLine(
-            color = Color.LightGray,
+            color = edgeColor,
             strokeWidth = (5f * scale).coerceIn(minEdgeStrokeWidth, maxEdgeStrokeWidth),
             start =
             Offset(
