@@ -7,6 +7,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import model.graphs.DirectedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
 import view.tabScreen.analyzeTab.algorithmsUI.*
 import viewmodel.graph.GraphViewModel
 
@@ -17,16 +21,29 @@ val horizontalGap = 20.dp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
-    val algorithms = arrayOf(
+    val algorithms = mutableListOf(
         "Layout",
         "Communities",
-        "Key vertices",
-        "Shortest path",
-        "Cycles",
-        "Bridges",
-        "SCC",
-        "Min spanning tree"
+        "Key vertices"
     )
+
+    if (graphVM.graph is DirectedGraph) {
+        algorithms += "SCCs"
+        algorithms += "Cycles"
+    }
+
+    if (graphVM.graph is UndirectedGraph) {
+        algorithms += "Bridges"
+    }
+
+    if (graphVM.graph is WeightedUndirectedGraph) {
+        algorithms += "Min spanning tree"
+        algorithms += "Shortest path"
+    }
+
+    if (graphVM.graph is WeightedDirectedGraph) {
+        algorithms += "Shortest path"
+    }
 
     var selectedAlgorithm by remember { mutableStateOf(algorithms[0]) }
 
@@ -88,7 +105,6 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
                     }
                 }
             }
-
         }
 
         when (selectedAlgorithm) {
@@ -98,7 +114,7 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
             "Shortest path" -> { ShortestPathUI(graphVM) }
             "Cycles" -> { CyclesUI(graphVM) }
             "Bridges" -> { BridgesUI(graphVM) }
-            "SCC" -> { SCCUI(graphVM) }
+            "SCCs" -> { SCCUI(graphVM) }
             "Min spanning tree" -> { MinSpanningTreeUI(graphVM) }
         }
     }
