@@ -18,22 +18,31 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
+import model.io.neo4j.Neo4jRepository
 import model.io.sql.SQLDatabaseModule
 import view.utils.EditDBWindow
 import view.utils.ErrorWindow
 import view.utils.ImportGraphDialogWindow
+import view.utils.Neo4jLoginDialog
+import viewmodel.MainScreenViewModel
 import java.awt.FileDialog
 import java.awt.Frame
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
+fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewModel<D>) {
     var showSaveDialog by remember { mutableStateOf(false) }
     var showLoadDialog by remember { mutableStateOf(false) }
     var graphName by remember { mutableStateOf("") }
     var showErrorWindow by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var showEditDialog by remember { mutableStateOf(false) }
+
+    var showNeo4jDialog by remember { mutableStateOf(false) }
+    val isAuthorizedToNeo4j = remember { mutableStateOf(false) }
+    val neo4jUri = remember { mutableStateOf("") }
+    val neo4jUser = remember { mutableStateOf("") }
+    val neo4jPassword = remember { mutableStateOf("") }
 
     val databases = arrayOf("SQLite", "Neo4j", "JSON")
     var selectedDatabase by remember { mutableStateOf(databases[0]) }
@@ -223,6 +232,14 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     showSaveDialog = false
                 }
             }
+        } else if (selectedDatabase == "Neo4j") {
+            val repo = mainScreenVM.neo4jRepo
+            if (repo == null) {
+                showSaveDialog = false
+                showNeo4jDialog = true
+            } else {
+                repo.saveOrReplaceGraph(graphVM.graph, graphName, graphVM.isDirected.value, graphVM.isWeighted.value)
+            }
         }
     }
 
@@ -232,6 +249,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
 
     if (showEditDialog) {
         EditDBWindow(selectedDatabase) { showEditDialog = false }
+    }
+
+    if (showNeo4jDialog)  {
+        Neo4jLoginDialog(mainScreenVM) { showNeo4jDialog = false }
     }
 
     if (showErrorWindow) {

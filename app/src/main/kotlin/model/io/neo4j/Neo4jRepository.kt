@@ -6,22 +6,17 @@ import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import org.neo4j.driver.AuthTokens
-import org.neo4j.driver.GraphDatabase
-import org.neo4j.driver.Record
+import org.neo4j.driver.*
 import java.io.Closeable
 
 const val DIR_LABEL = "POINTS_TO"
 const val UNDIR_LABEL = "CONNECTED_TO"
 
-class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeable {
+class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
     private val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
     private val session = driver.session()
 
-    private val vertexToIdMap = mutableMapOf<Vertex<D>, Int>()
-    private var nextId = 0
-
-    fun saveOrReplaceGraph(graph: Graph<D>, name: String, isDirected: Boolean, isWeighted: Boolean) {
+    fun <D> saveOrReplaceGraph(graph: Graph<D>, name: String, isDirected: Boolean, isWeighted: Boolean) {
         clearGraph(name)
 
         val vertices = graph.getVertices()
@@ -32,8 +27,7 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
 
         session.executeWrite { tx ->
             for (vertex in vertices) {
-                vertexToIdMap[vertex] = nextId
-                val id = nextId++
+                val id = vertex.id
 
                 val data = vertex.data.toString()
 
@@ -46,8 +40,8 @@ class Neo4jRepository<D>(uri: String, user: String, password: String) : Closeabl
                 val v1 = edge.vertex1
                 val v2 = edge.vertex2
 
-                val id1 = vertexToIdMap[v1]
-                val id2 = vertexToIdMap[v2]
+                val id1 = v1.id
+                val id2 = v2.id
 
                 val data1 = v1.data.toString()
                 val data2 = v2.data.toString()
