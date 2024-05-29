@@ -53,7 +53,7 @@ fun <D> GraphView(viewModel: GraphViewModel<D>, currentScaleState: MutableState<
     ) {
         if (updateRequired.value.value) {
             viewModel.randomize(740.0, 650.0)
-            viewModel.applyForceDirectedLayout(740.0, 650.0, 0.01, 15.0, 5.0)
+            viewModel.applyForceDirectedLayout(740.0, 650.0, 0.1, 8.0, 1.2)
         }
         viewModel.verticesVM.forEach { v -> VertexView(v, currentScaleState.value) }
         viewModel.edgesVM.forEach { e -> EdgeView(e, currentScaleState.value) }

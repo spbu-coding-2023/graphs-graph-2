@@ -130,23 +130,18 @@ fun timeIt(f: (x: Array<Complex>) -> Array<Complex>, size: Int, repeat: Int): Do
  *   A complex-number vector of the same size, with the coefficients of the DFT.
  **************************************************************************************************/
 fun directFT(x: Array<Complex>): Array<Complex> {
+    // Implement the direct DFT computation
+    // This is usually O(N^2) but can be acceptable for small N
     val N = x.size
-    val X = Array<Complex>(N) { _ -> Complex() }       // Accumulate the results;
-
-    val W = Cexp(-2 * PI / N.toDouble())                   // Initialize twiddle factors;
-    var Wk = Complex(1.0, 0.0)
-
-    for (k in 0..N - 1) {
-        var Wkn = Complex(1.0, 0.0)
-        for (n in 0..N - 1) {
-            X[k] = X[k] + Wkn * x[n]
-            Wkn = Wkn * Wk                             // Update twiddle factor;
+    val X = Array(N) { Complex(0.0, 0.0) }
+    for (k in 0 until N) {
+        for (n in 0 until N) {
+            val theta = -2.0 * PI * k * n / N
+            X[k] = X[k] + x[n] * Cexp(theta)
         }
-        Wk = Wk * W
     }
-    return X                                           // Return value;
+    return X
 }
-
 
 /**************************************************************************************************
  * Function: factor
@@ -185,23 +180,23 @@ fun factor(n: Int): Int {
 fun recursiveFFT(x: Array<Complex>): Array<Complex> {
     val N = x.size
 
-    val N1 = factor(N)                                 // Smallest prime factor of length;
-    if (N == N1) {                                     // If the length is prime itself,
-        return directFT(x)                             //   transform is given by the direct form;
+    val N1 = factor(N)  // Smallest prime factor of length
+    if (N == N1) {
+        return directFT(x)  // Direct transform if length is prime
     } else {
-        val N2 = N / N1                                // Decompose in two factors, N1 being prime;
+        val N2 = N / N1  // Decompose in two factors, N1 being prime
 
-        val X = Array<Complex>(N) { _ -> Complex() }   // Allocate memory for computation;
+        val X = Array(N) { Complex(0.0, 0.0) }  // Allocate memory for computation
 
-        var W = Cexp(-2 * PI / N.toDouble())               // Twiddle factor;
+        val W = Cexp(-2 * PI / N.toDouble())  // Twiddle factor
         var Wj = Complex(1.0, 0.0)
-        for (j in 0..N1 - 1) {                           // Compute every subsequence of size N2;
-            val xj = Array<Complex>(N2) { n -> x[n * N1 + j] }     // Create the subsequence;
-            val Xj = recursiveFFT(xj)                          // Compute the DFT of the subsequence;
+        for (j in 0 until N1) {  // Compute subsequences of size N2
+            val xj = Array(N2) { n -> x[n * N1 + j] }  // Create the subsequence
+            val Xj = recursiveFFT(xj)  // Compute the DFT of the subsequence
             var Wkj = Complex(1.0, 0.0)
-            for (k in 0..N - 1) {
-                X[k] = X[k] + Xj[k % N2] * Wkj           // Recombine results;
-                Wkj = Wkj * Wj                         // Update twiddle factors;
+            for (k in 0 until N) {
+                X[k] = X[k] + Xj[k % N2] * Wkj  // Recombine results
+                Wkj = Wkj * Wj  // Update twiddle factors
             }
             Wj = Wj * W
         }
