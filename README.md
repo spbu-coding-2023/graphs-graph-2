@@ -9,8 +9,7 @@ Application that lets you create, save, visualise, analyse and modify 4 differen
 - Store graphs anywhere you want: SQLite, Neo4J, JSON
 - Drag, zoom, replace nodes
 
-![alt text][main_screen_image]
-
+![mainscreen_screenshot](https://github.com/spbu-coding-2023/graphs-graph-2/assets/64466788/9c708a11-dc6e-4cf9-a848-44f21dec7a37)
 
 ## Usage
 
@@ -52,4 +51,3 @@ _______________________________
 [contribute_rules_url]: https://github.com/spbu-coding-2023/graphs-graph-2/blob/main/CONTRIBUTING.md
 
 [java_gnomik_url]: https://ibb.co/54hJVd2
-[main_screen_image]: https://imgur.com/a/iAgrdIg
