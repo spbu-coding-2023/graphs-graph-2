@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -62,7 +63,10 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     onClick = { if (vertexData.isNotEmpty()) showVertexAddDialog = true },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
-                    Text("add")
+                    Text(
+                        "add\nvertex",
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
@@ -79,7 +83,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     textStyle = TextStyle(fontSize = 12.sp),
                     label = {
                         Text(
-                            "1 edge ID",
+                            "1 vertex ID",
                             style = MaterialTheme.typography.body1.copy(fontSize = 12.sp),
                             color = Color.Gray
                         )
@@ -98,7 +102,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxWidth().height(70.dp).clip(RoundedCornerShape(8.dp)),
                     label = {
                         Text(
-                            "2 edge ID",
+                            "2 vertex ID",
                             style = MaterialTheme.typography.body1.copy(fontSize = 12.sp),
                             color = Color.Gray
                         )
@@ -129,7 +133,10 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
-                    Text("add")
+                    Text(
+                        "add\nedge",
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
