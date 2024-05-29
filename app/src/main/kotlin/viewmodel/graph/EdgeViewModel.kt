@@ -5,6 +5,8 @@ import androidx.compose.ui.unit.Dp
 import ARROW_DEPTH
 import ARROW_SIZE
 import SQRT_3
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import kotlin.math.sqrt
 
 class EdgeViewModel<D>(
@@ -16,6 +18,8 @@ class EdgeViewModel<D>(
     fun isDirected() = isDirected.value
 
     private val radius = firstVertex.radius
+
+    var highlightColor = mutableStateOf(Color.LightGray)
 
     internal fun calculateFirstVertexCenter(scale: Float): Pair<Dp, Dp> {
         val x = firstVertex.x.value + radius * scale

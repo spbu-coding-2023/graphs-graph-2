@@ -22,8 +22,8 @@ import viewmodel.MainScreenViewModel
 @Composable
 fun <D> TabHandler(viewmodel: MainScreenViewModel<D>) {
     Column(
-        modifier =
-        Modifier.width(360.dp)
+        modifier = Modifier
+            .width(360.dp)
             .background(color = MaterialTheme.colors.surface)
             .fillMaxHeight()
             .clip(shape = RoundedCornerShape(10.dp))

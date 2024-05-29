@@ -8,7 +8,7 @@ import model.algorithms.clustering.implementation.Link
 import model.algorithms.clustering.implementation.getPartition
 
 class CommunitiesFinder {
-    fun <D> findCommunity(graph: Graph<D>): Set<Set<Vertex<D>>> {
+    fun <D> findCommunities(graph: Graph<D>): Set<Set<Vertex<D>>> {
         if (graph.getVertices().size == 1) return setOf(setOf(graph.getVertices()[0]))
 
         val links = convertToAPIFormat(graph)

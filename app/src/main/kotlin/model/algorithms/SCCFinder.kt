@@ -1,16 +1,15 @@
 package model.algorithms
 
 import model.graphs.DirectedGraph
-import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
 
 class SCCFinder {
     // SCC - Strongly Connected Components (by Kosaraju)
-    fun <D> findSCC(graph: DirectedGraph<D>): MutableSet<MutableSet<Vertex<D>>> {
+    fun <D> findSCC(graph: DirectedGraph<D>): Set<Set<Vertex<D>>> {
         val visited = mutableMapOf<Vertex<D>, Boolean>().withDefault { false }
         val stack = ArrayDeque<Vertex<D>>()
         val component = arrayListOf<Vertex<D>>()
-        val sccList: MutableSet<MutableSet<Vertex<D>>> = mutableSetOf()
+        val SCCs: MutableSet<MutableSet<Vertex<D>>> = mutableSetOf()
 
         fun auxiliaryDFS(srcVertex: Vertex<D>, componentList: ArrayList<Vertex<D>>) {
             visited[srcVertex] = true
@@ -46,10 +45,11 @@ class SCCFinder {
             if (visited[vertex] != true) {
                 val currentComponent = mutableSetOf<Vertex<D>>()
                 reverseDFS(vertex, currentComponent)
-                sccList.add(currentComponent)
+                SCCs.add(currentComponent)
             }
         }
-        return sccList
+
+        return SCCs
     }
 
     private fun <D> reverseEdgesMap(graph: DirectedGraph<D>): Map<Vertex<D>, MutableSet<Vertex<D>>> {
@@ -58,6 +58,7 @@ class SCCFinder {
         graph.getEdges().forEach { edge ->
             reversedEdgesMap[edge.vertex2]?.add(edge.vertex1)
         }
+
         return reversedEdgesMap
     }
 }

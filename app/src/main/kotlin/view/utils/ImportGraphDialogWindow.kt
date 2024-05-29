@@ -36,50 +36,54 @@ fun ImportGraphDialogWindow() {
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Column(
-                modifier = Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
+                modifier = Modifier.background(Color.White)
+                    .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp).width(350.dp).height(180.dp)
             ) {
-                Row(modifier = Modifier.width(350.dp).height(150.dp)) {
-                    Text(
-                        "Select the database",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 10.dp)
-                    )
-                    Box(modifier = Modifier.width(300.dp).padding(16.dp)) {
-                        ExposedDropdownMenuBox(
-                            expanded = expanded.value,
-                            onExpandedChange = {
-                                expanded.value = !expanded.value
-                            }
-                        ) {
-                            TextField(
-                                value = selectedGraphName.value,
-                                onValueChange = {},
-                                readOnly = true,
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
-                                modifier = Modifier
-                            )
+                Text(
+                    "Select the graph:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
 
-                            ExposedDropdownMenu(
-                                expanded = expanded.value,
-                                onDismissRequest = { expanded.value = false }
-                            ) {
-                                graphs.value.forEach { graphName ->
-                                    // TODO: fix its layout
-                                    DropdownMenuItem(
-                                        onClick = {
-                                            selectedGraphName.value = graphName.second
-                                            selectedGraphID.value = graphName.first
-                                            expanded.value = false
-                                        }
-                                    ) {
-                                        Text(text = graphName.second)
+                Row(
+                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                    horizontalArrangement = Arrangement.spacedBy(30.dp)
+                ) {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded.value,
+                        onExpandedChange = {
+                            expanded.value = !expanded.value
+                        },
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                    ) {
+                        TextField(
+                            value = selectedGraphName.value,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expanded.value,
+                            onDismissRequest = { expanded.value = false }
+                        ) {
+                            graphs.value.forEach { graphName ->
+                                // TODO: fix its layout
+                                DropdownMenuItem(
+                                    onClick = {
+                                        selectedGraphName.value = graphName.second
+                                        selectedGraphID.value = graphName.first
+                                        expanded.value = false
                                     }
+                                ) {
+                                    Text(text = graphName.second)
                                 }
                             }
                         }
                     }
                 }
+
                 Row(
                     modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
                     verticalAlignment = Alignment.Bottom,

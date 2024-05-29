@@ -7,6 +7,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import model.graphs.DirectedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
 import view.tabScreen.analyzeTab.algorithmsUI.*
 import viewmodel.graph.GraphViewModel
 
@@ -17,16 +21,29 @@ val horizontalGap = 20.dp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
-    val algorithms = arrayOf(
+    val algorithms = mutableListOf(
         "Layout",
-        "Communities",
-        "Key vertices",
-        "Shortest path",
-        "Cycles",
-        "Bridges",
-        "SCC",
-        "Min spanning tree"
+        "Find communities",
+        "Find key vertices"
     )
+
+    if (graphVM.graph is DirectedGraph) {
+        algorithms += "Find SCCs"
+        algorithms += "Find cycles"
+    }
+
+    if (graphVM.graph is UndirectedGraph) {
+        algorithms += "Find bridges"
+    }
+
+    if (graphVM.graph is WeightedUndirectedGraph) {
+        algorithms += "Min spanning tree"
+        algorithms += "Find shortest path"
+    }
+
+    if (graphVM.graph is WeightedDirectedGraph) {
+        algorithms += "Find shortest path"
+    }
 
     var selectedAlgorithm by remember { mutableStateOf(algorithms[0]) }
 
@@ -88,17 +105,16 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
                     }
                 }
             }
-
         }
 
         when (selectedAlgorithm) {
             "Layout" -> { LayoutUI(graphVM) }
-            "Communities" -> { CommunitiesUI(graphVM) }
-            "Key vertices" -> { KeyVerticesUI(graphVM) }
-            "Shortest path" -> { ShortestPathUI(graphVM) }
-            "Cycles" -> { CyclesUI(graphVM) }
-            "Bridges" -> { BridgesUI(graphVM) }
-            "SCC" -> { SCCUI(graphVM) }
+            "Find communities" -> { CommunitiesUI(graphVM) }
+            "Find key vertices" -> { KeyVerticesUI(graphVM) }
+            "Find shortest path" -> { ShortestPathUI(graphVM) }
+            "Find cycles" -> { CyclesUI(graphVM) }
+            "Find bridges" -> { BridgesUI(graphVM) }
+            "Find SCCs" -> { SCCUI(graphVM) }
             "Min spanning tree" -> { MinSpanningTreeUI(graphVM) }
         }
     }
