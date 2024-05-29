@@ -82,8 +82,8 @@ class SelectInitDialogWindow(
             CreateGraphDialogWindow(SetupGraphViewModel())
         }
 
-//        if (showImportTab) {
-//            ImportGraphDialogWindow()
-//        }
+        if (showImportTab) {
+            ImportGraphDialogWindow()
+        }
     }
 }

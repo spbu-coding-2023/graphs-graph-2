@@ -24,11 +24,8 @@ class VertexViewModel<D>(
         get() = vertex.data.toString()
 
     fun onDrag(dragAmount: DpOffset) {
-        val newX = x.value + dragAmount.x
-        val newY = y.value + dragAmount.y
-
-        x.value = newX
-        y.value = newY
+        x.value += dragAmount.x
+        y.value += dragAmount.y
     }
 
     val getVertexID

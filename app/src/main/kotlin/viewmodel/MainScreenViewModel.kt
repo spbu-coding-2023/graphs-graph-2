@@ -1,22 +1,23 @@
 package viewmodel
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import model.graphs.abstractGraph.Graph
 import viewmodel.graph.GraphViewModel
-import viewmodel.graph.TFDPLayout
 
-class MainScreenViewModel<D>(graph: Graph<D>, currentGraphType: String) {
+class MainScreenViewModel<D>(
+    graph: Graph<D>,
+    currentGraphType: String,
+    existingGraphViewModel: GraphViewModel<D>? = null
+) {
     val showVerticesData = mutableStateOf(false)
     val showVerticesIds = mutableStateOf(false)
     val graphType = mutableStateOf(currentGraphType)
 
     fun setDirectionState(currentGraphType: String): MutableState<Boolean> {
-        if (currentGraphType.contains("Directed")) return mutableStateOf(true)
-        return mutableStateOf(false)
+        return mutableStateOf(currentGraphType.contains("Directed"))
     }
 
-    val graphViewModel =
-        GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectionState(currentGraphType))
+    var graphViewModel: GraphViewModel<D> = existingGraphViewModel
+        ?: GraphViewModel(graph, showVerticesIds, showVerticesData, graphType, setDirectionState(currentGraphType))
 }

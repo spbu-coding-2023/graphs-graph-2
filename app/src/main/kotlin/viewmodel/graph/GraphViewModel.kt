@@ -8,7 +8,7 @@ import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
 
 class GraphViewModel<D>(
-    val graph: Graph<D>,
+    val currentGraph: Graph<D>,
     private val showVerticesData: State<Boolean>,
     var showVerticesID: MutableState<Boolean>,
     val graphType: MutableState<String>,
@@ -75,4 +75,6 @@ class GraphViewModel<D>(
 
     val verticesVM: List<VertexViewModel<D>> get() = _verticesViewModels.values.toList()
     val edgesVM: List<EdgeViewModel<D>> get() = _edgeViewModels.values.toList()
+
+    val graph: Graph<D> get() = currentGraph
 }
