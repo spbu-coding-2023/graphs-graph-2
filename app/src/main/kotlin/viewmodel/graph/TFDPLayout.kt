@@ -18,7 +18,7 @@ class TFDPLayout() {
     fun fft2D(input: Array<Array<Complex>>): Array<Array<Complex>> {
         val rows = input.size
         val cols = input[0].size
-        val output = Array(rows) { Array(cols) { Complex() } }
+        val output = Array(rows) { Array(cols) { Complex(0.0, 0.0) } }
 
         // Transform each row
         for (i in 0 until rows) {
@@ -26,7 +26,7 @@ class TFDPLayout() {
         }
 
         // Transpose the output matrix
-        val transposedOutput = Array(cols) { Array(rows) { Complex() } }
+        val transposedOutput = Array(cols) { Array(rows) { Complex(0.0, 0.0) } }
         for (i in 0 until rows) {
             for (j in 0 until cols) {
                 transposedOutput[j][i] = output[i][j]
@@ -145,15 +145,15 @@ class TFDPLayout() {
 
         // Update positions
         vertices.forEachIndexed { index, vertex ->
-            vertex.x.value += forces[index].first.dp / 2
-            vertex.y.value += forces[index].second.dp / 2
+            vertex.x.value += forces[index].first.dp
+            vertex.y.value += forces[index].second.dp
         }
     }
 
     fun <D> randomize(width: Double, height: Double, vertices: Collection<VertexViewModel<D>>) {
         vertices.forEach { vertex ->
-            val randomX = Random.nextDouble(0.0, width - 360.0 - vertex.radius.value * 2).toFloat().dp
-            val randomY = Random.nextDouble(0.0, height - vertex.radius.value * 2).toFloat().dp
+            val randomX = Random.nextDouble(0.0, width * 1.5 - 360.0 - vertex.radius.value * 2).toFloat().dp
+            val randomY = Random.nextDouble(0.0, height * 1.5 - vertex.radius.value * 2).toFloat().dp
 
             vertex.x.value = randomX
             vertex.y.value = randomY
