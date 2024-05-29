@@ -24,7 +24,7 @@ fun <D> SCCUI(graphVM: GraphViewModel<D>) {
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
             ) {
-                Text("Find SCCs")
+                Text("Run algorithm")
             }
         }
     }

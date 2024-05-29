@@ -21,6 +21,7 @@ import kotlinx.coroutines.delay
 import model.io.sql.SQLDatabaseModule
 import view.utils.EditDBWindow
 import view.utils.ErrorWindow
+import view.utils.ImportGraphDialogWindow
 import java.awt.FileDialog
 import java.awt.Frame
 
@@ -149,7 +150,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showSaveDialog = true
-                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -188,11 +188,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
         }
     }
 
-
-    val dialogueHeight = 300.dp
-    val dialogueWidth = 400.dp
-    val padding = 14.dp
-
     if (showSaveDialog) {
         if (selectedDatabase == "SQLite") {
             val existingGraphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
@@ -208,6 +203,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 Dialog(
                     onDismissRequest = {
                         showSaveDialog = false
+                        graphName = ""
                     }
                 ) {
                     Column(
@@ -217,7 +213,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                             .width(300.dp)
                             .height(50.dp)
                     ) {
-                        Text("Graph '$graphName' loaded successfully!")
+                        Text("Graph '$graphName' saved successfully!")
                     }
                 }
 
@@ -231,20 +227,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showLoadDialog) {
-        Dialog(
-            onDismissRequest = {
-                showLoadDialog = false
-            }
-        ) {
-            Column(
-                modifier =
-                Modifier
-                    .background(Color.White)
-                    .padding(padding)
-                    .width(dialogueWidth)
-                    .height(dialogueHeight)
-            ) {}
-        }
+        ImportGraphDialogWindow() // TODO
     }
 
     if (showEditDialog) {

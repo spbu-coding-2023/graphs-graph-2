@@ -55,7 +55,7 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
             ) {
-                Text("Find cycles")
+                Text("Run algorithm")
             }
         }
     }

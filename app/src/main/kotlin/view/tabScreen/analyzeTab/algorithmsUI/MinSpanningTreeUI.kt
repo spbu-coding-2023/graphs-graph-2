@@ -24,7 +24,7 @@ fun <D> MinSpanningTreeUI(graphVM: GraphViewModel<D>) {
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
             ) {
-                Text("Find min spanning tree")
+                Text("Run algorithm")
             }
         }
     }

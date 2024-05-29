@@ -24,7 +24,7 @@ fun <D> CommunitiesUI(graphVM: GraphViewModel<D>) {
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
             ) {
-                Text("Find communities")
+                Text("Run algorithm")
             }
         }
     }

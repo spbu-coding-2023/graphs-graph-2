@@ -23,26 +23,26 @@ val horizontalGap = 20.dp
 fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
     val algorithms = mutableListOf(
         "Layout",
-        "Communities",
-        "Key vertices"
+        "Find communities",
+        "Find key vertices"
     )
 
     if (graphVM.graph is DirectedGraph) {
-        algorithms += "SCCs"
-        algorithms += "Cycles"
+        algorithms += "Find SCCs"
+        algorithms += "Find cycles"
     }
 
     if (graphVM.graph is UndirectedGraph) {
-        algorithms += "Bridges"
+        algorithms += "Find bridges"
     }
 
     if (graphVM.graph is WeightedUndirectedGraph) {
         algorithms += "Min spanning tree"
-        algorithms += "Shortest path"
+        algorithms += "Find shortest path"
     }
 
     if (graphVM.graph is WeightedDirectedGraph) {
-        algorithms += "Shortest path"
+        algorithms += "Find shortest path"
     }
 
     var selectedAlgorithm by remember { mutableStateOf(algorithms[0]) }
@@ -109,12 +109,12 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
 
         when (selectedAlgorithm) {
             "Layout" -> { LayoutUI(graphVM) }
-            "Communities" -> { CommunitiesUI(graphVM) }
-            "Key vertices" -> { KeyVerticesUI(graphVM) }
-            "Shortest path" -> { ShortestPathUI(graphVM) }
-            "Cycles" -> { CyclesUI(graphVM) }
-            "Bridges" -> { BridgesUI(graphVM) }
-            "SCCs" -> { SCCUI(graphVM) }
+            "Find communities" -> { CommunitiesUI(graphVM) }
+            "Find key vertices" -> { KeyVerticesUI(graphVM) }
+            "Find shortest path" -> { ShortestPathUI(graphVM) }
+            "Find cycles" -> { CyclesUI(graphVM) }
+            "Find bridges" -> { BridgesUI(graphVM) }
+            "Find SCCs" -> { SCCUI(graphVM) }
             "Min spanning tree" -> { MinSpanningTreeUI(graphVM) }
         }
     }
