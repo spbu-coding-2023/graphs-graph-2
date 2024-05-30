@@ -18,9 +18,6 @@ class MainScreenViewModel<D>(
     val showVerticesIds = mutableStateOf(false)
     val graphType = mutableStateOf(currentGraphType)
 
-    var neo4jRepo: Neo4jRepository? = null
-    var isNeo4jRepoInit = false
-
     fun setDirectionState(currentGraphType: String): MutableState<Boolean> {
         return mutableStateOf(currentGraphType.contains("Directed"))
     }
@@ -38,28 +35,4 @@ class MainScreenViewModel<D>(
             setDirectionState(currentGraphType),
             setWeightinessState(currentGraphType)
         )
-
-    fun tryInitNeo4jRepo(uri: String, user: String, password: String): Boolean {
-        if (!checkIfCredentialsAreValid(uri, user, password)) return false
-        if (isNeo4jRepoInit) return true
-
-        neo4jRepo = Neo4jRepository(uri, user, password)
-
-        return true
-    }
-
-    private fun checkIfCredentialsAreValid(uri: String, user: String, password: String): Boolean {
-        try {
-            val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
-            driver.session().executeWrite { tx ->
-                tx.run {
-                    "MATCH (v) RETURN v LIMIT 1"
-                }
-            }
-        } catch (e: Exception) {
-            return false
-        }
-
-        return true
-    }
 }
