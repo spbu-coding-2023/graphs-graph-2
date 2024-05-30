@@ -288,3 +288,25 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
         }
     }
 }
+
+private fun isValidNeo4jName(name: String): Boolean {
+    if (name.isEmpty()) return false
+    for (i in name.indices) {
+        val isValidChar = when (name[i].code) {
+            45 -> {                      // -
+                if (i!= 0) true else false
+            }
+            in 48..57 -> {          // 0-9
+                if (i != 0) true else false
+            }
+            in 65..90 -> true       // A-Z
+            95 -> true                   // _
+            in 97..122 -> true      // a-z
+            else -> false
+        }
+
+        if (isValidChar) continue else return false
+    }
+
+    return true
+}

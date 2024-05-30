@@ -2,17 +2,20 @@ package view.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import model.io.neo4j.Neo4jRepositoryHandler
-@Composable
+
 fun Neo4jLoginDialog(onDismiss: () -> Unit) {
     var uriInput by remember { mutableStateOf("") }
     var userInput by remember { mutableStateOf("") }
