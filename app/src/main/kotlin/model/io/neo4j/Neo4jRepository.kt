@@ -26,6 +26,7 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
                 "distinct labels(v) AS label"
             ).list()
         }
+        println(result)
 
         val names = mutableListOf<String>()
         for (record in result) {
