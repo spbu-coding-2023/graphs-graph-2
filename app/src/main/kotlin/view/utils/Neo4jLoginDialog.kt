@@ -16,7 +16,6 @@ import viewmodel.MainScreenViewModel
 
 @Composable
 fun Neo4jLoginDialog(onDismiss: () -> Unit) {
-
     var uriInput by remember { mutableStateOf("") }
     var userInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }

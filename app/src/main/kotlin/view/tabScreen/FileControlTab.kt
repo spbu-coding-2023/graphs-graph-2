@@ -222,8 +222,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 }
             }
         } else if (selectedDatabase == "Neo4j") {
-            val isRepoInit = Neo4jRepositoryHandler.isRepoInit
-            if (!isRepoInit) {
+            if (!Neo4jRepositoryHandler.isRepoInit) {
                 showSaveDialog = false
                 showNeo4jDialog = true
             } else if (!Neo4jRepositoryHandler.isValidNeo4jName(graphName)) {
@@ -262,7 +261,13 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     if (showLoadDialog) {
         when (selectedDatabase) {
             "SQLite" -> ImportGraphDialogWindow()
-            "Neo4j" -> {/* Neo4jTabImportGraphDialogWindow() */}
+            "Neo4j" -> {
+                if (!Neo4jRepositoryHandler.isRepoInit) {
+                    showLoadDialog = false
+                    showNeo4jDialog = true
+                }
+                Neo4jImportGraphDialogWindow { showLoadDialog = false }
+            }
         }
     }
 

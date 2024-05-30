@@ -21,13 +21,15 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
             tx.run(
                 "MATCH (v) " +
                 "RETURN " +
-                "DISTINCT LABELS(v) AS name "
+                "distinct labels(v) AS label"
             ).list()
         }
+        println(result)
 
         val names = mutableListOf<String>()
         for (record in result) {
-            names.add(record["name"] as String)
+            val name = record["label"].toString().drop(2).dropLast(2)
+            names.add(name)
         }
 
         return names

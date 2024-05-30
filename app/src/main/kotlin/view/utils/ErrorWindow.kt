@@ -40,8 +40,8 @@ fun ErrorWindow(message: String, onDismiss: () -> Unit) {
 
                     Text(text = message)
                     Spacer(modifier = Modifier.height(30.dp))
-                    Button(onClick = { onDismiss() }, modifier = Modifier.align(Alignment.End)) {
-                        Text("Ok")
+                    Button(onClick = { onDismiss() }, modifier = Modifier.align(Alignment.End).width(100.dp)) {
+                        Text("ok")
                     }
                 }
             }
