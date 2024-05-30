@@ -63,7 +63,7 @@ fun <D> TabHandler(viewmodel: MainScreenViewModel<D>) {
                 when (pageState.currentPage) {
                     0 -> GeneralTab(viewmodel.graphViewModel)
                     1 -> AnalyzeTab(viewmodel.graphViewModel)
-                    2 -> FileControlTab(viewmodel.graphViewModel, viewmodel)
+                    2 -> FileControlTab(viewmodel.graphViewModel)
                 }
             }
         }

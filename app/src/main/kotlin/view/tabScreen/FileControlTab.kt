@@ -18,18 +18,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
+import model.io.neo4j.Neo4jRepositoryHandler
 import model.io.sql.SQLDatabaseModule
-import view.utils.EditDBWindow
-import view.utils.ErrorWindow
-import view.utils.ImportGraphDialogWindow
-import view.utils.Neo4jLoginDialog
+import view.utils.*
 import viewmodel.MainScreenViewModel
 import java.awt.FileDialog
 import java.awt.Frame
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewModel<D>) {
+fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showSaveDialog by remember { mutableStateOf(false) }
     var showLoadDialog by remember { mutableStateOf(false) }
     var graphName by remember { mutableStateOf("") }
@@ -232,17 +230,17 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
                 }
             }
         } else if (selectedDatabase == "Neo4j") {
-            val repo = mainScreenVM.neo4jRepo
-            if (repo == null) {
+            val isRepoInit = Neo4jRepositoryHandler.isRepoInit
+            if (!isRepoInit) {
                 showSaveDialog = false
                 showNeo4jDialog = true
-            } else if (!isValidNeo4jName(graphName)) {
+            } else if (!Neo4jRepositoryHandler.isValidNeo4jName(graphName)) {
                 showSaveDialog = false
                 showErrorWindow = true
                 errorMessage = "$graphName is an invalid name."
                 graphName = ""
             } else {
-                repo.saveOrReplaceGraph(graphVM.graph, graphName, graphVM.isDirected.value, graphVM.isWeighted.value)
+                Neo4jRepositoryHandler.saveOrReplace(graphVM.graph, graphName, graphVM.isDirected.value, graphVM.isWeighted.value)
 
                 Dialog(
                     onDismissRequest = {
@@ -270,7 +268,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
     }
 
     if (showLoadDialog) {
-        ImportGraphDialogWindow() // TODO
+        when (selectedDatabase) {
+            "SQLite" -> ImportGraphDialogWindow()
+            "Neo4j" -> {/* Neo4jTabImportGraphDialogWindow() */}
+        }
     }
 
     if (showEditDialog) {
@@ -278,7 +279,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
     }
 
     if (showNeo4jDialog)  {
-        Neo4jLoginDialog(mainScreenVM) { showNeo4jDialog = false }
+        Neo4jLoginDialog() { showNeo4jDialog = false }
     }
 
     if (showErrorWindow) {
@@ -289,26 +290,4 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>, mainScreenVM: MainScreenViewM
             errorMessage = ""
         }
     }
-}
-
-private fun isValidNeo4jName(name: String): Boolean {
-    if (name.isEmpty()) return false
-    for (i in name.indices) {
-        val isValidChar = when (name[i].code) {
-            45 -> {                      // -
-                if (i!= 0) true else false
-            }
-            in 48..57 -> {          // 0-9
-                if (i != 0) true else false
-            }
-            in 65..90 -> true       // A-Z
-            95 -> true                   // _
-            in 97..122 -> true      // a-z
-            else -> false
-        }
-
-        if (isValidChar) continue else return false
-    }
-
-    return true
 }

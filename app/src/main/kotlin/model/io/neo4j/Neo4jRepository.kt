@@ -16,6 +16,23 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
     private val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
     private val session = driver.session()
 
+    fun getGraphNames(): List<String> {
+        val result = session.executeRead { tx ->
+            tx.run(
+                "MATCH (v) " +
+                "RETURN " +
+                "DISTINCT LABELS(v) AS name "
+            ).list()
+        }
+
+        val names = mutableListOf<String>()
+        for (record in result) {
+            names.add(record["name"] as String)
+        }
+
+        return names
+    }
+
     fun <D> saveOrReplaceGraph(graph: Graph<D>, name: String, isDirected: Boolean, isWeighted: Boolean) {
         clearGraph(name)
 
