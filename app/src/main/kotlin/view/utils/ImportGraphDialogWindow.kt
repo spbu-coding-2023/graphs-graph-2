@@ -18,10 +18,10 @@ import androidx.compose.ui.window.Dialog
 
 @Composable
 fun ImportGraphDialogWindow() {
-    MyAppTheme {
-        var selectedDatabase by remember { mutableStateOf("") }
-        var importGraphClicked by remember { mutableStateOf(false) }
+    var selectedDatabase by remember { mutableStateOf("") }
+    var importGraphClicked by remember { mutableStateOf(false) }
 
+    MyAppTheme {
         Dialog(
             onDismissRequest = {}
         ) {
