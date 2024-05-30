@@ -1,44 +1,36 @@
 package view.utils
 
-import model.io.sql.SQLDatabaseModule
+import MyAppTheme
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ImportGraphDialogWindow() {
-    val selectedGraphID = remember { mutableStateOf(0) }
-    val closeDialog = remember { mutableStateOf(false) }
-    val expanded = remember { mutableStateOf(false) }
-    val importFromDBRequired = remember { mutableStateOf(false) }
-    val selectedGraphName = remember { mutableStateOf("") }
-    val graphs = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
+    MyAppTheme {
+        var selectedDatabase by remember { mutableStateOf("") }
+        var importGraphClicked by remember { mutableStateOf(false) }
 
-    SQLDatabaseModule.getGraphNames(graphs)
-
-    if (!closeDialog.value) {
         Dialog(
-            onDismissRequest = {},
-            properties = DialogProperties(usePlatformDefaultWidth = false)
+            onDismissRequest = {}
         ) {
             Column(
-                modifier = Modifier.background(Color.White)
-                    .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp).width(350.dp).height(180.dp)
+                modifier =
+                Modifier.background(Color.White).padding(16.dp).width(300.dp).height(290.dp)
             ) {
                 Text(
-                    "Select the graph:",
+                    "Where do you want to import from?",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(bottom = 10.dp)
@@ -46,63 +38,57 @@ fun ImportGraphDialogWindow() {
 
                 Row(
                     modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp)
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    ExposedDropdownMenuBox(
-                        expanded = expanded.value,
-                        onExpandedChange = {
-                            expanded.value = !expanded.value
-                        },
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
-                    ) {
-                        TextField(
-                            value = selectedGraphName.value,
-                            onValueChange = {},
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                        )
-                        ExposedDropdownMenu(
-                            expanded = expanded.value,
-                            onDismissRequest = { expanded.value = false }
-                        ) {
-                            graphs.value.forEach { graphName ->
-                                // TODO: fix its layout
-                                DropdownMenuItem(
-                                    onClick = {
-                                        selectedGraphName.value = graphName.second
-                                        selectedGraphID.value = graphName.first
-                                        expanded.value = false
-                                    }
-                                ) {
-                                    Text(text = graphName.second)
-                                }
-                            }
+                    Button(
+                        modifier =
+                        Modifier.height(60.dp).width(250.dp),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                        onClick = {
+                            selectedDatabase = "SQLite"
+                            importGraphClicked = true
                         }
+                    ) {
+                        Text("SQLite", color = Color.White)
                     }
                 }
 
                 Row(
                     modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
                     verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
-                        modifier = Modifier.width(145.dp).height(50.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
+                        modifier =
+                        Modifier.height(60.dp).width(250.dp),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                         onClick = {
-                            importFromDBRequired.value = true
-                            expanded.value = false
-                            closeDialog.value = true
+                            selectedDatabase = "Neo4j"
+                            importGraphClicked = true
                         }
                     ) {
-                        Text("Import", color = Color.White)
+                        Text("Neo4j", color = Color.White)
+                    }
+                }
+                Row(
+                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier =
+                        Modifier.height(60.dp).width(250.dp),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                        onClick = {
+                            selectedDatabase = "JSON"
+                            importGraphClicked = true
+                        }
+                    ) {
+                        Text("JSON", color = Color.White)
                     }
                 }
             }
         }
-    }
-    if (importFromDBRequired.value) {
-        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
     }
 }

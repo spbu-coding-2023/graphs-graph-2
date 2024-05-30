@@ -259,7 +259,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
 
     if (showLoadDialog) {
         when (selectedDatabase) {
-            "SQLite" -> ImportGraphDialogWindow()
+            "SQLite" -> SQLiteImportGraphDialogWindow()
             "Neo4j" -> {
                 if (!Neo4jRepositoryHandler.isRepoInit) {
                     showLoadDialog = false
