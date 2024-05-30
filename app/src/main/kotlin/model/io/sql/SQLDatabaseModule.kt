@@ -228,7 +228,8 @@ object SQLDatabaseModule {
                             mutableStateOf(false),
                             mutableStateOf(false),
                             graphVMType,
-                            mutableStateOf(currentGraphSetup.first.second.toString().contains("Directed"))
+                            mutableStateOf(currentGraphSetup.first.second.toString().contains("Directed")),
+                            mutableStateOf(currentGraphSetup.first.second.toString().contains("Weighted"))
                         )
 
                         // Fetch vertices

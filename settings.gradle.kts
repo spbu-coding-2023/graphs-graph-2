@@ -1,12 +1,14 @@
-rootProject.name = "graphs-2"
-include("app")
-
+val neo4jDriverVersion: String by settings
+val composeVersion: String by settings
+val kotlinVersion: String by settings
+val junitVersion: String by settings
+val koinVersion: String by settings
 
 pluginManagement {
-   repositories {
-       gradlePluginPortal()
-       maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-   }
+    repositories {
+        gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
 }
 
 dependencyResolutionManagement {
@@ -17,11 +19,13 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            version("kotlin", "1.9.22")
-            plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
-            plugin("compose", "org.jetbrains.compose").version("1.6.2")
-            library("koin-core", "io.insert-koin:koin-core:3.5.3")
-            library("junit-jupiter", "org.junit.jupiter:junit-jupiter:5.10.2")
+            plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").version(kotlinVersion)
+            plugin("compose", "org.jetbrains.compose").version(composeVersion)
+            library("koin-core", "io.insert-koin:koin-core:$koinVersion")
+            library("junit-jupiter", "org.junit.jupiter:junit-jupiter:$junitVersion")
         }
     }
 }
+
+rootProject.name = "graphs-2"
+include("app")

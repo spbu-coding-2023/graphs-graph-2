@@ -18,10 +18,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
+import model.io.neo4j.Neo4jRepositoryHandler
 import model.io.sql.SQLDatabaseModule
-import view.utils.EditDBWindow
-import view.utils.ErrorWindow
-import view.utils.ImportGraphDialogWindow
+import view.utils.*
+import viewmodel.MainScreenViewModel
 import java.awt.FileDialog
 import java.awt.Frame
 
@@ -31,10 +31,10 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showSaveDialog by remember { mutableStateOf(false) }
     var showLoadDialog by remember { mutableStateOf(false) }
     var graphName by remember { mutableStateOf("") }
-    var showEnterPathField by remember { mutableStateOf(false) }
     var showErrorWindow by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var showEditDialog by remember { mutableStateOf(false) }
+    var showNeo4jDialog by remember { mutableStateOf(false) }
 
     val databases = arrayOf("SQLite", "Neo4j", "JSON")
     var selectedDatabase by remember { mutableStateOf(databases[0]) }
@@ -85,6 +85,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             modifier = Modifier.height(rowHeight).padding(borderPadding),
             horizontalArrangement = Arrangement.spacedBy(horizontalGap)
         ) {
+
             var expanded by remember { mutableStateOf(false) }
 
             ExposedDropdownMenuBox(
@@ -96,7 +97,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             ) {
                 TextField(
                     value = selectedDatabase,
-                    onValueChange = {},
+                    onValueChange = { graphName = it },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier,
@@ -138,7 +139,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     Text("Select File")
                 }
             }
-
         }
 
         Row(
@@ -161,7 +161,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showLoadDialog = true
-                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -178,7 +177,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showEditDialog = true
-                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -211,7 +209,41 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                             .background(Color.White)
                             .padding(16.dp)
                             .width(300.dp)
-                            .height(50.dp)
+                            .height(100.dp)
+                    ) {
+                        Text("Graph '$graphName' saved successfully!")
+                    }
+                }
+
+                // Automatically dismiss the dialog after 3 seconds
+                LaunchedEffect(Unit) {
+                    delay(3000)
+                    showSaveDialog = false
+                }
+            }
+        } else if (selectedDatabase == "Neo4j") {
+            if (!Neo4jRepositoryHandler.isRepoInit) {
+                showSaveDialog = false
+                showNeo4jDialog = true
+            } else if (!Neo4jRepositoryHandler.isValidNeo4jName(graphName)) {
+                showSaveDialog = false
+                showErrorWindow = true
+                errorMessage = "$graphName is an invalid name."
+                graphName = ""
+            } else {
+                Neo4jRepositoryHandler.saveOrReplace(graphVM.graph, graphName, graphVM.isDirected.value, graphVM.isWeighted.value)
+
+                Dialog(
+                    onDismissRequest = {
+                        showSaveDialog = false
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .padding(16.dp)
+                            .width(300.dp)
+                            .height(100.dp)
                     ) {
                         Text("Graph '$graphName' saved successfully!")
                     }
@@ -227,11 +259,24 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showLoadDialog) {
-        ImportGraphDialogWindow() // TODO
+        when (selectedDatabase) {
+            "SQLite" -> ImportGraphDialogWindow()
+            "Neo4j" -> {
+                if (!Neo4jRepositoryHandler.isRepoInit) {
+                    showLoadDialog = false
+                    showNeo4jDialog = true
+                }
+                Neo4jImportGraphDialogWindow { showLoadDialog = false }
+            }
+        }
     }
 
     if (showEditDialog) {
         EditDBWindow(selectedDatabase) { showEditDialog = false }
+    }
+
+    if (showNeo4jDialog)  {
+        Neo4jLoginDialog { showNeo4jDialog = false }
     }
 
     if (showErrorWindow) {
