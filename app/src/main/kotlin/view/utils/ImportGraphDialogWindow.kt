@@ -1,6 +1,9 @@
 package view.utils
 
+import JSON
 import MyAppTheme
+import NEO4J
+import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
@@ -46,11 +49,11 @@ fun ImportGraphDialogWindow() {
                         Modifier.height(60.dp).width(250.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                         onClick = {
-                            selectedDatabase = "SQLite"
+                            selectedDatabase = SQLITE
                             importGraphClicked = true
                         }
                     ) {
-                        Text("SQLite", color = Color.White)
+                        Text(SQLITE, color = Color.White)
                     }
                 }
 
@@ -64,11 +67,11 @@ fun ImportGraphDialogWindow() {
                         Modifier.height(60.dp).width(250.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                         onClick = {
-                            selectedDatabase = "Neo4j"
+                            selectedDatabase = NEO4J
                             importGraphClicked = true
                         }
                     ) {
-                        Text("Neo4j", color = Color.White)
+                        Text(NEO4J, color = Color.White)
                     }
                 }
                 Row(
@@ -81,11 +84,11 @@ fun ImportGraphDialogWindow() {
                         Modifier.height(60.dp).width(250.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                         onClick = {
-                            selectedDatabase = "JSON"
+                            selectedDatabase = JSON
                             importGraphClicked = true
                         }
                     ) {
-                        Text("JSON", color = Color.White)
+                        Text(JSON, color = Color.White)
                     }
                 }
             }

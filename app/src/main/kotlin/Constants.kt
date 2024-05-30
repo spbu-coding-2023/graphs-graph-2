@@ -11,3 +11,7 @@ val minVertexRadius = 7.dp
 
 val maxEdgeStrokeWidth = 12f
 val minEdgeStrokeWidth = 4f
+
+val SQLITE = "SQLite"
+val NEO4J = "Neo4j"
+val JSON = "JSON"

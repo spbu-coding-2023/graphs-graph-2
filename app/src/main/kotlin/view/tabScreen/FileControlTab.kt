@@ -1,5 +1,8 @@
 package view.tabScreen
 
+import JSON
+import NEO4J
+import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,7 +38,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showNeo4jDialog by remember { mutableStateOf(false) }
 
-    val databases = arrayOf("SQLite", "Neo4j", "JSON")
+    val databases = arrayOf(SQLITE, NEO4J, JSON)
     var selectedDatabase by remember { mutableStateOf(databases[0]) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
@@ -125,7 +128,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 }
             }
 
-            if (selectedDatabase == "JSON") {
+            if (selectedDatabase == JSON) {
                 val fileDialog = FileDialog(null as Frame?, "Select File to Open")
                 fileDialog.mode = FileDialog.LOAD
                 Button(
@@ -186,7 +189,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showSaveDialog) {
-        if (selectedDatabase == "SQLite") {
+        if (selectedDatabase == SQLITE) {
             val existingGraphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
             SQLDatabaseModule.getGraphNames(existingGraphNamesSQL)
 
@@ -220,7 +223,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     showSaveDialog = false
                 }
             }
-        } else if (selectedDatabase == "Neo4j") {
+        } else if (selectedDatabase == NEO4J) {
             if (!Neo4jRepositoryHandler.isRepoInit) {
                 showSaveDialog = false
                 showNeo4jDialog = true
@@ -259,8 +262,8 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
 
     if (showLoadDialog) {
         when (selectedDatabase) {
-            "SQLite" -> SQLiteImportGraphDialogWindow()
-            "Neo4j" -> {
+            SQLITE -> SQLiteImportGraphDialogWindow()
+            NEO4J -> {
                 if (!Neo4jRepositoryHandler.isRepoInit) {
                     showLoadDialog = false
                     showNeo4jDialog = true
