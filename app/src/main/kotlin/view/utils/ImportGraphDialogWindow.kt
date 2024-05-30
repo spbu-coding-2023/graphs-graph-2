@@ -38,7 +38,7 @@ fun ImportGraphDialogWindow() {
                     Modifier.background(Color.White).padding(16.dp).width(300.dp).height(290.dp)
                 ) {
                     Text(
-                        "Where do you want to import from?",
+                        "Import from...",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(bottom = 10.dp)
