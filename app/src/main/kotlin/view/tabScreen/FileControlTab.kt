@@ -34,12 +34,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showErrorWindow by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var showEditDialog by remember { mutableStateOf(false) }
-
     var showNeo4jDialog by remember { mutableStateOf(false) }
-    val isAuthorizedToNeo4j = remember { mutableStateOf(false) }
-    val neo4jUri = remember { mutableStateOf("") }
-    val neo4jUser = remember { mutableStateOf("") }
-    val neo4jPassword = remember { mutableStateOf("") }
 
     val databases = arrayOf("SQLite", "Neo4j", "JSON")
     var selectedDatabase by remember { mutableStateOf(databases[0]) }
@@ -155,7 +150,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showSaveDialog = true
-                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -167,7 +161,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showLoadDialog = true
-                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -184,7 +177,6 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.fillMaxSize().height(fieldHeight),
                     onClick = {
                         showEditDialog = true
-                        graphName = ""
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
@@ -279,7 +271,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showNeo4jDialog)  {
-        Neo4jLoginDialog() { showNeo4jDialog = false }
+        Neo4jLoginDialog { showNeo4jDialog = false }
     }
 
     if (showErrorWindow) {
