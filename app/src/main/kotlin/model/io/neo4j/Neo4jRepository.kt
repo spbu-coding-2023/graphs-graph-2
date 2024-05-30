@@ -26,7 +26,6 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
                 "distinct labels(v) AS label"
             ).list()
         }
-        println(result)
 
         val names = mutableListOf<String>()
         for (record in result) {
@@ -87,7 +86,7 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
         }
     }
 
-    fun loadGraph(name: String): Graph<String> {
+    fun loadGraph(name: String): Triple<Graph<String>, Boolean, Boolean> {
         val graphContents = readGraphContents(name)
 
         val isDirected = hasDirection(graphContents[0])
@@ -133,7 +132,7 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
             }
         }
 
-        return graph
+        return Triple(graph, isWeighted, isDirected)
     }
 
     private fun initializeGraph(isWeighted: Boolean, isDirected: Boolean): Graph<String> {

@@ -18,79 +18,93 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import model.io.neo4j.Neo4jRepositoryHandler
 
 @Composable
 fun ImportGraphDialogWindow() {
     var selectedDatabase by remember { mutableStateOf("") }
     var importGraphClicked by remember { mutableStateOf(false) }
 
+    val fontSize = 16.sp
+    val buttonColor = MaterialTheme.colors.secondary
+
     MyAppTheme {
-        Dialog(
-            onDismissRequest = {}
-        ) {
-            Column(
-                modifier =
-                Modifier.background(Color.White).padding(16.dp).width(300.dp).height(290.dp)
+        if (!importGraphClicked) {
+            Dialog(
+                onDismissRequest = {}
             ) {
-                Text(
-                    "Where do you want to import from?",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
+                Column(
+                    modifier =
+                    Modifier.background(Color.White).padding(16.dp).width(300.dp).height(290.dp)
+                ) {
+                    Text(
+                        "Where do you want to import from?",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(bottom = 10.dp)
+                    )
 
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier =
-                        Modifier.height(60.dp).width(250.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                        onClick = {
-                            selectedDatabase = SQLITE
-                            importGraphClicked = true
-                        }
-                    ) {
-                        Text(SQLITE, color = Color.White)
-                    }
-                }
+                    Spacer(modifier = Modifier.height(15.dp))
 
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier =
-                        Modifier.height(60.dp).width(250.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                        onClick = {
-                            selectedDatabase = NEO4J
-                            importGraphClicked = true
-                        }
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(NEO4J, color = Color.White)
+                        Button(
+                            modifier =
+                            Modifier.height(60.dp).width(250.dp),
+                            colors = ButtonDefaults.buttonColors(buttonColor),
+                            onClick = {
+                                selectedDatabase = SQLITE
+                                importGraphClicked = true
+                            }
+                        ) {
+                            Text(SQLITE, color = Color.White, fontSize = fontSize)
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            modifier =
+                            Modifier.height(60.dp).width(250.dp),
+                            colors = ButtonDefaults.buttonColors(buttonColor),
+                            onClick = {
+                                selectedDatabase = NEO4J
+                                importGraphClicked = true
+                            }
+                        ) {
+                            Text(NEO4J, color = Color.White, fontSize = fontSize)
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            modifier =
+                            Modifier.height(60.dp).width(250.dp),
+                            colors = ButtonDefaults.buttonColors(buttonColor),
+                            onClick = {
+                                selectedDatabase = JSON
+                                importGraphClicked = true
+                            }
+                        ) {
+                            Text(JSON, color = Color.White, fontSize = fontSize)
+                        }
                     }
                 }
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier =
-                        Modifier.height(60.dp).width(250.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                        onClick = {
-                            selectedDatabase = JSON
-                            importGraphClicked = true
-                        }
-                    ) {
-                        Text(JSON, color = Color.White)
-                    }
-                }
+            }
+        }
+        if (importGraphClicked) {
+            when (selectedDatabase) {
+                SQLITE -> SQLiteImportGraphDialogWindow()
+                NEO4J -> Neo4jImportGraphDialogWindow { importGraphClicked = false }
             }
         }
     }

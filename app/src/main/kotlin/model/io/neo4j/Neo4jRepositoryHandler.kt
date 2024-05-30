@@ -37,12 +37,15 @@ object Neo4jRepositoryHandler {
         return true
     }
 
-    fun loadGraph(name: String): Graph<String>? {
+    fun loadGraph(name: String): Triple<Graph<String>, Boolean, Boolean>? {
         if (!isRepoInit || !isValidNeo4jName(name)) return null
 
-        val graph = neo4jRepo?.loadGraph(name)
+        val graphWithInfo = neo4jRepo?.loadGraph(name) ?: return null
+        val graph = graphWithInfo.first
+        val isWeighed = graphWithInfo.second
+        val isDirected = graphWithInfo.third
 
-        return graph
+        return Triple(graph, isWeighed, isDirected)
     }
 
     fun isValidNeo4jName(name: String): Boolean {

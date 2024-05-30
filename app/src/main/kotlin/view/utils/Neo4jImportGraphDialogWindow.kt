@@ -23,82 +23,87 @@ fun Neo4jImportGraphDialogWindow(onDismiss: () -> Unit) {
     var selectedGraphName by remember { mutableStateOf("") }
     val graphNames = Neo4jRepositoryHandler.getNames()
 
-    Dialog(
-        onDismissRequest = {
-            onDismiss()
-        },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
-    ) {
-        Column(
-            modifier = Modifier.background(Color.White)
-                .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp).width(350.dp).height(180.dp)
+    if (!Neo4jRepositoryHandler.isRepoInit) {
+        Neo4jLoginDialog { onDismiss() }
+    }
+    else {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            Text(
-                "Select the graph:",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 10.dp)
-            )
-
-            Row(
-                modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                horizontalArrangement = Arrangement.spacedBy(30.dp)
+            Column(
+                modifier = Modifier.background(Color.White)
+                    .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp).width(350.dp).height(180.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = {
-                        expanded = !expanded
-                    },
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                Text(
+                    "Select the graph:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+
+                Row(
+                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                    horizontalArrangement = Arrangement.spacedBy(30.dp)
                 ) {
-                    TextField(
-                        value = selectedGraphName,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                    )
-                    ExposedDropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                        onExpandedChange = {
+                            expanded = !expanded
+                        },
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
                     ) {
-                        println(graphNames)
-                        graphNames?.forEach { name ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    selectedGraphName = name
-                                    expanded = false
+                        TextField(
+                            value = selectedGraphName,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            graphNames?.forEach { name ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        selectedGraphName = name
+                                        expanded = false
+                                    }
+                                ) {
+                                    Text(text = name)
                                 }
-                            ) {
-                                Text(text = name)
                             }
                         }
                     }
                 }
-            }
 
-            Row(
-                modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    modifier = Modifier.width(145.dp).height(50.dp),
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-                    onClick = {
-                        importFromDBRequired = true
-                        expanded = false
-                        onDismiss()
-                    }
+                Row(
+                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text("Import", color = Color.White)
+                    Button(
+                        modifier = Modifier.width(145.dp).height(50.dp),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
+                        onClick = {
+                            importFromDBRequired = true
+                            expanded = false
+                            onDismiss()
+                        }
+                    ) {
+                        Text("Import", color = Color.White)
+                    }
                 }
             }
         }
-    }
 
-    if (importFromDBRequired) {
+        if (importFromDBRequired) {
 //        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
-        Neo4jRepositoryHandler.loadGraph(selectedGraphName)
+            Neo4jRepositoryHandler.loadGraph(selectedGraphName)
+        }
     }
 }
