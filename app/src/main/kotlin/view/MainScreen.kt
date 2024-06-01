@@ -23,9 +23,7 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
 
         Row {
             TabHandler(viewmodel)
-            Surface(modifier = Modifier.fillMaxSize()) {
-                GraphView(viewmodel.graphViewModel, scale)
-            }
+            Surface(modifier = Modifier.fillMaxSize()) { GraphView(viewmodel.graphViewModel, scale) }
         }
         // Hoverable box over the existing Surface
         FAQBox(interactionSource, viewmodel)

@@ -62,8 +62,8 @@ abstract class Graph<D> {
     fun getVertices() = vertices.toList()
 
     /**
-     * In unweighted graph, returns a map with every edge as a key and 1 as a value
-     * In a weighted graph, returns copy of weightMap property
+     * In unweighted graph, returns a map with every edge as a key and 1 as a value In a weighted graph, returns copy of
+     * weightMap property
      */
     open fun getWeightMap(): MutableMap<Edge<D>, Int> {
         val weightMap = mutableMapOf<Edge<D>, Int>()
@@ -74,15 +74,18 @@ abstract class Graph<D> {
     }
 
     fun getNeighbours(vertex: Vertex<D>): List<Vertex<D>> {
-        val neighbours = adjacencyMap[vertex]
-            ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
+        val neighbours =
+            adjacencyMap[vertex]
+                ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the adjacency map.")
 
         return neighbours.toList()
     }
 
     fun getOutgoingEdges(vertex: Vertex<D>): List<Edge<D>> {
-        val outgoingEdges = outgoingEdgesMap[vertex]
-            ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the outgoing edges map.")
+        val outgoingEdges =
+            outgoingEdgesMap[vertex]
+                ?: throw NoSuchElementException(
+                    "Vertex (${vertex.id}, ${vertex.data}) isn't in the outgoing edges map.")
 
         return outgoingEdges.toList()
     }

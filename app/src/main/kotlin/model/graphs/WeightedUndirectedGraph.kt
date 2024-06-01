@@ -1,9 +1,9 @@
 package model.graphs
 
-import model.graphs.abstractGraph.Edge
-import model.graphs.abstractGraph.Vertex
 import java.util.*
 import kotlin.NoSuchElementException
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Vertex
 
 class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
     private val weightMap: MutableMap<Edge<D>, Int> = mutableMapOf()
@@ -15,7 +15,6 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
 
         return newEdge
     }
-
 
     // In case weight is not passed, set it to default value = 1
     override fun addEdge(vertex1: Vertex<D>, vertex2: Vertex<D>) = addEdge(vertex1, vertex2, 1)
@@ -29,11 +28,11 @@ class WeightedUndirectedGraph<D> : UndirectedGraph<D>() {
     }
 
     fun getWeight(edge: Edge<D>): Int {
-        val weight = weightMap[edge]
-            ?: throw NoSuchElementException(
-                "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data}) " +
-                    "and (${edge.vertex2.id}, ${edge.vertex2.data})"
-            )
+        val weight =
+            weightMap[edge]
+                ?: throw NoSuchElementException(
+                    "No weight found for edge between vertices (${edge.vertex1.id}, ${edge.vertex1.data}) " +
+                        "and (${edge.vertex2.id}, ${edge.vertex2.data})")
 
         return weight
     }

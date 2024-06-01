@@ -13,25 +13,23 @@ data class ColorPalette(
 
 @Composable
 fun MyAppTheme(content: @Composable () -> Unit) {
-    val mycolors = ColorPalette(
-        primary = Color(0xFF8AAAC6),
-        secondary = Color(0xFFAECCE4),
-        background = Color(0xFFE5F3FD),
-        secondaryVariant = Color(0xFFF5FBFF),
-        surface = Color.White,
-    )
+    val mycolors =
+        ColorPalette(
+            primary = Color(0xFF8AAAC6),
+            secondary = Color(0xFFAECCE4),
+            background = Color(0xFFE5F3FD),
+            secondaryVariant = Color(0xFFF5FBFF),
+            surface = Color.White,
+        )
 
-    fun ColorPalette.toMaterialColors() = lightColors(
-        primary = primary,
-        secondary = secondary,
-        background = background,
-        secondaryVariant = secondaryVariant,
-        surface = surface,
-    )
+    fun ColorPalette.toMaterialColors() =
+        lightColors(
+            primary = primary,
+            secondary = secondary,
+            background = background,
+            secondaryVariant = secondaryVariant,
+            surface = surface,
+        )
 
-    MaterialTheme(
-        colors = mycolors.toMaterialColors()
-    ) {
-        content()
-    }
+    MaterialTheme(colors = mycolors.toMaterialColors()) { content() }
 }

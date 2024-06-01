@@ -11,12 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import view.utils.ErrorWindow
-import viewmodel.WindowViewModel
 import viewmodel.graph.GraphViewModel
 
 @Composable
@@ -34,10 +32,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
 
-        Row(
-            modifier = Modifier.height(75.dp).padding(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
+        Row(modifier = Modifier.height(75.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             Column(modifier = Modifier.width(200.dp).fillMaxHeight(), Arrangement.Center) {
                 TextField(
                     value = vertexData,
@@ -48,30 +43,22 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         Text(
                             "Vertex data",
                             style = MaterialTheme.typography.body1.copy(fontSize = 14.sp),
-                            color = Color.Gray
-                        )
+                            color = Color.Gray)
                     },
-                    colors =
-                    TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant
-                    ),
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
                 )
             }
             Column(modifier = Modifier.width(120.dp).fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(70.dp),
                     onClick = { if (vertexData.isNotEmpty()) showVertexAddDialog = true },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
-                ) {
-                    Text("add")
-                }
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)) {
+                        Text("add")
+                    }
             }
         }
 
-        Row(
-            modifier = Modifier.height(75.dp).padding(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
+        Row(modifier = Modifier.height(75.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             Column(modifier = Modifier.width(100.dp).fillMaxHeight(), Arrangement.Center) {
                 TextField(
                     value = firstVertexId,
@@ -82,14 +69,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         Text(
                             "1 vertex ID",
                             style = MaterialTheme.typography.body1.copy(fontSize = 12.sp),
-                            color = Color.Gray
-                        )
+                            color = Color.Gray)
                     },
-                    colors =
-                    TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant
-                    )
-                )
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondaryVariant))
             }
 
             Column(modifier = Modifier.width(100.dp).fillMaxHeight(), Arrangement.Center) {
@@ -102,24 +84,17 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         Text(
                             "2 vertex ID",
                             style = MaterialTheme.typography.body1.copy(fontSize = 12.sp),
-                            color = Color.Gray
-                        )
+                            color = Color.Gray)
                     },
-                    colors =
-                    TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant
-                    )
-                )
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondaryVariant))
             }
 
             Column(modifier = Modifier.width(110.dp).fillMaxHeight(), Arrangement.Center) {
                 Button(
                     modifier = Modifier.fillMaxSize().height(70.dp),
                     onClick = {
-                        if (graphVM.graph.getVertices()
-                                .any { it.id == firstVertexId.toInt() } && graphVM.graph.getVertices()
-                                .any { it.id == secondVertexId.toInt() }
-                        ) {
+                        if (graphVM.graph.getVertices().any { it.id == firstVertexId.toInt() } &&
+                            graphVM.graph.getVertices().any { it.id == secondVertexId.toInt() }) {
                             graphVM.addEdge(firstVertexId.toInt(), secondVertexId.toInt())
 
                             graphVM.updateIsRequired.value = true
@@ -129,46 +104,34 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                             showErrorWindow.value = true
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
-                ) {
-                    Text("add")
-                }
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)) {
+                        Text("add")
+                    }
             }
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(5.dp).clickable {
-                graphVM.showVerticesID.value = !graphVM.showVerticesID.value
-            },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = graphVM.showVerticesID.value,
-                onCheckedChange = { graphVM.showVerticesID.value = it },
-                colors =
-                CheckboxDefaults.colors(
-                    checkedColor = MaterialTheme.colors.primary,
-                    uncheckedColor = MaterialTheme.colors.secondary
-                )
-            )
-            Text(
-                text = "Show ID",
-                modifier = Modifier.padding(start = 10.dp, bottom = 3.dp).align(Alignment.CenterVertically)
-            )
-
-        }
+            modifier =
+                Modifier.fillMaxWidth().padding(5.dp).clickable {
+                    graphVM.showVerticesID.value = !graphVM.showVerticesID.value
+                },
+            verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = graphVM.showVerticesID.value,
+                    onCheckedChange = { graphVM.showVerticesID.value = it },
+                    colors =
+                        CheckboxDefaults.colors(
+                            checkedColor = MaterialTheme.colors.primary,
+                            uncheckedColor = MaterialTheme.colors.secondary))
+                Text(
+                    text = "Show ID",
+                    modifier = Modifier.padding(start = 10.dp, bottom = 3.dp).align(Alignment.CenterVertically))
+            }
     }
 
     if (showVertexAddDialog) {
-        Dialog(
-            onDismissRequest = {
-                showVertexAddDialog = false
-            }
-        ) {
-            Column(
-                modifier =
-                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
-            ) {
+        Dialog(onDismissRequest = { showVertexAddDialog = false }) {
+            Column(modifier = Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)) {
                 if (graphVM.verticesVM.isEmpty()) {
                     Text("Input data of second vertex to create and connect with")
 
@@ -180,8 +143,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         },
                         modifier = Modifier.fillMaxWidth().height(60.dp).clip(RoundedCornerShape(8.dp)),
                         textStyle = TextStyle(fontSize = 14.sp),
-                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
-                    )
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent))
 
                     if (errorMessage.isNotBlank()) {
                         Text(errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
@@ -206,11 +168,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 vertexData = ""
                                 secondVertexData = ""
                             }
+                        }) {
+                            Text("Connect")
                         }
-                    ) {
-                        Text("Connect")
-                    }
-
                 } else {
                     Text("Input ID of vertex to connect with:")
 
@@ -222,8 +182,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                         },
                         modifier = Modifier.fillMaxWidth().height(60.dp).clip(RoundedCornerShape(8.dp)),
                         textStyle = TextStyle(fontSize = 14.sp),
-                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
-                    )
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent))
 
                     if (errorMessage.isNotBlank()) {
                         Text(errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
@@ -253,10 +212,9 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                                 connectVertexId = ""
                                 vertexData = ""
                             }
+                        }) {
+                            Text("Connect")
                         }
-                    ) {
-                        Text("Connect")
-                    }
                 }
             }
         }

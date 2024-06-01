@@ -1,20 +1,18 @@
 package viewmodel.graph
 
 import androidx.compose.ui.unit.dp
-import model.Complex
-import model.recursiveFFT
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
+import model.Complex
+import model.recursiveFFT
 
 class TFDPLayout() {
     /**
-     * longRangeAttractionConstant - strength of attractive force (long-range) - B
-     * nearAttractionConstant - strength of attractive t-force (near) - A
-     * repulsiveConstant - extent and magnitude of the repulsive t-force that
-    controls the longest distance of neighbors in the layout - Y
-     **/
-
+     * longRangeAttractionConstant - strength of attractive force (long-range) - B nearAttractionConstant - strength of
+     * attractive t-force (near) - A repulsiveConstant - extent and magnitude of the repulsive t-force that controls the
+     * longest distance of neighbors in the layout - Y
+     */
     fun fft2D(input: Array<Array<Complex>>): Array<Array<Complex>> {
         val rows = input.size
         val cols = input[0].size
@@ -83,7 +81,15 @@ class TFDPLayout() {
         return output
     }
 
-    fun <D> place(width: Double, height: Double, vertices: Collection<VertexViewModel<D>>, gridSize: Int = 128, longRangeAttractionConstant: Double, nearAttractionConstant: Double, repulsiveConstant: Double) {
+    fun <D> place(
+        width: Double,
+        height: Double,
+        vertices: Collection<VertexViewModel<D>>,
+        gridSize: Int = 128,
+        longRangeAttractionConstant: Double,
+        nearAttractionConstant: Double,
+        repulsiveConstant: Double
+    ) {
         val forces = Array(vertices.size) { Pair(0.0, 0.0) }
         val grid = Array(gridSize) { Array(gridSize) { Complex(0.0, 0.0) } }
         val deltaX = width / gridSize
@@ -127,7 +133,8 @@ class TFDPLayout() {
                 forceY[i][j] -= up / deltaY / distance * repulsion
 
                 val attraction =
-                    longRangeAttractionConstant * (distance + ((nearAttractionConstant * distance) / (1 + distance * distance)))
+                    longRangeAttractionConstant *
+                        (distance + ((nearAttractionConstant * distance) / (1 + distance * distance)))
 
                 forceX[i][j] -= right / deltaX / distance * attraction
                 forceY[i][j] -= up / deltaY / distance * attraction

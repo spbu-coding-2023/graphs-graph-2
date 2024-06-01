@@ -42,40 +42,31 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
     val borderColor = highlightColor.value
 
     Box(
-        modifier = Modifier
-            .offset { IntOffset(adjustedX.roundToPx(), adjustedY.roundToPx()) }
-            .size(adjustedRadius * 2)
-            .border(5.dp, borderColor, CircleShape)
-            .background(
-                if (viewModel.isSelected.value) Color.Yellow else Color.LightGray,
-                shape = CircleShape
-            )
-            .clip(CircleShape)
-            .pointerInput(Unit) {
-                coroutineScope.launch {
-                    detectDragGestures { change, dragAmount ->
-                        viewModel.onDrag(
-                            DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp())
-                        )
-                        change.consume()
+        modifier =
+            Modifier.offset { IntOffset(adjustedX.roundToPx(), adjustedY.roundToPx()) }
+                .size(adjustedRadius * 2)
+                .border(5.dp, borderColor, CircleShape)
+                .background(if (viewModel.isSelected.value) Color.Yellow else Color.LightGray, shape = CircleShape)
+                .clip(CircleShape)
+                .pointerInput(Unit) {
+                    coroutineScope.launch {
+                        detectDragGestures { change, dragAmount ->
+                            viewModel.onDrag(DpOffset(dragAmount.x.toDp(), dragAmount.y.toDp()))
+                            change.consume()
+                        }
                     }
-                }
-                detectTapGestures(
-                    onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        if (viewModel.dataVisible.value) {
-            Text(modifier = Modifier.align(Alignment.Center), text = viewModel.getVertexData)
+                    detectTapGestures(onTap = { viewModel.isSelected.value = !viewModel.isSelected.value })
+                },
+        contentAlignment = Alignment.Center) {
+            if (viewModel.dataVisible.value) {
+                Text(modifier = Modifier.align(Alignment.Center), text = viewModel.getVertexData)
+            }
+            if (viewModel.idVisible.value) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center).zIndex(3f),
+                    text = viewModel.getVertexID.toString(),
+                    color = Color.Black,
+                    style = MaterialTheme.typography.body1.copy(fontSize = 20.sp))
+            }
         }
-        if (viewModel.idVisible.value) {
-            Text(
-                modifier = Modifier.align(Alignment.Center).zIndex(3f),
-                text = viewModel.getVertexID.toString(),
-                color = Color.Black,
-                style = MaterialTheme.typography.body1.copy(fontSize = 20.sp)
-            )
-        }
-    }
 }

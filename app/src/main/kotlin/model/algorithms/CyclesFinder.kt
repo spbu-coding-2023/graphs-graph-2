@@ -10,8 +10,9 @@ class CyclesFinder {
 
         val SCCFinder = SCCFinder()
         val sccs = SCCFinder.findSCC(graph)
-        val vertexSCC = sccs.find { srcVertex in it }
-            ?: throw NoSuchElementException("Vertex (${srcVertex.id}, ${srcVertex.data}) isn't in any of the SCCs")
+        val vertexSCC =
+            sccs.find { srcVertex in it }
+                ?: throw NoSuchElementException("Vertex (${srcVertex.id}, ${srcVertex.data}) isn't in any of the SCCs")
 
         if (vertexSCC.size == 1) return emptySet()
 
@@ -75,8 +76,7 @@ class CyclesFinder {
             if (cycleIsFound) unblock(currentVertex)
             else {
                 for (neighbour in subGraph.getNeighbours(currentVertex)) {
-                    blockedMap[neighbour]?.add(currentVertex)
-                        ?: blockedMap.put(neighbour, mutableSetOf(currentVertex))
+                    blockedMap[neighbour]?.add(currentVertex) ?: blockedMap.put(neighbour, mutableSetOf(currentVertex))
                 }
             }
 
@@ -90,8 +90,9 @@ class CyclesFinder {
         val cycles = mutableSetOf<List<Pair<Edge<D>, Vertex<D>>>>()
         for (verticesCycle in verticesCycles) {
             val originalVerticesCycle = mutableListOf<Vertex<D>>()
-            for (vertex in verticesCycle) originalVerticesCycle += verticesCopiesMap[vertex]
-                ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the vertices map")
+            for (vertex in verticesCycle) originalVerticesCycle +=
+                verticesCopiesMap[vertex]
+                    ?: throw NoSuchElementException("Vertex (${vertex.id}, ${vertex.data}) isn't in the vertices map")
 
             val cycle = mutableListOf<Pair<Edge<D>, Vertex<D>>>()
 

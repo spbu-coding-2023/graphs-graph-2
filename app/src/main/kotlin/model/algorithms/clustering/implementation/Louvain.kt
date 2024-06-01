@@ -1,25 +1,17 @@
 /**
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
-
 package model.algorithms.clustering.implementation
 
-/**
- * Class that encapsulates the Louvain algorithm.
- */
-internal class Louvain(
-    private val links: List<Link>
-) {
+/** Class that encapsulates the Louvain algorithm. */
+internal class Louvain(private val links: List<Link>) {
     private var communities: MutableMap<Int, Community>
     private var nodes: List<Node> = emptyList()
     private var graphWeight: Double
@@ -34,9 +26,7 @@ internal class Louvain(
 
     private fun buildNodesFromLinks() {
         val nodeIndices = links.flatMap { listOf(it.source(), it.target()) }.distinct().sorted()
-        val mutableNodes = nodeIndices
-            .withIndex()
-            .associateBy({ it.value }, { MutableNode(it.index, setOf(it.value)) })
+        val mutableNodes = nodeIndices.withIndex().associateBy({ it.value }, { MutableNode(it.index, setOf(it.value)) })
         links.forEach { link ->
             if (link.source() == link.target()) {
                 mutableNodes[link.source()]!!.selfLoopsWeight += 2 * link.weight()
@@ -56,9 +46,7 @@ internal class Louvain(
     private fun aggregateCommunities() {
         // re-index communities in nodes
         communities.values.withIndex().forEach { (newIndex, community) ->
-            community.nodes.forEach { nodeIndex ->
-                nodes[nodeIndex].community = newIndex
-            }
+            community.nodes.forEach { nodeIndex -> nodes[nodeIndex].community = newIndex }
         }
 
         val newNodes = communities.values.map { it.toLouvainNode(nodes) }
@@ -87,10 +75,11 @@ internal class Louvain(
     }
 
     /**
-     * Step I of the algorithm:
-     * For each node i evaluate the gain in modularity if node i is moved to the community of one of its neighbors j.
-     * Then move node i in the community for which the modularity gain is the largest, but only if this gain is positive.
-     * This process is applied to all nodes until no further improvement can be achieved, completing Step I.
+     * Step I of the algorithm: For each node i evaluate the gain in modularity if node i is moved to the community of
+     * one of its neighbors j. Then move node i in the community for which the modularity gain is the largest, but only
+     * if this gain is positive. This process is applied to all nodes until no further improvement can be achieved,
+     * completing Step I.
+     *
      * @see optimizeModularity
      */
     private fun findLocalMaxModularityPartition() {
@@ -149,9 +138,7 @@ internal class Louvain(
         communities.forEach { (communityIndex, community) ->
             community.nodes.forEach { nodeIndex ->
                 val node = nodes[nodeIndex]
-                node.originalNodes.forEach {
-                    communitiesMap[it] = communityIndex
-                }
+                node.originalNodes.forEach { communitiesMap[it] = communityIndex }
             }
         }
         return communitiesMap
@@ -203,8 +190,8 @@ internal class Louvain(
         assignCommunities(communitiesMap)
     }
 
-    private fun reIndexMap(theMap: Map<Int, Int>, saveIndex: Int, startFrom: Int) = theMap
-        .mapValues { (_, communityIndex) ->
+    private fun reIndexMap(theMap: Map<Int, Int>, saveIndex: Int, startFrom: Int) =
+        theMap.mapValues { (_, communityIndex) ->
             if (communityIndex == 0) {
                 saveIndex
             } else {

@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.zIndex
@@ -16,7 +15,6 @@ import maxEdgeStrokeWidth
 import minEdgeStrokeWidth
 import viewmodel.WindowViewModel
 import viewmodel.graph.EdgeViewModel
-
 
 @Composable
 fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
@@ -40,16 +38,8 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
         drawLine(
             color = edgeColor,
             strokeWidth = (5f * scale).coerceIn(minEdgeStrokeWidth, maxEdgeStrokeWidth),
-            start =
-            Offset(
-                firstVertexCenterX.toPx(),
-                firstVertexCenterY.toPx()
-            ),
-            end =
-            Offset(
-                secondVertexCenterX.toPx(),
-                secondVertexCenterY.toPx()
-            ),
+            start = Offset(firstVertexCenterX.toPx(), firstVertexCenterY.toPx()),
+            end = Offset(secondVertexCenterX.toPx(), secondVertexCenterY.toPx()),
         )
 
         if (arrowPoints.isNotEmpty()) {
@@ -60,21 +50,11 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
                 arrowPoints[0].first.toPx(),
                 arrowPoints[0].second.toPx(),
             )
-            trianglePath.lineTo(
-                arrowPoints[1].first.toPx(),
-                arrowPoints[1].second.toPx()
-            )
-            trianglePath.lineTo(
-                arrowPoints[2].first.toPx(),
-                arrowPoints[2].second.toPx()
-            )
+            trianglePath.lineTo(arrowPoints[1].first.toPx(), arrowPoints[1].second.toPx())
+            trianglePath.lineTo(arrowPoints[2].first.toPx(), arrowPoints[2].second.toPx())
             trianglePath.close()
 
-            drawPath(
-                path = trianglePath,
-                color = edgeColor,
-                style = Fill
-            )
+            drawPath(path = trianglePath, color = edgeColor, style = Fill)
         }
     }
 }

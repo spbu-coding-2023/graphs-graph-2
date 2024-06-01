@@ -21,11 +21,7 @@ val horizontalGap = 20.dp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
-    val algorithms = mutableListOf(
-        "Layout",
-        "Find communities",
-        "Find key vertices"
-    )
+    val algorithms = mutableListOf("Layout", "Find communities", "Find key vertices")
 
     if (graphVM.graph is DirectedGraph) {
         algorithms += "Find SCCs"
@@ -51,71 +47,71 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
         Row(modifier = Modifier.height(0.dp)) {}
         Row(
             modifier = Modifier.height(rowHeight).padding(borderPadding),
-            horizontalArrangement = Arrangement.spacedBy(horizontalGap)
-        ) {
-            Column(
-                modifier = Modifier.width(95.dp).fillMaxHeight(),
-                Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "Algorithm:",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 7.dp)
-                )
-            }
-            Column(modifier = Modifier.width(225.dp).fillMaxHeight(), Arrangement.Center) {
-                var expanded by remember { mutableStateOf(false) }
+            horizontalArrangement = Arrangement.spacedBy(horizontalGap)) {
+                Column(
+                    modifier = Modifier.width(95.dp).fillMaxHeight(),
+                    Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Algorithm:", textAlign = TextAlign.Center, modifier = Modifier.padding(start = 7.dp))
+                    }
+                Column(modifier = Modifier.width(225.dp).fillMaxHeight(), Arrangement.Center) {
+                    var expanded by remember { mutableStateOf(false) }
 
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = {
-                        expanded = !expanded
-                    },
-                    modifier = Modifier.width(225.dp).fillMaxHeight()
-                ) {
-                    TextField(
-                        value = selectedAlgorithm,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier,
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondaryVariant
-                        )
-                    )
-
-                    ExposedDropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = expanded,
-                        onDismissRequest = {
-                            expanded = false
-                        }
-                    ) {
-                        algorithms.forEach { algorithm ->
-                            DropdownMenuItem(
+                        onExpandedChange = { expanded = !expanded },
+                        modifier = Modifier.width(225.dp).fillMaxHeight()) {
+                            TextField(
+                                value = selectedAlgorithm,
+                                onValueChange = {},
+                                readOnly = true,
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                                 modifier = Modifier,
-                                onClick = {
-                                    selectedAlgorithm = algorithm
-                                    expanded = false
+                                colors =
+                                    TextFieldDefaults.textFieldColors(
+                                        backgroundColor = MaterialTheme.colors.secondaryVariant))
+
+                            ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                                algorithms.forEach { algorithm ->
+                                    DropdownMenuItem(
+                                        modifier = Modifier,
+                                        onClick = {
+                                            selectedAlgorithm = algorithm
+                                            expanded = false
+                                        }) {
+                                            Text(text = algorithm)
+                                        }
                                 }
-                            ) {
-                                Text(text = algorithm)
                             }
                         }
-                    }
                 }
             }
-        }
 
         when (selectedAlgorithm) {
-            "Layout" -> { LayoutUI(graphVM) }
-            "Find communities" -> { CommunitiesUI(graphVM) }
-            "Find key vertices" -> { KeyVerticesUI(graphVM) }
-            "Find shortest path" -> { ShortestPathUI(graphVM) }
-            "Find cycles" -> { CyclesUI(graphVM) }
-            "Find bridges" -> { BridgesUI(graphVM) }
-            "Find SCCs" -> { SCCUI(graphVM) }
-            "Min spanning tree" -> { MinSpanningTreeUI(graphVM) }
+            "Layout" -> {
+                LayoutUI(graphVM)
+            }
+            "Find communities" -> {
+                CommunitiesUI(graphVM)
+            }
+            "Find key vertices" -> {
+                KeyVerticesUI(graphVM)
+            }
+            "Find shortest path" -> {
+                ShortestPathUI(graphVM)
+            }
+            "Find cycles" -> {
+                CyclesUI(graphVM)
+            }
+            "Find bridges" -> {
+                BridgesUI(graphVM)
+            }
+            "Find SCCs" -> {
+                SCCUI(graphVM)
+            }
+            "Min spanning tree" -> {
+                MinSpanningTreeUI(graphVM)
+            }
         }
     }
 }

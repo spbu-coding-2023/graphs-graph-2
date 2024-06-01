@@ -261,11 +261,7 @@ class ShortestPathFinderTest {
 
                     val actualValue = shortestPathFinder.findShortestPath(graph, v0, v4)
                     val expectedValue =
-                        listOf(
-                            graph.getEdge(v0, v1) to v1,
-                            graph.getEdge(v1, v2) to v2,
-                            graph.getEdge(v2, v4) to v4
-                        )
+                        listOf(graph.getEdge(v0, v1) to v1, graph.getEdge(v1, v2) to v2, graph.getEdge(v2, v4) to v4)
 
                     assertEquals(expectedValue, actualValue)
                 }

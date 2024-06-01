@@ -26,13 +26,7 @@ import viewmodel.MainScreenViewModel
 fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScreenViewModel<D>) {
     var isHovered by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag("FAQBox"),
-        contentAlignment = Alignment.TopEnd
-    ) {
-
+    Box(modifier = Modifier.fillMaxSize().testTag("FAQBox"), contentAlignment = Alignment.TopEnd) {
         val iconSize = 40.dp
         val paddingSize = 5.dp
 
@@ -45,42 +39,36 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                 shape = RoundedCornerShape(15.dp),
                 border = BorderStroke(3.dp, MaterialTheme.colors.secondary),
                 modifier =
-                Modifier
-                    .height(textBoxHeight + paddingSize)
-                    .width(textBoxWidth + paddingSize)
-                    .padding(paddingSize)
-                    .testTag("FAQBoxHovered")
-            ) {
-                Text(
-                    text = viewmodel.graphViewModel.graphType.value.replace(" ", "\nData type: "),
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("HoveredText")
-                )
-            }
+                    Modifier.height(textBoxHeight + paddingSize)
+                        .width(textBoxWidth + paddingSize)
+                        .padding(paddingSize)
+                        .testTag("FAQBoxHovered")) {
+                    Text(
+                        text = viewmodel.graphViewModel.graphType.value.replace(" ", "\nData type: "),
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.testTag("HoveredText"))
+                }
         }
 
         Surface(
             color = Color.Transparent,
             modifier =
-            Modifier
-                .width(iconSize + paddingSize)
-                .height(iconSize + paddingSize)
-                .padding(paddingSize)
-                .background(Color.Transparent)
-                .hoverable(interactionSource = interactionSource)
-                .testTag("FAQBoxNotHovered")
-        ) {
-            if (!isHovered) {
-                Image(
-                    painterResource("drawable/question.svg"),
-                    contentDescription = "Question Mark Icon",
-                    modifier = Modifier.size(iconSize + paddingSize),
-                    alignment = Alignment.TopEnd
-                )
+                Modifier.width(iconSize + paddingSize)
+                    .height(iconSize + paddingSize)
+                    .padding(paddingSize)
+                    .background(Color.Transparent)
+                    .hoverable(interactionSource = interactionSource)
+                    .testTag("FAQBoxNotHovered")) {
+                if (!isHovered) {
+                    Image(
+                        painterResource("drawable/question.svg"),
+                        contentDescription = "Question Mark Icon",
+                        modifier = Modifier.size(iconSize + paddingSize),
+                        alignment = Alignment.TopEnd)
+                }
             }
-        }
 
         LaunchedEffect(interactionSource) {
             interactionSource.interactions.collect { interaction ->
@@ -88,7 +76,6 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                     is HoverInteraction.Enter -> {
                         isHovered = true
                     }
-
                     is HoverInteraction.Exit -> {
                         isHovered = false
                     }

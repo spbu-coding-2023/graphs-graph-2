@@ -1,18 +1,17 @@
 package viewmodel.graph
 
+import androidx.compose.runtime.*
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import model.algorithms.*
+import model.algorithms.clustering.CommunitiesFinder
+import model.graphs.*
+import model.graphs.abstractGraph.*
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import model.io.neo4j.Neo4jRepository
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
-import model.graphs.*
-import model.graphs.abstractGraph.*
-import model.algorithms.*
-import model.algorithms.clustering.CommunitiesFinder
 
 class GraphViewModel<D>(
     val currentGraph: Graph<D>,
@@ -28,10 +27,14 @@ class GraphViewModel<D>(
     var _verticesViewModels = mutableMapOf<Vertex<D>, VertexViewModel<D>>()
     var _edgeViewModels = mutableMapOf<Edge<D>, EdgeViewModel<D>>()
 
-    val verticesVM: List<VertexViewModel<D>> get() = _verticesViewModels.values.toList()
-    val edgesVM: List<EdgeViewModel<D>> get() = _edgeViewModels.values.toList()
+    val verticesVM: List<VertexViewModel<D>>
+        get() = _verticesViewModels.values.toList()
 
-    val graph: Graph<D> get() = currentGraph
+    val edgesVM: List<EdgeViewModel<D>>
+        get() = _edgeViewModels.values.toList()
+
+    val graph: Graph<D>
+        get() = currentGraph
 
     fun updateEdgeViewModels(edge: Edge<D>) {
         val firstVertex: VertexViewModel<D> =
@@ -46,11 +49,12 @@ class GraphViewModel<D>(
     }
 
     fun updateVertexViewModels(vertex: Vertex<D>) {
-        _verticesViewModels[vertex] = VertexViewModel(
-            dataVisible = showVerticesData,
-            idVisible = showVerticesID,
-            vertex = vertex,
-        )
+        _verticesViewModels[vertex] =
+            VertexViewModel(
+                dataVisible = showVerticesData,
+                idVisible = showVerticesID,
+                vertex = vertex,
+            )
     }
 
     fun checkVertexById(id: Int): Boolean {
@@ -69,10 +73,14 @@ class GraphViewModel<D>(
         val firstVertex = graph.getVertices()[firstId]
         val secondVertex = graph.getVertices()[secondId]
 
-        val firstVertexVM = _verticesViewModels[firstVertex]
-            ?: throw NoSuchElementException("No ViewModel found for vertex (${firstVertex.id}, ${firstVertex.data})")
-        val secondVertexVM = _verticesViewModels[secondVertex]
-            ?: throw NoSuchElementException("No ViewModel found for vertex (${secondVertex.id}, ${secondVertex.data})")
+        val firstVertexVM =
+            _verticesViewModels[firstVertex]
+                ?: throw NoSuchElementException(
+                    "No ViewModel found for vertex (${firstVertex.id}, ${firstVertex.data})")
+        val secondVertexVM =
+            _verticesViewModels[secondVertex]
+                ?: throw NoSuchElementException(
+                    "No ViewModel found for vertex (${secondVertex.id}, ${secondVertex.data})")
 
         val newEdge = graph.addEdge(firstVertexVM.vertex, secondVertexVM.vertex)
         graph.getWeightMap()[newEdge] = weight
@@ -170,8 +178,7 @@ class GraphViewModel<D>(
             if (shortestPath?.isEmpty() ?: false) return false
 
             return highlightPath(shortestPath)
-        }
-        else if (graph is WeightedUndirectedGraph) {
+        } else if (graph is WeightedUndirectedGraph) {
             val shortestPath = shortestPathFinder.findShortestPath(graph as WeightedUndirectedGraph, src, dest)
             if (shortestPath?.isEmpty() ?: false) return false
 
@@ -218,22 +225,23 @@ class GraphViewModel<D>(
 
         clearGraph()
 
-        val colors = arrayOf(
-            Color.Red,
-            Color.Blue,
-            Color.Green,
-            Color.Yellow,
-            Color.Cyan,
-            Color.Magenta,
-            Color.Black,
-            Color.White,
-            Color.DarkGray,
-            Color(0xebab34),
-            Color(0xaeeb34),
-            Color(0x5e34eb),
-            Color(0x8334eb),
-            Color(0xd834eb),
-            Color(0xeb34a1),
+        val colors =
+            arrayOf(
+                Color.Red,
+                Color.Blue,
+                Color.Green,
+                Color.Yellow,
+                Color.Cyan,
+                Color.Magenta,
+                Color.Black,
+                Color.White,
+                Color.DarkGray,
+                Color(0xebab34),
+                Color(0xaeeb34),
+                Color(0x5e34eb),
+                Color(0x8334eb),
+                Color(0xd834eb),
+                Color(0xeb34a1),
             )
 
         var i = 0
@@ -273,8 +281,7 @@ class GraphViewModel<D>(
         var returnValue = false
         returnValue = highlightPath(cycles?.get(currentCycleIndex))
 
-        val size = cycles?.size
-            ?: return false
+        val size = cycles?.size ?: return false
 
         if (++currentCycleIndex > size - 1) currentCycleIndex = 0
 

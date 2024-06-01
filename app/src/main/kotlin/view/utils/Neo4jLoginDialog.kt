@@ -2,14 +2,11 @@ package view.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -28,17 +25,9 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
     val mainFontSize = 20.sp
     val secondaryFontSize = 15.sp
 
-    Dialog(
-        onDismissRequest = onDismiss
-    ) {
-        Column(
-            modifier =
-            Modifier.background(Color.White).padding(16.dp).width(350.dp).height(360.dp)
-        ) {
-            Text(
-                text = "Please login to Neo4j AuraDB to use Neo4j:",
-                fontSize = mainFontSize
-            )
+    Dialog(onDismissRequest = onDismiss) {
+        Column(modifier = Modifier.background(Color.White).padding(16.dp).width(350.dp).height(360.dp)) {
+            Text(text = "Please login to Neo4j AuraDB to use Neo4j:", fontSize = mainFontSize)
 
             val height = 60.dp
 
@@ -55,14 +44,9 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
                     Text(
                         "Uri",
                         style = MaterialTheme.typography.body1.copy(fontSize = secondaryFontSize),
-                        color = Color.Gray
-                    )
+                        color = Color.Gray)
                 },
-                colors =
-                TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White
-                )
-            )
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White))
             TextField(
                 value = userInput,
                 onValueChange = {
@@ -74,14 +58,9 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
                     Text(
                         "Name",
                         style = MaterialTheme.typography.body1.copy(fontSize = secondaryFontSize),
-                        color = Color.Gray
-                    )
+                        color = Color.Gray)
                 },
-                colors =
-                TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White
-                )
-            )
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White))
             TextField(
                 value = passwordInput,
                 onValueChange = {
@@ -93,14 +72,9 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
                     Text(
                         "Password",
                         style = MaterialTheme.typography.body1.copy(fontSize = secondaryFontSize),
-                        color = Color.Gray
-                    )
+                        color = Color.Gray)
                 },
-                colors =
-                TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White
-                )
-            )
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White))
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.Center,
@@ -112,9 +86,7 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.height(30.dp))
 
                     Button(
-                        modifier = Modifier
-                            .width(250.dp)
-                            .height(50.dp),
+                        modifier = Modifier.width(250.dp).height(50.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
                         onClick = {
                             if (Neo4jRepositoryHandler.initRepo(uriInput, userInput, passwordInput)) {
@@ -122,17 +94,12 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
                             } else {
                                 errorMessage = "Sorry, but this input is invalid."
                             }
+                        }) {
+                            Text("Login", color = Color.White)
                         }
-                    ) {
-                        Text("Login", color = Color.White)
-                    }
 
                     if (errorMessage.isNotBlank()) {
-                        Text(
-                            text = errorMessage,
-                            color = Color.Red,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                        Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
 
                         uriInput = ""
                         userInput = ""
@@ -142,10 +109,8 @@ fun Neo4jLoginDialog(onDismiss: () -> Unit) {
                         Text(
                             text = "Logged in successfully!",
                             color = MaterialTheme.colors.primary,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                            modifier = Modifier.padding(top = 8.dp))
                         LaunchedEffect(Unit) {
-
                             delay(1500)
                             onDismiss()
                         }

@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import model.io.neo4j.Neo4jRepositoryHandler
-import model.io.sql.SQLDatabaseModule
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -25,84 +24,71 @@ fun Neo4jImportGraphDialogWindow(onDismiss: () -> Unit) {
 
     if (!Neo4jRepositoryHandler.isRepoInit) {
         Neo4jLoginDialog { onDismiss() }
-    }
-    else {
-        Dialog(
-            onDismissRequest = {
-                onDismiss()
-            },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
+    } else {
+        Dialog(onDismissRequest = { onDismiss() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
             Column(
-                modifier = Modifier.background(Color.White)
-                    .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp).width(350.dp).height(180.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "Select the graph:",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
+                modifier =
+                    Modifier.background(Color.White)
+                        .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp)
+                        .width(350.dp)
+                        .height(180.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "Select the graph:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(bottom = 10.dp))
 
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp)
-                ) {
-                    ExposedDropdownMenuBox(
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = !expanded
-                        },
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
-                    ) {
-                        TextField(
-                            value = selectedGraphName,
-                            onValueChange = {},
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                        )
-                        ExposedDropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            graphNames?.forEach { name ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        selectedGraphName = name
-                                        expanded = false
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        horizontalArrangement = Arrangement.spacedBy(30.dp)) {
+                            ExposedDropdownMenuBox(
+                                expanded = expanded,
+                                onExpandedChange = { expanded = !expanded },
+                                modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+                                    TextField(
+                                        value = selectedGraphName,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                                        },
+                                        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                                    )
+                                    ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                                        graphNames?.forEach { name ->
+                                            DropdownMenuItem(
+                                                onClick = {
+                                                    selectedGraphName = name
+                                                    expanded = false
+                                                }) {
+                                                    Text(text = name)
+                                                }
+                                        }
                                     }
-                                ) {
-                                    Text(text = name)
                                 }
-                            }
                         }
-                    }
-                }
 
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier = Modifier.width(145.dp).height(50.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-                        onClick = {
-                            importFromDBRequired = true
-                            expanded = false
-                            onDismiss()
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center) {
+                            Button(
+                                modifier = Modifier.width(145.dp).height(50.dp),
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
+                                onClick = {
+                                    importFromDBRequired = true
+                                    expanded = false
+                                    onDismiss()
+                                }) {
+                                    Text("Import", color = Color.White)
+                                }
                         }
-                    ) {
-                        Text("Import", color = Color.White)
-                    }
                 }
-            }
         }
 
         if (importFromDBRequired) {
-//        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
+            //        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
             Neo4jRepositoryHandler.loadGraph(selectedGraphName)
         }
     }

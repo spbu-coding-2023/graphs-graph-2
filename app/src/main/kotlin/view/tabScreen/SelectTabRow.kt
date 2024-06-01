@@ -17,17 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SelectTabRow(
-    currentPageState: PagerState,
-    index: Int,
-    title: String
-) {
+fun SelectTabRow(currentPageState: PagerState, index: Int, title: String) {
     val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
 
     Tab(
@@ -37,23 +32,20 @@ fun SelectTabRow(
         content = {
             Box(
                 modifier =
-                Modifier.background(
-                    if (currentPageState.currentPage == index) MaterialTheme.colors.primary
-                    else Color.Transparent
-                )
-                    .padding(10.dp)
-                    .height(30.dp)
-                    .width(120.dp)
-                    .align(Alignment.CenterHorizontally),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = title,
-                    textAlign = TextAlign.Center,
-                    color = if (currentPageState.currentPage == index) MaterialTheme.colors.surface else Color.Black
-                    // Set text color for selected and unselected tabs
-                )
-            }
-        }
-    )
+                    Modifier.background(
+                            if (currentPageState.currentPage == index) MaterialTheme.colors.primary
+                            else Color.Transparent)
+                        .padding(10.dp)
+                        .height(30.dp)
+                        .width(120.dp)
+                        .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center) {
+                    Text(
+                        text = title,
+                        textAlign = TextAlign.Center,
+                        color = if (currentPageState.currentPage == index) MaterialTheme.colors.surface else Color.Black
+                        // Set text color for selected and unselected tabs
+                        )
+                }
+        })
 }

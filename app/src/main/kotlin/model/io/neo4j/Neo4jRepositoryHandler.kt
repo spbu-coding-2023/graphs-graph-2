@@ -51,18 +51,19 @@ object Neo4jRepositoryHandler {
     fun isValidNeo4jName(name: String): Boolean {
         if (name.isEmpty()) return false
         for (i in name.indices) {
-            val isValidChar = when (name[i].code) {
-                45 -> {                      // -
-                    if (i!= 0) true else false
+            val isValidChar =
+                when (name[i].code) {
+                    45 -> { // -
+                        if (i != 0) true else false
+                    }
+                    in 48..57 -> { // 0-9
+                        if (i != 0) true else false
+                    }
+                    in 65..90 -> true // A-Z
+                    95 -> true // _
+                    in 97..122 -> true // a-z
+                    else -> false
                 }
-                in 48..57 -> {          // 0-9
-                    if (i != 0) true else false
-                }
-                in 65..90 -> true       // A-Z
-                95 -> true                   // _
-                in 97..122 -> true      // a-z
-                else -> false
-            }
 
             if (isValidChar) continue else return false
         }
@@ -73,11 +74,7 @@ object Neo4jRepositoryHandler {
     private fun checkIfCredentialsAreValid(uri: String, user: String, password: String): Boolean {
         try {
             val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
-            driver.session().executeWrite { tx ->
-                tx.run {
-                    "MATCH (v) RETURN v LIMIT 1"
-                }
-            }
+            driver.session().executeWrite { tx -> tx.run { "MATCH (v) RETURN v LIMIT 1" } }
         } catch (e: Exception) {
             return false
         }

@@ -13,24 +13,21 @@ import org.junit.Test
 import view.utils.FAQBox
 import viewmodel.MainScreenViewModel
 
-
 class IntegrationTest {
 
-    @get:Rule
-    val composeTestRule = createComposeRule()
+    @get:Rule val composeTestRule = createComposeRule()
 
     @Test
     fun `graph is undirected, check its view and FAQ button`() {
         // I'm not sure if we can consider this as an integration test
-        // Imho it's an integration test, due to UI's connection with VM + there is more than 2 components (view/vm, or front/back)
+        // Imho it's an integration test, due to UI's connection with VM + there is more than 2
+        // components (view/vm, or front/back)
 
         // SETUP
         val interactionSource = MutableInteractionSource()
-        val viewmodel = MainScreenViewModel(UndirectedGraph<Int>(),"UndirectedGraph")
+        val viewmodel = MainScreenViewModel(UndirectedGraph<Int>(), "UndirectedGraph")
 
-        composeTestRule.setContent {
-            FAQBox(interactionSource, viewmodel)
-        }
+        composeTestRule.setContent { FAQBox(interactionSource, viewmodel) }
 
         // UI TEST
 
@@ -38,9 +35,7 @@ class IntegrationTest {
         composeTestRule.onNodeWithTag("FAQBoxNotHovered").assertExists()
 
         // Simulate hover enter by changing the state manually
-        runBlocking {
-            interactionSource.tryEmit(HoverInteraction.Enter())
-        }
+        runBlocking { interactionSource.tryEmit(HoverInteraction.Enter()) }
 
         // Verify hovered state
         composeTestRule.onNodeWithTag("FAQBoxHovered").assertExists()
@@ -56,8 +51,5 @@ class IntegrationTest {
         assert(allEdgesDirected) { "Not all edges are directed" }
     }
 
-    @Test
-    fun `check import from DB and save with other name`() {
-
-    }
+    @Test fun `check import from DB and save with other name`() {}
 }

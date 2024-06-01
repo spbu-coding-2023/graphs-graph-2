@@ -1,17 +1,17 @@
 package model.algorithms
 
-import model.graphs.abstractGraph.Edge
-import model.graphs.abstractGraph.Graph
-import model.graphs.abstractGraph.Vertex
 import java.util.*
 import java.util.ArrayDeque
 import kotlin.math.roundToInt
+import model.graphs.abstractGraph.Edge
+import model.graphs.abstractGraph.Graph
+import model.graphs.abstractGraph.Vertex
 
 class KeyVerticesFinder {
     /**
-     * For every vertex, calculates normalized closeness centrality, based on which the key vertices are picked.
-     * Formula was taken from "Efficient Top-k Closeness Centrality Search" by Paul W. Olsen et al.,
-     * yet an easier algorithm for traversal was chosen.
+     * For every vertex, calculates normalized closeness centrality, based on which the key vertices are picked. Formula
+     * was taken from "Efficient Top-k Closeness Centrality Search" by Paul W. Olsen et al., yet an easier algorithm for
+     * traversal was chosen.
      */
     fun <D> findKeyVertices(graph: Graph<D>): Set<Vertex<D>>? {
         val vertices = graph.getVertices()
@@ -37,8 +37,8 @@ class KeyVerticesFinder {
     }
 
     /**
-     * Uses modified Dijkstra's algorithm to calculate the sum of all weights (distances)
-     * of shortest paths from source vertex to every other reachable one
+     * Uses modified Dijkstra's algorithm to calculate the sum of all weights (distances) of shortest paths from source
+     * vertex to every other reachable one
      */
     private fun <D> calcSumOfDistancesFromVertex(
         graph: Graph<D>,
@@ -46,7 +46,7 @@ class KeyVerticesFinder {
         distanceMap: Map<Edge<D>, Int>,
         graphSize: Int
     ): Int {
-        val POS_INF = 100_000_000   // to infinity and beyond
+        val POS_INF = 100_000_000 // to infinity and beyond
 
         val visited = Array(graphSize) { false }
 
@@ -117,8 +117,7 @@ class KeyVerticesFinder {
     private fun calcCentralityOfVertex(sumOfDistances: Int, reachableNum: Int, graphSize: Int): Double {
         if (sumOfDistances == 0) return 0.0
 
-        val centrality =
-            ((reachableNum - 1) * (reachableNum - 1)) / ((graphSize - 1) * sumOfDistances).toDouble()
+        val centrality = ((reachableNum - 1) * (reachableNum - 1)) / ((graphSize - 1) * sumOfDistances).toDouble()
 
         return centrality
     }
@@ -127,7 +126,7 @@ class KeyVerticesFinder {
         val keyVertices = mutableSetOf<Vertex<D>>()
 
         val percent = 0.2
-        val keyVerticesNum = (graphSize * percent).roundToInt()     // rounds up
+        val keyVerticesNum = (graphSize * percent).roundToInt() // rounds up
 
         var currKeyVerticesNum = 0
 

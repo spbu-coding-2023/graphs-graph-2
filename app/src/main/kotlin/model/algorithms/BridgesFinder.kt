@@ -1,10 +1,9 @@
 package model.algorithms
 
+import kotlin.math.min
 import model.graphs.UndirectedGraph
 import model.graphs.abstractGraph.Edge
-import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import kotlin.math.min
 
 class BridgesFinder {
     fun <D> findBridges(graph: UndirectedGraph<D>): List<Edge<D>> {
@@ -32,8 +31,7 @@ class BridgesFinder {
                 if (neighbour.id == parentList[vertex.id]) continue
 
                 if (visitedList[neighbour.id]) {
-                    minDiscoveryTime[vertex.id] =
-                        min(minDiscoveryTime[vertex.id], discoveryTime[neighbour.id])
+                    minDiscoveryTime[vertex.id] = min(minDiscoveryTime[vertex.id], discoveryTime[neighbour.id])
 
                     continue
                 }
@@ -42,8 +40,7 @@ class BridgesFinder {
 
                 doDFSToFindBridgesFromVertex(neighbour)
 
-                minDiscoveryTime[vertex.id] =
-                    min(minDiscoveryTime[vertex.id], minDiscoveryTime[neighbour.id])
+                minDiscoveryTime[vertex.id] = min(minDiscoveryTime[vertex.id], minDiscoveryTime[neighbour.id])
 
                 if (minDiscoveryTime[neighbour.id] > discoveryTime[vertex.id]) {
                     val bridgeFound = graph.getEdge(vertex, neighbour)

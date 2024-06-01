@@ -1,15 +1,18 @@
 package model.algorithms
 
+import java.util.*
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import java.util.*
 
 class ShortestPathFinder {
-    fun <D> findShortestPath(graph: Graph<D>, srcVertex: Vertex<D>, destVertex: Vertex<D>):
-            List<Pair<Edge<D>, Vertex<D>>>? {
+    fun <D> findShortestPath(
+        graph: Graph<D>,
+        srcVertex: Vertex<D>,
+        destVertex: Vertex<D>
+    ): List<Pair<Edge<D>, Vertex<D>>>? {
         if (graph.hasNegativeEdges()) {
             // there is no shortest path in undirected graphs with negative edges
             if (graph is WeightedUndirectedGraph) return null
@@ -58,8 +61,7 @@ class ShortestPathFinder {
         val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
-            val predecessor = predecessorMap[currentVertex]
-                ?: return null // path doesn't exist
+            val predecessor = predecessorMap[currentVertex] ?: return null // path doesn't exist
 
             val currentEdge = graph.getEdge(predecessor, currentVertex)
             path.add(currentEdge to currentVertex)
@@ -104,8 +106,7 @@ class ShortestPathFinder {
         val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
-            val predecessor = predecessorMap[currentVertex]
-                ?: return null // path doesn't exist
+            val predecessor = predecessorMap[currentVertex] ?: return null // path doesn't exist
 
             val currentEdge = graph.getEdge(predecessor, currentVertex)
             path.add(currentEdge to currentVertex)
@@ -153,7 +154,6 @@ class ShortestPathFinder {
 
                 if (distance[v1.id] != Int.MAX_VALUE && distance[v2.id] > distance[v1.id] + graph.getWeight(edge)) {
                     distance[v2.id] = NEG_INF
-
                 }
             }
         }
@@ -167,8 +167,7 @@ class ShortestPathFinder {
         val path: MutableList<Pair<Edge<D>, Vertex<D>>> = mutableListOf()
         var currentVertex = destVertex
         while (currentVertex != srcVertex) {
-            val currentPredecessor = predecessor[currentVertex.id]
-                ?: return null // path doesn't exist
+            val currentPredecessor = predecessor[currentVertex.id] ?: return null // path doesn't exist
 
             path.add(graph.getEdge(currentPredecessor, currentVertex) to currentVertex)
 

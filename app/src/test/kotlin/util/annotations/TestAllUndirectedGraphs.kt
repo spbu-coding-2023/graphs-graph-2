@@ -1,8 +1,8 @@
 package util.annotations
 
-import util.annotations.argumentProviders.WeightedAndUnweightedUndirectedGraphsProvider
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
+import util.annotations.argumentProviders.WeightedAndUnweightedUndirectedGraphsProvider
 
 @ParameterizedTest(name = "{0}")
 @ArgumentsSource(WeightedAndUnweightedUndirectedGraphsProvider::class)

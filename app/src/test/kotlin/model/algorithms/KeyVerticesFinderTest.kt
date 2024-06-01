@@ -1,18 +1,16 @@
 package model.algorithms
 
 import model.graphs.DirectedGraph
-import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import util.annotations.TestAllDirectedGraphs
-import util.annotations.TestAllUndirectedGraphs
 
 class KeyVerticesFinderTest {
     val keyVerticesFinder = KeyVerticesFinder()
+
     @Nested
     inner class `Graph is directed and unweighted` {
         @Nested

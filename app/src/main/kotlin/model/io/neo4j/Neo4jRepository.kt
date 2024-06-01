@@ -1,5 +1,6 @@
 package model.io.neo4j
 
+import java.io.Closeable
 import model.graphs.DirectedGraph
 import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
@@ -9,7 +10,6 @@ import model.graphs.abstractGraph.Vertex
 import org.neo4j.driver.AuthTokens
 import org.neo4j.driver.GraphDatabase
 import org.neo4j.driver.Record
-import java.io.Closeable
 
 const val DIR_LABEL = "POINTS_TO"
 const val UNDIR_LABEL = "CONNECTED_TO"
@@ -19,13 +19,8 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
     private val session = driver.session()
 
     fun getGraphNames(): List<String> {
-        val result = session.executeRead { tx ->
-            tx.run(
-                "MATCH (v) " +
-                "RETURN " +
-                "distinct labels(v) AS label"
-            ).list()
-        }
+        val result =
+            session.executeRead { tx -> tx.run("MATCH (v) " + "RETURN " + "distinct labels(v) AS label").list() }
 
         val names = mutableListOf<String>()
         for (record in result) {
@@ -51,9 +46,7 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
 
                 val data = vertex.data.toString()
 
-                tx.run(
-                    "CREATE (:$name {id:$id, data:$data}) "
-                )
+                tx.run("CREATE (:$name {id:$id, data:$data}) ")
             }
 
             for (edge in edges) {
@@ -70,20 +63,14 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
 
                 tx.run(
                     "MATCH (v:$name {id:$id1, data:$data1}) " +
-                    "MATCH (u:$name {id:$id2, data:$data2}) " +
-                    "CREATE (v)-[:$edgeLabel {weight:$weight}]->(u) "
-                )
+                        "MATCH (u:$name {id:$id2, data:$data2}) " +
+                        "CREATE (v)-[:$edgeLabel {weight:$weight}]->(u) ")
             }
         }
     }
 
     private fun clearGraph(name: String) {
-        session.executeWrite { tx ->
-            tx.run(
-                "MATCH (v:$name)-[e]->(u:$name) " +
-                "DELETE v, e, u "
-            )
-        }
+        session.executeWrite { tx -> tx.run("MATCH (v:$name)-[e]->(u:$name) " + "DELETE v, e, u ") }
     }
 
     fun loadGraph(name: String): Triple<Graph<String>, Boolean, Boolean> {
@@ -137,31 +124,25 @@ class Neo4jRepository(uri: String, user: String, password: String) : Closeable {
 
     private fun initializeGraph(isWeighted: Boolean, isDirected: Boolean): Graph<String> {
         return if (isWeighted && isDirected) WeightedDirectedGraph()
-        else if (isWeighted) WeightedUndirectedGraph()
-        else if (isDirected) DirectedGraph()
-        else UndirectedGraph()
+        else if (isWeighted) WeightedUndirectedGraph() else if (isDirected) DirectedGraph() else UndirectedGraph()
     }
 
-    private fun readGraphContents(name: String) = session.executeRead { tx ->
-        tx.run(
-            "MATCH (v:$name)-[e]->(u:$name) " +
-            "RETURN " +
-            "v.id AS id1, " +
-            "v.data AS data1, " +
-            "u.id AS id2, " +
-            "u.data AS data2, " +
-            "e.weight AS weight, " +
-            "type(e) AS relationType "
-        ).list()
-    }
+    private fun readGraphContents(name: String) =
+        session.executeRead { tx ->
+            tx.run(
+                    "MATCH (v:$name)-[e]->(u:$name) " +
+                        "RETURN " +
+                        "v.id AS id1, " +
+                        "v.data AS data1, " +
+                        "u.id AS id2, " +
+                        "u.data AS data2, " +
+                        "e.weight AS weight, " +
+                        "type(e) AS relationType ")
+                .list()
+        }
 
     private fun getStoredGraphSize(name: String): Int {
-        val result = session.executeRead { tx ->
-            tx.run(
-                "MATCH (v:$name) " +
-                "RETURN count(v) AS size "
-            ).list()
-        }
+        val result = session.executeRead { tx -> tx.run("MATCH (v:$name) " + "RETURN count(v) AS size ").list() }
 
         val size = result[0]["size"].asInt()
 

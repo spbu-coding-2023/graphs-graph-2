@@ -22,9 +22,7 @@ class SCCFinder {
             stack.add(srcVertex)
         }
 
-        graph.getVertices().forEach { vertex ->
-            if (visited[vertex] != true) auxiliaryDFS(vertex, component)
-        }
+        graph.getVertices().forEach { vertex -> if (visited[vertex] != true) auxiliaryDFS(vertex, component) }
 
         val reversedEdgesMap = reverseEdgesMap(graph)
         visited.clear()
@@ -55,9 +53,7 @@ class SCCFinder {
     private fun <D> reverseEdgesMap(graph: DirectedGraph<D>): Map<Vertex<D>, MutableSet<Vertex<D>>> {
         val reversedEdgesMap = mutableMapOf<Vertex<D>, MutableSet<Vertex<D>>>()
         graph.getVertices().forEach { reversedEdgesMap[it] = mutableSetOf() }
-        graph.getEdges().forEach { edge ->
-            reversedEdgesMap[edge.vertex2]?.add(edge.vertex1)
-        }
+        graph.getEdges().forEach { edge -> reversedEdgesMap[edge.vertex2]?.add(edge.vertex1) }
 
         return reversedEdgesMap
     }

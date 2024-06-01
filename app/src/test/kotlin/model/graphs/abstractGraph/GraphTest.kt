@@ -1,7 +1,5 @@
 package model.graphs.abstractGraph
 
-import model.graphs.abstractGraph.Graph
-import model.graphs.abstractGraph.Vertex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import util.annotations.TestAllGraphTypes
@@ -249,8 +247,7 @@ class GraphTest {
                             graph.getEdge(newV0, newV1),
                             graph.getEdge(newV3, newV2),
                             graph.getEdge(newV2, newV1),
-                            graph.getEdge(newV3, newV1)
-                        )
+                            graph.getEdge(newV3, newV1))
 
                     assertEquals(expectedEdges, actualEdges)
                 }
@@ -261,36 +258,28 @@ class GraphTest {
         inner class `Vertex is not in the graph` {
             @TestAllGraphTypes
             fun `removing vertex from an empty graph should cause exception`(graph: Graph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(0, 0))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeVertex(Vertex(0, 0)) }
             }
 
             @TestAllGraphTypes
             fun `removing non-existing vertex from a non-empty graph should cause exception`(graph: Graph<Int>) {
                 setupAbstractGraph(graph)
 
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(1904, -360))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeVertex(Vertex(1904, -360)) }
             }
 
             @TestAllGraphTypes
             fun `removing vertex with wrong id should cause exception`(graph: Graph<Int>) {
                 setupAbstractGraph(graph)
 
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(6, 3))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeVertex(Vertex(6, 3)) }
             }
 
             @TestAllGraphTypes
             fun `removing vertex with wrong data should cause exception`(graph: Graph<Int>) {
                 setupAbstractGraph(graph)
 
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeVertex(Vertex(0, 35))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeVertex(Vertex(0, 35)) }
             }
         }
     }

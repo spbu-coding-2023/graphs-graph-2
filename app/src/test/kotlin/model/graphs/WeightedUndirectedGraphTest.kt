@@ -95,9 +95,7 @@ class WeightedUndirectedGraphTest {
 
             graph.removeEdge(edge)
 
-            assertThrows(NoSuchElementException::class.java) {
-                graph.getWeight(edge)
-            }
+            assertThrows(NoSuchElementException::class.java) { graph.getWeight(edge) }
         }
     }
 }

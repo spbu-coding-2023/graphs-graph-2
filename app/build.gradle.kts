@@ -7,6 +7,8 @@ val koinVersion: String by project
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compose)
+
+    id("com.ncorti.ktfmt.gradle") version "0.18.0"
 }
 
 repositories {
@@ -43,4 +45,9 @@ compose.desktop {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+ktfmt {
+    dropboxStyle()
+    maxWidth.set(120)
 }

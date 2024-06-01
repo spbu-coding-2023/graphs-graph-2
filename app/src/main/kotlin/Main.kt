@@ -12,9 +12,7 @@ import view.utils.SelectInitDialogWindow
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        SelectInitDialogWindow(true).GraphInitDialogWindow(true)
-    }
+    MaterialTheme { SelectInitDialogWindow(true).GraphInitDialogWindow(true) }
 }
 
 fun main() = application {

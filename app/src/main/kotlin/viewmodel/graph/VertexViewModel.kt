@@ -32,4 +32,3 @@ class VertexViewModel<D>(
     val getVertexID
         get() = vertex.id
 }
-

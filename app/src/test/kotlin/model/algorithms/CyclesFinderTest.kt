@@ -46,14 +46,7 @@ class CyclesFinderTest {
             val expectedCycle5 = listOf(e12 to v2, e25 to v5, e53 to v3, e34 to v4, e41 to v1)
 
             val actualValue = cyclesFinder.findCycles(graph, v1)
-            val expectedValue =
-                setOf(
-                    expectedCycle1,
-                    expectedCycle2,
-                    expectedCycle3,
-                    expectedCycle4,
-                    expectedCycle5
-                )
+            val expectedValue = setOf(expectedCycle1, expectedCycle2, expectedCycle3, expectedCycle4, expectedCycle5)
 
             assertEquals(expectedValue, actualValue)
         }
@@ -144,4 +137,3 @@ class CyclesFinderTest {
         assertEquals(expectedGraph, actualGraph)
     }
 }
-

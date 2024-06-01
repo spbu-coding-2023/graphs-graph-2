@@ -1,11 +1,11 @@
 package model.algorithms.clustering
 
+import model.algorithms.clustering.implementation.Link
+import model.algorithms.clustering.implementation.getPartition
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import model.algorithms.clustering.implementation.Link
-import model.algorithms.clustering.implementation.getPartition
 
 class CommunitiesFinder {
     fun <D> findCommunities(graph: Graph<D>): Set<Set<Vertex<D>>> {
@@ -62,7 +62,9 @@ class CommunitiesFinder {
 
     inner class EdgeLink(private val vertex1Id: Int, private val vertex2Id: Int, val weight: Double) : Link {
         override fun source() = vertex1Id
+
         override fun target() = vertex2Id
+
         override fun weight() = weight
     }
 }

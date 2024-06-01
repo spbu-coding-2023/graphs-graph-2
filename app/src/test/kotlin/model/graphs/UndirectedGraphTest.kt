@@ -61,9 +61,7 @@ class UndirectedGraphTest {
         inner class `Edge isn't in the graph` {
             @TestAllUndirectedGraphs
             fun `trying to get non-existent edge should throw an exception`(graph: UndirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getEdge(Vertex(2, 12), Vertex(85, 6))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getEdge(Vertex(2, 12), Vertex(85, 6)) }
             }
         }
     }
@@ -109,9 +107,7 @@ class UndirectedGraphTest {
         inner class `Vertex isn't in the graph` {
             @TestAllUndirectedGraphs
             fun `exception should be thrown`(graph: UndirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getNeighbours(Vertex(2201, 2006))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getNeighbours(Vertex(2201, 2006)) }
             }
         }
     }
@@ -157,9 +153,7 @@ class UndirectedGraphTest {
         inner class `Vertex isn't in the graph` {
             @TestAllUndirectedGraphs
             fun `exception should be thrown`(graph: UndirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getOutgoingEdges(Vertex(2611, 2005))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getOutgoingEdges(Vertex(2611, 2005)) }
             }
         }
     }
@@ -243,11 +237,7 @@ class UndirectedGraphTest {
                     val actualEdges2 = graph.getOutgoingEdges(v3).toSet()
                     val expectedEdges2 =
                         setOf(
-                            graph.getEdge(v3, v0),
-                            graph.getEdge(v3, v1),
-                            graph.getEdge(v3, v2),
-                            graph.getEdge(v3, v4)
-                        )
+                            graph.getEdge(v3, v0), graph.getEdge(v3, v1), graph.getEdge(v3, v2), graph.getEdge(v3, v4))
 
                     assertEquals(expectedEdges1, actualEdges1)
                     assertEquals(expectedEdges2, actualEdges2)
@@ -346,7 +336,9 @@ class UndirectedGraphTest {
                 }
 
                 @TestAllUndirectedGraphs
-                fun `adding edge with reversed arguments shouldn't change outgoing edges map`(graph: UndirectedGraph<Int>) {
+                fun `adding edge with reversed arguments shouldn't change outgoing edges map`(
+                    graph: UndirectedGraph<Int>
+                ) {
                     val graphStructure = setupAbstractGraph(graph)
                     val defaultVerticesList = graphStructure.first
 
@@ -375,9 +367,7 @@ class UndirectedGraphTest {
 
                     val v2 = defaultVerticesList[2]
 
-                    assertThrows(IllegalArgumentException::class.java) {
-                        graph.addEdge(v2, v2)
-                    }
+                    assertThrows(IllegalArgumentException::class.java) { graph.addEdge(v2, v2) }
                 }
             }
         }
@@ -391,9 +381,7 @@ class UndirectedGraphTest {
 
                 val v0 = defaultVerticesList[0]
 
-                assertThrows(IllegalArgumentException::class.java) {
-                    graph.addEdge(Vertex(2210, 2005), v0)
-                }
+                assertThrows(IllegalArgumentException::class.java) { graph.addEdge(Vertex(2210, 2005), v0) }
             }
 
             @TestAllUndirectedGraphs
@@ -403,9 +391,7 @@ class UndirectedGraphTest {
 
                 val v0 = defaultVerticesList[0]
 
-                assertThrows(IllegalArgumentException::class.java) {
-                    graph.addEdge(v0, Vertex(2510, 1917))
-                }
+                assertThrows(IllegalArgumentException::class.java) { graph.addEdge(v0, Vertex(2510, 1917)) }
             }
 
             @TestAllUndirectedGraphs
@@ -529,9 +515,7 @@ class UndirectedGraphTest {
         inner class `Edge isn't in the graph` {
             @TestAllUndirectedGraphs
             fun `non-existing edge should throw an exception`(graph: UndirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeEdge(Edge(Vertex(0, 0), Vertex(1, 1)))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeEdge(Edge(Vertex(0, 0), Vertex(1, 1))) }
             }
         }
     }

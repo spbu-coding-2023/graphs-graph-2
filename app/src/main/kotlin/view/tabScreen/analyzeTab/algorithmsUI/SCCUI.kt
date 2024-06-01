@@ -21,22 +21,20 @@ fun <D> SCCUI(graphVM: GraphViewModel<D>) {
 
     Row(
         modifier = Modifier.height(rowHeight).padding(borderPadding),
-        horizontalArrangement = Arrangement.spacedBy(horizontalGap)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
-            Button(
-                modifier = Modifier.fillMaxSize(),
-                onClick = {
-                    if (!graphVM.findSCCs()) {
-                        showErrorWindow.value = true
+        horizontalArrangement = Arrangement.spacedBy(horizontalGap)) {
+            Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(), Arrangement.Center) {
+                Button(
+                    modifier = Modifier.fillMaxSize(),
+                    onClick = {
+                        if (!graphVM.findSCCs()) {
+                            showErrorWindow.value = true
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)) {
+                        Text("Run algorithm")
                     }
-                },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
-            ) {
-                Text("Run algorithm")
             }
         }
-    }
 
     if (showErrorWindow.value) {
         ErrorWindow("No SCCs were found", { showErrorWindow.value = false })

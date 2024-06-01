@@ -182,13 +182,7 @@ class SCCFinderTest {
             val v4 = graph.addVertex(4)
 
             val actualValue = SCCFinder.findSCC(graph)
-            val expectedValue =
-                mutableSetOf(
-                    mutableSetOf(v1),
-                    mutableSetOf(v2),
-                    mutableSetOf(v3),
-                    mutableSetOf(v4)
-                )
+            val expectedValue = mutableSetOf(mutableSetOf(v1), mutableSetOf(v2), mutableSetOf(v3), mutableSetOf(v4))
 
             assertEquals(expectedValue, actualValue)
         }
@@ -349,4 +343,3 @@ class SCCFinderTest {
         }
     }
 }
-

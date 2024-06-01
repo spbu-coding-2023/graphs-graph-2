@@ -1,12 +1,12 @@
 package viewmodel.graph
 
-import androidx.compose.runtime.State
-import androidx.compose.ui.unit.Dp
 import ARROW_DEPTH
 import ARROW_SIZE
 import SQRT_3
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import kotlin.math.sqrt
 
 class EdgeViewModel<D>(
@@ -71,7 +71,6 @@ class EdgeViewModel<D>(
         return listOf(
             Pair(arrowEndPointX, arrowEndPointY),
             Pair(arrowLeftPointX, arrowLeftPointY),
-            Pair(arrowRightPointX, arrowRightPointY)
-        )
+            Pair(arrowRightPointX, arrowRightPointY))
     }
 }

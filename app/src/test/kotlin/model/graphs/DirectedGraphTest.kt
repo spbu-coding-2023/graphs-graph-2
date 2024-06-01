@@ -57,16 +57,12 @@ class DirectedGraphTest {
                 val v0 = defaultVerticesList[0]
                 val v1 = defaultVerticesList[1]
 
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getEdge(v1, v0)
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getEdge(v1, v0) }
             }
 
             @TestAllDirectedGraphs
             fun `trying to get non-existent edge should throw an exception`(graph: DirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getEdge(Vertex(2, 12), Vertex(85, 6))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getEdge(Vertex(2, 12), Vertex(85, 6)) }
             }
         }
     }
@@ -112,9 +108,7 @@ class DirectedGraphTest {
         inner class `Vertex isn't in the graph` {
             @TestAllDirectedGraphs
             fun `exception should be thrown`(graph: DirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getNeighbours(Vertex(2201, 2006))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getNeighbours(Vertex(2201, 2006)) }
             }
         }
     }
@@ -160,9 +154,7 @@ class DirectedGraphTest {
         inner class `Vertex isn't in the graph` {
             @TestAllDirectedGraphs
             fun `exception should be thrown`(graph: DirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.getOutgoingEdges(Vertex(2611, 2005))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.getOutgoingEdges(Vertex(2611, 2005)) }
             }
         }
     }
@@ -296,9 +288,7 @@ class DirectedGraphTest {
 
                     val v2 = defaultVerticesList[2]
 
-                    assertThrows(IllegalArgumentException::class.java) {
-                        graph.addEdge(v2, v2)
-                    }
+                    assertThrows(IllegalArgumentException::class.java) { graph.addEdge(v2, v2) }
                 }
             }
         }
@@ -312,9 +302,7 @@ class DirectedGraphTest {
 
                 val v0 = defaultVerticesList[0]
 
-                assertThrows(IllegalArgumentException::class.java) {
-                    graph.addEdge(Vertex(2210, 2005), v0)
-                }
+                assertThrows(IllegalArgumentException::class.java) { graph.addEdge(Vertex(2210, 2005), v0) }
             }
 
             @TestAllDirectedGraphs
@@ -324,9 +312,7 @@ class DirectedGraphTest {
 
                 val v0 = defaultVerticesList[0]
 
-                assertThrows(IllegalArgumentException::class.java) {
-                    graph.addEdge(v0, Vertex(2510, 1917))
-                }
+                assertThrows(IllegalArgumentException::class.java) { graph.addEdge(v0, Vertex(2510, 1917)) }
             }
 
             @TestAllDirectedGraphs
@@ -421,16 +407,12 @@ class DirectedGraphTest {
                 val v3 = defaultVerticesList[3]
                 val v4 = defaultVerticesList[4]
 
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeEdge(graph.getEdge(v4, v3))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeEdge(graph.getEdge(v4, v3)) }
             }
 
             @TestAllDirectedGraphs
             fun `non-existing edge should throw an exception`(graph: DirectedGraph<Int>) {
-                assertThrows(NoSuchElementException::class.java) {
-                    graph.removeEdge(Edge(Vertex(0, 0), Vertex(1, 1)))
-                }
+                assertThrows(NoSuchElementException::class.java) { graph.removeEdge(Edge(Vertex(0, 0), Vertex(1, 1))) }
             }
         }
     }
