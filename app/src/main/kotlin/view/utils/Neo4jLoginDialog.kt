@@ -16,6 +16,7 @@ import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import model.io.neo4j.Neo4jRepositoryHandler
 
+@Composable
 fun Neo4jLoginDialog(onDismiss: () -> Unit) {
     var uriInput by remember { mutableStateOf("") }
     var userInput by remember { mutableStateOf("") }
