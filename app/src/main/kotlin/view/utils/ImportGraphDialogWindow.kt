@@ -1,108 +1,111 @@
 package view.utils
 
-import model.io.sql.SQLDatabaseModule
+import JSON
+import MyAppTheme
+import NEO4J
+import SQLITE
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import model.io.neo4j.Neo4jRepositoryHandler
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ImportGraphDialogWindow() {
-    val selectedGraphID = remember { mutableStateOf(0) }
-    val closeDialog = remember { mutableStateOf(false) }
-    val expanded = remember { mutableStateOf(false) }
-    val importFromDBRequired = remember { mutableStateOf(false) }
-    val selectedGraphName = remember { mutableStateOf("") }
-    val graphs = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
+    var selectedDatabase by remember { mutableStateOf("") }
+    var importGraphClicked by remember { mutableStateOf(false) }
 
-    SQLDatabaseModule.getGraphNames(graphs)
+    val fontSize = 16.sp
+    val buttonColor = MaterialTheme.colors.secondary
 
-    if (!closeDialog.value) {
-        Dialog(
-            onDismissRequest = {},
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
-            Column(
-                modifier = Modifier.background(Color.White)
-                    .padding(top = 16.dp, end = 16.dp, start = 16.dp, bottom = 6.dp).width(350.dp).height(180.dp)
+    MyAppTheme {
+        if (!importGraphClicked) {
+            Dialog(
+                onDismissRequest = {}
             ) {
-                Text(
-                    "Select the graph:",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
-
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp)
+                Column(
+                    modifier =
+                    Modifier.background(Color.White).padding(16.dp).width(300.dp).height(290.dp)
                 ) {
-                    ExposedDropdownMenuBox(
-                        expanded = expanded.value,
-                        onExpandedChange = {
-                            expanded.value = !expanded.value
-                        },
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                    Text(
+                        "Import from...",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(bottom = 10.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        TextField(
-                            value = selectedGraphName.value,
-                            onValueChange = {},
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                        )
-                        ExposedDropdownMenu(
-                            expanded = expanded.value,
-                            onDismissRequest = { expanded.value = false }
-                        ) {
-                            graphs.value.forEach { graphName ->
-                                // TODO: fix its layout
-                                DropdownMenuItem(
-                                    onClick = {
-                                        selectedGraphName.value = graphName.second
-                                        selectedGraphID.value = graphName.first
-                                        expanded.value = false
-                                    }
-                                ) {
-                                    Text(text = graphName.second)
-                                }
+                        Button(
+                            modifier =
+                            Modifier.height(60.dp).width(250.dp),
+                            colors = ButtonDefaults.buttonColors(buttonColor),
+                            onClick = {
+                                selectedDatabase = SQLITE
+                                importGraphClicked = true
                             }
+                        ) {
+                            Text(SQLITE, color = Color.White, fontSize = fontSize)
                         }
                     }
-                }
 
-                Row(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        modifier = Modifier.width(145.dp).height(50.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-                        onClick = {
-                            importFromDBRequired.value = true
-                            expanded.value = false
-                            closeDialog.value = true
-                        }
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Text("Import", color = Color.White)
+                        Button(
+                            modifier =
+                            Modifier.height(60.dp).width(250.dp),
+                            colors = ButtonDefaults.buttonColors(buttonColor),
+                            onClick = {
+                                selectedDatabase = NEO4J
+                                importGraphClicked = true
+                            }
+                        ) {
+                            Text(NEO4J, color = Color.White, fontSize = fontSize)
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            modifier =
+                            Modifier.height(60.dp).width(250.dp),
+                            colors = ButtonDefaults.buttonColors(buttonColor),
+                            onClick = {
+                                selectedDatabase = JSON
+                                importGraphClicked = true
+                            }
+                        ) {
+                            Text(JSON, color = Color.White, fontSize = fontSize)
+                        }
                     }
                 }
             }
         }
-    }
-    if (importFromDBRequired.value) {
-        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
+        if (importGraphClicked) {
+            when (selectedDatabase) {
+                SQLITE -> SQLiteImportGraphDialogWindow()
+                NEO4J -> Neo4jImportGraphDialogWindow { importGraphClicked = false }
+            }
+        }
     }
 }

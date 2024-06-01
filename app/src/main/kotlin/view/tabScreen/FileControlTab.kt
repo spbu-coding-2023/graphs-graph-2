@@ -1,5 +1,8 @@
 package view.tabScreen
 
+import JSON
+import NEO4J
+import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +24,6 @@ import kotlinx.coroutines.delay
 import model.io.neo4j.Neo4jRepositoryHandler
 import model.io.sql.SQLDatabaseModule
 import view.utils.*
-import viewmodel.MainScreenViewModel
 import java.awt.FileDialog
 import java.awt.Frame
 
@@ -36,7 +38,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showNeo4jDialog by remember { mutableStateOf(false) }
 
-    val databases = arrayOf("SQLite", "Neo4j", "JSON")
+    val databases = arrayOf(SQLITE, NEO4J, JSON)
     var selectedDatabase by remember { mutableStateOf(databases[0]) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
@@ -126,7 +128,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 }
             }
 
-            if (selectedDatabase == "JSON") {
+            if (selectedDatabase == JSON) {
                 val fileDialog = FileDialog(null as Frame?, "Select File to Open")
                 fileDialog.mode = FileDialog.LOAD
                 Button(
@@ -187,7 +189,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showSaveDialog) {
-        if (selectedDatabase == "SQLite") {
+        if (selectedDatabase == SQLITE) {
             val existingGraphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
             SQLDatabaseModule.getGraphNames(existingGraphNamesSQL)
 
@@ -221,7 +223,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     showSaveDialog = false
                 }
             }
-        } else if (selectedDatabase == "Neo4j") {
+        } else if (selectedDatabase == NEO4J) {
             if (!Neo4jRepositoryHandler.isRepoInit) {
                 showSaveDialog = false
                 showNeo4jDialog = true
@@ -260,14 +262,8 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
 
     if (showLoadDialog) {
         when (selectedDatabase) {
-            "SQLite" -> ImportGraphDialogWindow()
-            "Neo4j" -> {
-                if (!Neo4jRepositoryHandler.isRepoInit) {
-                    showLoadDialog = false
-                    showNeo4jDialog = true
-                }
-                Neo4jImportGraphDialogWindow { showLoadDialog = false }
-            }
+            SQLITE -> SQLiteImportGraphDialogWindow()
+            NEO4J -> Neo4jImportGraphDialogWindow { showLoadDialog = false }
         }
     }
 
@@ -287,4 +283,26 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
             errorMessage = ""
         }
     }
+}
+
+private fun isValidNeo4jName(name: String): Boolean {
+    if (name.isEmpty()) return false
+    for (i in name.indices) {
+        val isValidChar = when (name[i].code) {
+            45 -> {                      // -
+                if (i!= 0) true else false
+            }
+            in 48..57 -> {          // 0-9
+                if (i != 0) true else false
+            }
+            in 65..90 -> true       // A-Z
+            95 -> true                   // _
+            in 97..122 -> true      // a-z
+            else -> false
+        }
+
+        if (isValidChar) continue else return false
+    }
+
+    return true
 }

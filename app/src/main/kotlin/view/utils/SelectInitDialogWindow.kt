@@ -1,9 +1,11 @@
 package view.utils
 
+import MyAppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -27,63 +29,64 @@ class SelectInitDialogWindow(
     fun GraphInitDialogWindow(
         showDialog: Boolean,
     ) {
+        MyAppTheme {
+            DisposableEffect(Unit) {
+                if (showDialog) {
+                    showGraphDialog = true
+                }
 
-        DisposableEffect(Unit) {
-            if (showDialog) {
-                showGraphDialog = true
+                onDispose { showGraphDialog = false }
             }
 
-            onDispose { showGraphDialog = false }
-        }
-
-        if (showGraphDialog) {
-            Dialog(onDismissRequest = {}, properties = DialogProperties(dismissOnBackPress = false)) {
-                Column(
-                    modifier = Modifier.background(Color.White).padding(16.dp).width(350.dp).height(150.dp)
-                ) {
-                    Text(
-                        "Welcome to WUDU!",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 10.dp)
-                    )
-                    Text("Please select how to initialize the graph")
-
-                    Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
-
-                    Row(
-                        modifier = Modifier.padding(10.dp).fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(30.dp)
+            if (showGraphDialog) {
+                Dialog(onDismissRequest = {}, properties = DialogProperties(dismissOnBackPress = false)) {
+                    Column(
+                        modifier = Modifier.background(Color.White).padding(16.dp).width(350.dp).height(150.dp)
                     ) {
-                        Button(modifier = Modifier.width(145.dp).height(50.dp),
-                            colors = ButtonDefaults.buttonColors(Color.Red),
-                            onClick = {
-                                showGraphDialog = false
-                                showCreateGraphDialog = true
-                            }) {
-                            Text("Create", color = Color.White)
-                        }
+                        Text(
+                            "Welcome to WUDU!",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(bottom = 10.dp)
+                        )
+                        Text("Please select how to initialize the graph")
 
-                        Button(modifier = Modifier.width(145.dp).height(50.dp),
-                            colors = ButtonDefaults.buttonColors(Color.Blue),
-                            onClick = {
-                                showGraphDialog = false
-                                showImportTab = true
-                            }
+                        Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
+
+                        Row(
+                            modifier = Modifier.padding(10.dp).fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(30.dp)
                         ) {
-                            Text("Import", color = Color.White)
+                            Button(modifier = Modifier.width(145.dp).height(50.dp),
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                                onClick = {
+                                    showGraphDialog = false
+                                    showCreateGraphDialog = true
+                                }) {
+                                Text("Create", color = Color.White)
+                            }
+
+                            Button(modifier = Modifier.width(145.dp).height(50.dp),
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
+                                onClick = {
+                                    showGraphDialog = false
+                                    showImportTab = true
+                                }
+                            ) {
+                                Text("Import", color = Color.White)
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (showCreateGraphDialog) {
-            CreateGraphDialogWindow(SetupGraphViewModel())
-        }
+            if (showCreateGraphDialog) {
+                CreateGraphDialogWindow(SetupGraphViewModel())
+            }
 
-        if (showImportTab) {
-            ImportGraphDialogWindow()
+            if (showImportTab) {
+                ImportGraphDialogWindow()
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package view.utils
 
+import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,7 +31,7 @@ fun EditDBWindow(DBType: String, onDismiss: () -> Unit) {
     var updateGraphNames by remember { mutableStateOf(false) }
     var graphNameToReplaceWith by remember { mutableStateOf("")}
 
-    if (DBType == "SQLite") {
+    if (DBType == SQLITE) {
         SQLDatabaseModule.getGraphNames(graphNamesSQL)
         if (graphNamesSQL.value.isNotEmpty()) showDialog = true
         else ErrorWindow("Database doesn't have any Graphs", {})
