@@ -10,7 +10,7 @@ Application that lets you create, save, visualise, analyse and modify 4 differen
 ### All in all:
 - Support 4 types of graphs
 - Use all in all - 9 algorithms (SCC, bridges, shortest paths, cycles, layout, communities, etc. see [wiki])
-- Store graphs anywhere you want: SQLite, Neo4J, JSON (see [wiki])
+- Store graphs anywhere you want: SQLite, Neo4J, JSON (WIP) (see [wiki])
 - Drag, zoom, replace nodes
 
 ![alt text][main_screen_image]
