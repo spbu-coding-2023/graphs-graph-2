@@ -12,11 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.zIndex
-import maxEdgeStrokeWidth
-import minEdgeStrokeWidth
 import viewmodel.WindowViewModel
 import viewmodel.graph.EdgeViewModel
 
+val MAX_EDGE_STROKE_WIDTH = 12f
+val MIN_EDGE_STROKE_WIDTH = 4f
 
 @Composable
 fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
@@ -39,7 +39,7 @@ fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
     Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
         drawLine(
             color = edgeColor,
-            strokeWidth = (5f * scale).coerceIn(minEdgeStrokeWidth, maxEdgeStrokeWidth),
+            strokeWidth = (5f * scale).coerceIn(MIN_EDGE_STROKE_WIDTH, MAX_EDGE_STROKE_WIDTH),
             start =
             Offset(
                 firstVertexCenterX.toPx(),
