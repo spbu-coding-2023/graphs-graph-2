@@ -29,6 +29,10 @@ class VertexViewModel<D>(
         y.value += dragAmount.y
     }
 
+    fun switchSelection() {
+        isSelected.value = !isSelected.value
+    }
+
     val getVertexID
         get() = vertex.id
 }

@@ -62,7 +62,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
                     }
                 }
                 detectTapGestures(
-                    onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
+                    onTap = { viewModel.switchSelection() }
                 )
             },
         contentAlignment = Alignment.Center

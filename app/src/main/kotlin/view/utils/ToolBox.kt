@@ -46,9 +46,7 @@ fun <D> ToolBox(graphVM: GraphViewModel<D>, currentScale: MutableState<Float>) {
                     .width(80.dp)
                     .height(50.dp)
                     .clip(shape = RoundedCornerShape(25.dp)),
-                onClick = {
-                    graphVM.clearGraph()
-                }
+                onClick = graphVM::clearGraph
             ) {
                 Text("Clear")
             }

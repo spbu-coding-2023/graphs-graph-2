@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import view.utils.RadioColumn
 import viewmodel.graph.SetupGraphViewModel
 import viewmodel.graph.createGraphFromTypesIndices
 
@@ -93,44 +94,6 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                 selectedOrientationIndex.value,
                 selectedWeightinessIndex.value
             )
-        }
-    }
-}
-
-@Composable
-fun RadioColumn(
-    selectText: String,
-    currentDataIndex: MutableState<Int>,
-    radioOptions: List<String>,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Text(selectText)
-        Spacer(modifier = Modifier.height(8.dp))
-        Column {
-            radioOptions.forEachIndexed { index, option ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .fillMaxWidth()
-                        .clickable { currentDataIndex.value = index }
-                ) {
-                    RadioButton(
-                        selected = currentDataIndex.value == index,
-                        onClick = { currentDataIndex.value = index },
-                        colors = RadioButtonDefaults.colors(
-                            selectedColor = MaterialTheme.colors.secondary
-                        )
-                    )
-                    Text(
-                        text = option,
-                        style = TextStyle(fontSize = 16.sp),
-                        color = if (currentDataIndex.value == index) Color.Black else Color.Gray
-                    )
-                }
-            }
         }
     }
 }
