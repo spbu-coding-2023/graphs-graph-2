@@ -1,31 +1,28 @@
 package view.tabScreen
 
-import JSON
-import NEO4J
-import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import viewmodel.graph.GraphViewModel
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import model.io.neo4j.Neo4jRepositoryHandler
 import model.io.sql.SQLDatabaseModule
 import view.utils.dialogWindows.*
+import viewmodel.graph.GraphViewModel
 import java.awt.FileDialog
 import java.awt.Frame
+
+enum class DatabaseTypes {
+    SQLite, NEO4J, JSON
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -38,8 +35,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showNeo4jDialog by remember { mutableStateOf(false) }
 
-    val databases = arrayOf(SQLITE, NEO4J, JSON)
-    var selectedDatabase by remember { mutableStateOf(databases[0]) }
+    var selectedDatabase by remember { mutableStateOf(DatabaseTypes.SQLite) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -98,7 +94,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 modifier = Modifier.width(fieldWidth).fillMaxHeight()
             ) {
                 TextField(
-                    value = selectedDatabase,
+                    value = selectedDatabase.toString(),
                     onValueChange = { graphName = it },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -114,7 +110,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                         expanded = false
                     }
                 ) {
-                    databases.forEach { db ->
+                    DatabaseTypes.entries.forEach { db ->
                         DropdownMenuItem(
                             modifier = Modifier,
                             onClick = {
@@ -122,13 +118,13 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                                 expanded = false
                             }
                         ) {
-                            Text(text = db)
+                            Text(db.toString())
                         }
                     }
                 }
             }
 
-            if (selectedDatabase == JSON) {
+            if (selectedDatabase == DatabaseTypes.JSON) {
                 val fileDialog = FileDialog(null as Frame?, "Select File to Open")
                 fileDialog.mode = FileDialog.LOAD
                 Button(
@@ -189,13 +185,13 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 
     if (showSaveDialog) {
-        if (selectedDatabase == SQLITE) {
+        if (selectedDatabase == DatabaseTypes.SQLite) {
             val existingGraphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
             SQLDatabaseModule.getGraphNames(existingGraphNamesSQL)
 
             if (existingGraphNamesSQL.value.any { it.second == graphName }) {
                 showErrorWindow = true
-                errorMessage = "Graph with name: ${graphName} already exists"
+                errorMessage = "Graph with name: $graphName already exists"
                 graphName = ""
                 showSaveDialog = false
             } else {
@@ -223,7 +219,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                     showSaveDialog = false
                 }
             }
-        } else if (selectedDatabase == NEO4J) {
+        } else if (selectedDatabase == DatabaseTypes.NEO4J) {
             if (!Neo4jRepositoryHandler.isRepoInit) {
                 showSaveDialog = false
                 showNeo4jDialog = true
@@ -262,8 +258,9 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
 
     if (showLoadDialog) {
         when (selectedDatabase) {
-            SQLITE -> SQLiteImportGraphDialogWindow()
-            NEO4J -> Neo4jImportGraphDialogWindow { showLoadDialog = false }
+            DatabaseTypes.SQLite -> SQLiteImportGraphDialogWindow()
+            DatabaseTypes.NEO4J -> Neo4jImportGraphDialogWindow { showLoadDialog = false }
+            DatabaseTypes.JSON -> TODO()
         }
     }
 
@@ -285,6 +282,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     }
 }
 
+// TODO
 private fun isValidNeo4jName(name: String): Boolean {
     if (name.isEmpty()) return false
     for (i in name.indices) {

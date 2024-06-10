@@ -19,10 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import model.io.sql.SQLDatabaseModule
+import view.tabScreen.DatabaseTypes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EditDBWindow(DBType: String, onDismiss: () -> Unit) {
+fun EditDBWindow(DBType: DatabaseTypes, onDismiss: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     val graphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
     var expanded by remember { mutableStateOf(false) }
@@ -31,10 +32,16 @@ fun EditDBWindow(DBType: String, onDismiss: () -> Unit) {
     var updateGraphNames by remember { mutableStateOf(false) }
     var graphNameToReplaceWith by remember { mutableStateOf("")}
 
-    if (DBType == SQLITE) {
+    if (DBType == DatabaseTypes.SQLite) {
         SQLDatabaseModule.getGraphNames(graphNamesSQL)
         if (graphNamesSQL.value.isNotEmpty()) showDialog = true
         else ErrorWindow("Database doesn't have any Graphs", {})
+    } else if (DBType == DatabaseTypes.NEO4J) {
+        ErrorWindow("Sorry! This feature will be implemented in future release") {}
+        // TODO
+    } else {
+        ErrorWindow("Sorry! This feature will be implemented in future release") {}
+        // TODO
     }
 
 
