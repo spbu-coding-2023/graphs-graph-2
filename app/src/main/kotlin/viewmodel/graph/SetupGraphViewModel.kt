@@ -262,3 +262,60 @@ class SetupGraphViewModel {
         }
     }
 }
+
+// TODO: REFACTOR
+@Composable
+fun createGraphFromTypesIndices(
+    viewModel: SetupGraphViewModel,
+    storedDataIndex: Int,
+    orientationIndex: Int,
+    weightnessIndex: Int
+) {
+    val storedData = when (storedDataIndex) {
+        0 -> SetupGraphViewModel.GraphType.Integer
+        1 -> SetupGraphViewModel.GraphType.UInteger
+        2 -> SetupGraphViewModel.GraphType.String
+        else -> SetupGraphViewModel.GraphType.Integer // default to integer
+    }
+
+    val graphStructure = when (orientationIndex) {
+        0 -> SetupGraphViewModel.GraphStructure.Undirected
+        1 -> SetupGraphViewModel.GraphStructure.Directed
+        else -> SetupGraphViewModel.GraphStructure.Undirected // default to undirected
+    }
+
+    val weight = when (weightnessIndex) {
+        0 -> SetupGraphViewModel.Weight.Unweighted
+        1 -> SetupGraphViewModel.Weight.Weighted
+        else -> SetupGraphViewModel.Weight.Unweighted // default to unweighted
+    }
+
+    return viewModel.createGraphAndApplyScreen(storedData, graphStructure, weight)
+}
+
+fun getGraphVMParameter(
+    storedDataType: Int,
+    structureType: Int,
+    weightType: Int
+): Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight> {
+    val storedData = when (storedDataType) {
+        0 -> SetupGraphViewModel.GraphType.Integer
+        1 -> SetupGraphViewModel.GraphType.UInteger
+        2 -> SetupGraphViewModel.GraphType.String
+        else -> SetupGraphViewModel.GraphType.Integer // default to integer
+    }
+
+    val graphStructure = when (structureType) {
+        0 -> SetupGraphViewModel.GraphStructure.Undirected
+        1 -> SetupGraphViewModel.GraphStructure.Directed
+        else -> SetupGraphViewModel.GraphStructure.Undirected // default to directed
+    }
+
+    val weight = when (weightType) {
+        0 -> SetupGraphViewModel.Weight.Unweighted
+        1 -> SetupGraphViewModel.Weight.Weighted
+        else -> SetupGraphViewModel.Weight.Unweighted // default to weighted
+    }
+
+    return Triple(storedData, graphStructure, weight)
+}

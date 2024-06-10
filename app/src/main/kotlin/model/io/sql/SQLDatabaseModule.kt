@@ -5,10 +5,10 @@ import androidx.compose.runtime.*
 import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import view.utils.ErrorWindow
-import view.utils.getGraphVMParameter
 import viewmodel.MainScreenViewModel
 import viewmodel.graph.GraphViewModel
 import viewmodel.graph.SetupGraphViewModel
+import viewmodel.graph.getGraphVMParameter
 import java.io.File
 import java.sql.*
 import kotlin.system.exitProcess
