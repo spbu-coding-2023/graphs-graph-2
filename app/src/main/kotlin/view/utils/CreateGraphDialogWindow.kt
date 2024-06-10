@@ -20,9 +20,9 @@ import viewmodel.graph.SetupGraphViewModel
 @Composable
 fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
     var closeDialog by remember { mutableStateOf(false) }
-    var selectedStoredDataIndex by remember { mutableStateOf(0) }
-    var selectedOrientationIndex by remember { mutableStateOf(0) }
-    var selectedWeightinessIndex by remember { mutableStateOf(0) }
+    val selectedStoredDataIndex = remember { mutableStateOf(0) }
+    val selectedOrientationIndex = remember { mutableStateOf(0) }
+    val selectedWeightinessIndex = remember { mutableStateOf(0) }
     var createGraphClicked by remember { mutableStateOf(false) }
 
     MyAppTheme {
@@ -32,8 +32,11 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                 properties = DialogProperties(usePlatformDefaultWidth = false)
             ) {
                 Column(
-                    modifier =
-                    Modifier.background(Color.White).padding(16.dp).width(700.dp).height(290.dp)
+                    modifier = Modifier
+                        .background(Color.White)
+                        .padding(16.dp)
+                        .widthIn(min = 200.dp, max = 700.dp)
+                        .wrapContentHeight()
                 ) {
                     Text(
                         "Create Graph",
@@ -41,131 +44,40 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                         fontSize = 20.sp,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
-                    Row(modifier = Modifier.fillMaxWidth().height(200.dp)) {
-                        Column(modifier = Modifier.width(250.dp).fillMaxHeight()) {
-                            Text("Select stored data:")
-
-                            Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
-
-                            val radioOptions = listOf("Integer", "UInteger", "String")
-
-                            Column(modifier = Modifier.width(220.dp)) {
-                                radioOptions.forEachIndexed { index, option ->
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier =
-                                        Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedStoredDataIndex = index
-                                        }
-                                    ) {
-                                        RadioButton(
-                                            selected = selectedStoredDataIndex == index,
-                                            onClick = { selectedStoredDataIndex = index },
-                                            colors =
-                                            RadioButtonDefaults.colors(
-                                                selectedColor = MaterialTheme.colors.secondary
-                                            )
-                                        )
-                                        Spacer(Modifier.width(1.dp))
-                                        Text(
-                                            text = option,
-                                            style = TextStyle(fontSize = 16.sp),
-                                            color =
-                                            if (selectedStoredDataIndex == index) Color.Black
-                                            else Color.Gray
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
-                        Column(modifier = Modifier.width(250.dp).fillMaxHeight()) {
-                            Text("Select the orientation:")
-
-                            Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
-
-                            val radioOptions = listOf("Undirected", "Directed")
-                            Column(modifier = Modifier.width(220.dp)) {
-                                radioOptions.forEachIndexed { index, option ->
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier =
-                                        Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedOrientationIndex = index
-                                        }
-                                    ) {
-                                        RadioButton(
-                                            selected = selectedOrientationIndex == index,
-                                            onClick = { selectedOrientationIndex = index },
-                                            colors =
-                                            RadioButtonDefaults.colors(
-                                                selectedColor = MaterialTheme.colors.secondary
-                                            )
-                                        )
-                                        Spacer(Modifier.width(1.dp))
-                                        Text(
-                                            text = option,
-                                            style = TextStyle(fontSize = 16.sp),
-                                            color =
-                                            if (selectedOrientationIndex == index) Color.Black
-                                            else Color.Gray
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
-                        Column(modifier = Modifier.width(250.dp).height(200.dp)) {
-                            Text("Select the weightiness:")
-
-                            Row(modifier = Modifier.height(20.dp).fillMaxWidth()) {}
-
-                            Column(modifier = Modifier.width(220.dp)) {
-                                val radioOptions = listOf("Unweighted", "Weighted")
-
-                                radioOptions.forEachIndexed { index, option ->
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier =
-                                        Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedWeightinessIndex = index
-                                        }
-                                    ) {
-                                        RadioButton(
-                                            selected = selectedWeightinessIndex == index,
-                                            onClick = { selectedWeightinessIndex = index },
-                                            colors =
-                                            RadioButtonDefaults.colors(
-                                                selectedColor = MaterialTheme.colors.secondary
-                                            )
-                                        )
-                                        Spacer(Modifier.width(1.dp))
-                                        Text(
-                                            text = option,
-                                            style = TextStyle(fontSize = 16.sp),
-                                            color =
-                                            if (selectedWeightinessIndex == index) Color.Black
-                                            else Color.Gray
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                    Row(modifier = Modifier.wrapContentHeight().fillMaxWidth()) {
+                        RadioColumn(
+                            "Select stored data:",
+                            selectedStoredDataIndex,
+                            listOf("Integer", "UInteger", "String"),
+                            Modifier.weight(1f).padding(horizontal = 8.dp)
+                        )
+                        RadioColumn(
+                            "Select the orientation:",
+                            selectedOrientationIndex,
+                            listOf("Undirected", "Directed"),
+                            Modifier.weight(1f).padding(horizontal = 8.dp)
+                        )
+                        RadioColumn(
+                            "Select the weightiness:",
+                            selectedWeightinessIndex,
+                            listOf("Unweighted", "Weighted"),
+                            Modifier.weight(1f).padding(horizontal = 8.dp)
+                        )
                     }
-
                     Row(
-                        modifier = Modifier.padding(10.dp).fillMaxWidth().height(50.dp),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.End
                     ) {
                         Button(
-                            modifier = Modifier.width(145.dp).height(50.dp),
+                            modifier = Modifier.wrapContentSize(),
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
                             onClick = {
                                 closeDialog = true
                                 createGraphClicked = true
                             }
-
                         ) {
                             Text("Apply", color = Color.White)
                         }
@@ -176,10 +88,48 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
         if (createGraphClicked) {
             createGraphFromTypesIndices(
                 viewModel,
-                selectedStoredDataIndex,
-                selectedOrientationIndex,
-                selectedWeightinessIndex
+                selectedStoredDataIndex.value,
+                selectedOrientationIndex.value,
+                selectedWeightinessIndex.value
             )
+        }
+    }
+}
+
+@Composable
+fun RadioColumn(
+    selectText: String,
+    currentDataIndex: MutableState<Int>,
+    radioOptions: List<String>,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Text(selectText)
+        Spacer(modifier = Modifier.height(8.dp))
+        Column {
+            radioOptions.forEachIndexed { index, option ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .fillMaxWidth()
+                        .clickable { currentDataIndex.value = index }
+                ) {
+                    RadioButton(
+                        selected = currentDataIndex.value == index,
+                        onClick = { currentDataIndex.value = index },
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = MaterialTheme.colors.secondary
+                        )
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = option,
+                        style = TextStyle(fontSize = 16.sp),
+                        color = if (currentDataIndex.value == index) Color.Black else Color.Gray
+                    )
+                }
+            }
         }
     }
 }
@@ -214,7 +164,11 @@ fun createGraphFromTypesIndices(
     return viewModel.createGraphAndApplyScreen(storedData, graphStructure, weight)
 }
 
-fun getGraphVMParameter(storedDataType: Int, structureType: Int, weightType: Int): Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight> {
+fun getGraphVMParameter(
+    storedDataType: Int,
+    structureType: Int,
+    weightType: Int
+): Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight> {
     val storedData = when (storedDataType) {
         0 -> SetupGraphViewModel.GraphType.Integer
         1 -> SetupGraphViewModel.GraphType.UInteger
