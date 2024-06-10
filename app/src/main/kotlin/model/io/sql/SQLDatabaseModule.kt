@@ -1,10 +1,7 @@
 package model.io.sql
 
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import view.utils.ErrorWindow
@@ -14,8 +11,7 @@ import viewmodel.graph.GraphViewModel
 import viewmodel.graph.SetupGraphViewModel
 import java.io.File
 import java.sql.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlin.system.exitProcess
 
 object SQLDatabaseModule {
     private const val DB_DIRECTORY = "database"
@@ -114,8 +110,8 @@ object SQLDatabaseModule {
     @Composable
     fun getGraphNames(graphNames: MutableState<ArrayList<Pair<Int, String>>>) {
         val selectNamesSQL = insertQueries.split(":")[3]
-        val showErrorMessage = remember { mutableStateOf(false) }
-        val errorMessage = remember { mutableStateOf("") }
+        var showErrorMessage by remember { mutableStateOf(false) }
+        var errorMessage by remember { mutableStateOf("") }
         graphNames.value = arrayListOf()
 
         try {
@@ -128,11 +124,11 @@ object SQLDatabaseModule {
                 }
             }
         } catch (e: SQLException) {
-            showErrorMessage.value = true
-            errorMessage.value = e.message.toString()
+            showErrorMessage = true
+            errorMessage = e.message.toString()
         }
-        if (showErrorMessage.value) {
-            ErrorWindow(errorMessage.value, { System.exit(-1) })
+        if (showErrorMessage) {
+            ErrorWindow(errorMessage) { exitProcess(-1) }
         }
     }
 
@@ -140,8 +136,8 @@ object SQLDatabaseModule {
     @Composable
     fun <D> importGraph(graphId: Int) {
         val graphVMState = remember { mutableStateOf<GraphViewModel<D>?>(null) }
-        val showErrorMessage = remember { mutableStateOf(false) }
-        val updateIsRequired = remember { mutableStateOf(false) }
+        var showErrorMessage by remember { mutableStateOf(false) }
+        var updateIsRequired by remember { mutableStateOf(false) }
         var currentGraphSetup: Pair<Triple<SetupGraphViewModel.GraphType,
                 SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight>, String>? = null
 
@@ -156,7 +152,7 @@ object SQLDatabaseModule {
                     if (resultSet.next()) {
                         currentGraphSetup = importGraphInfo(graphId)
                     } else {
-                        showErrorMessage.value = true
+                        showErrorMessage = true
                         throw SQLException("Graph with ID $graphId not found.")
                     }
                 }
@@ -171,25 +167,25 @@ object SQLDatabaseModule {
                 graphId,
                 graphVMState
             )
-            updateIsRequired.value = true
+            updateIsRequired = true
 
         } catch (e: SQLException) {
             e.printStackTrace()
-            showErrorMessage.value = true
+            showErrorMessage = true
         }
 
-        if (updateIsRequired.value) return importGraphUI(showErrorMessage, graphVMState, graphId)
+        if (updateIsRequired) return importGraphUI(showErrorMessage, graphVMState, graphId)
     }
 
     @Composable
     fun <D> importGraphUI(
-        showErrorMessage: MutableState<Boolean>,
+        showErrorMessage: Boolean,
         graphVMState: MutableState<GraphViewModel<D>?>,
         graphId: Int
     ) {
-        if (showErrorMessage.value) {
-            ErrorWindow("Graph with ID $graphId not found.", { System.exit(-1) })
-            System.exit(-1)
+        if (showErrorMessage) {
+            ErrorWindow("Graph with ID $graphId not found.") { exitProcess(-1) }
+            exitProcess(-1)
         }
         if (graphVMState.value != null) {
             graphVMState.value?.updateIsRequired?.value = true
@@ -295,8 +291,8 @@ object SQLDatabaseModule {
                     getGraphVMParameter(it1, it2, it)
                 }
             }
-        } ?: throw NoSuchElementException("No info found about graph with ID = ${graphId}"),
-            graphName ?: throw NoSuchElementException("Graph with ID = ${graphId} has no name"))
+        } ?: throw NoSuchElementException("No info found about graph with ID = $graphId"),
+            graphName ?: throw NoSuchElementException("Graph with ID = $graphId has no name"))
     }
 
     fun deleteGraph(graphId: Int) {

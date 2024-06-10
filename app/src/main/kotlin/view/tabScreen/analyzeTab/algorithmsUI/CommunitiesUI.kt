@@ -5,9 +5,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import view.tabScreen.analyzeTab.borderPadding
 import view.tabScreen.analyzeTab.horizontalGap
@@ -17,7 +15,7 @@ import viewmodel.graph.GraphViewModel
 
 @Composable
 fun <D> CommunitiesUI(graphVM: GraphViewModel<D>) {
-    val showErrorWindow = remember { mutableStateOf(false) }
+    var showErrorWindow by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier.height(rowHeight).padding(borderPadding),
@@ -28,7 +26,7 @@ fun <D> CommunitiesUI(graphVM: GraphViewModel<D>) {
                 modifier = Modifier.fillMaxSize(),
                 onClick = {
                     if (!graphVM.findCommunities()) {
-                        showErrorWindow.value = true
+                        showErrorWindow = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
@@ -38,7 +36,7 @@ fun <D> CommunitiesUI(graphVM: GraphViewModel<D>) {
         }
     }
 
-    if (showErrorWindow.value) {
-        ErrorWindow("No communities were found", { showErrorWindow.value = false })
+    if (showErrorWindow) {
+        ErrorWindow("No communities were found") { showErrorWindow = false }
     }
 }

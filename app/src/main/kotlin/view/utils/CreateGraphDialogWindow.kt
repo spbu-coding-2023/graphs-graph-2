@@ -19,14 +19,14 @@ import viewmodel.graph.SetupGraphViewModel
 
 @Composable
 fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
-    val closeDialog = remember { mutableStateOf(false) }
-    val selectedStoredDataIndex = remember { mutableStateOf(0) }
-    val selectedOrientationIndex = remember { mutableStateOf(0) }
-    val selectedWeightinessIndex = remember { mutableStateOf(0) }
-    val createGraphClicked = remember { mutableStateOf(false) }
+    var closeDialog by remember { mutableStateOf(false) }
+    var selectedStoredDataIndex by remember { mutableStateOf(0) }
+    var selectedOrientationIndex by remember { mutableStateOf(0) }
+    var selectedWeightinessIndex by remember { mutableStateOf(0) }
+    var createGraphClicked by remember { mutableStateOf(false) }
 
     MyAppTheme {
-        if (!closeDialog.value) {
+        if (!closeDialog) {
             Dialog(
                 onDismissRequest = {},
                 properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -55,12 +55,12 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier =
                                         Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedStoredDataIndex.value = index
+                                            selectedStoredDataIndex = index
                                         }
                                     ) {
                                         RadioButton(
-                                            selected = selectedStoredDataIndex.value == index,
-                                            onClick = { selectedStoredDataIndex.value = index },
+                                            selected = selectedStoredDataIndex == index,
+                                            onClick = { selectedStoredDataIndex = index },
                                             colors =
                                             RadioButtonDefaults.colors(
                                                 selectedColor = MaterialTheme.colors.secondary
@@ -71,7 +71,7 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                                             text = option,
                                             style = TextStyle(fontSize = 16.sp),
                                             color =
-                                            if (selectedStoredDataIndex.value == index) Color.Black
+                                            if (selectedStoredDataIndex == index) Color.Black
                                             else Color.Gray
                                         )
                                     }
@@ -91,12 +91,12 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier =
                                         Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedOrientationIndex.value = index
+                                            selectedOrientationIndex = index
                                         }
                                     ) {
                                         RadioButton(
-                                            selected = selectedOrientationIndex.value == index,
-                                            onClick = { selectedOrientationIndex.value = index },
+                                            selected = selectedOrientationIndex == index,
+                                            onClick = { selectedOrientationIndex = index },
                                             colors =
                                             RadioButtonDefaults.colors(
                                                 selectedColor = MaterialTheme.colors.secondary
@@ -107,7 +107,7 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                                             text = option,
                                             style = TextStyle(fontSize = 16.sp),
                                             color =
-                                            if (selectedOrientationIndex.value == index) Color.Black
+                                            if (selectedOrientationIndex == index) Color.Black
                                             else Color.Gray
                                         )
                                     }
@@ -128,12 +128,12 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier =
                                         Modifier.padding(vertical = 4.dp).fillMaxWidth().clickable {
-                                            selectedWeightinessIndex.value = index
+                                            selectedWeightinessIndex = index
                                         }
                                     ) {
                                         RadioButton(
-                                            selected = selectedWeightinessIndex.value == index,
-                                            onClick = { selectedWeightinessIndex.value = index },
+                                            selected = selectedWeightinessIndex == index,
+                                            onClick = { selectedWeightinessIndex = index },
                                             colors =
                                             RadioButtonDefaults.colors(
                                                 selectedColor = MaterialTheme.colors.secondary
@@ -144,7 +144,7 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                                             text = option,
                                             style = TextStyle(fontSize = 16.sp),
                                             color =
-                                            if (selectedWeightinessIndex.value == index) Color.Black
+                                            if (selectedWeightinessIndex == index) Color.Black
                                             else Color.Gray
                                         )
                                     }
@@ -162,8 +162,8 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                             modifier = Modifier.width(145.dp).height(50.dp),
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
                             onClick = {
-                                closeDialog.value = true
-                                createGraphClicked.value = true
+                                closeDialog = true
+                                createGraphClicked = true
                             }
 
                         ) {
@@ -173,12 +173,12 @@ fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
                 }
             }
         }
-        if (createGraphClicked.value) {
+        if (createGraphClicked) {
             createGraphFromTypesIndices(
                 viewModel,
-                selectedStoredDataIndex.value,
-                selectedOrientationIndex.value,
-                selectedWeightinessIndex.value
+                selectedStoredDataIndex,
+                selectedOrientationIndex,
+                selectedWeightinessIndex
             )
         }
     }

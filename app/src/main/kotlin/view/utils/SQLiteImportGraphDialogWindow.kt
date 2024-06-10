@@ -4,9 +4,7 @@ import model.io.sql.SQLDatabaseModule
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,16 +17,16 @@ import androidx.compose.ui.window.DialogProperties
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SQLiteImportGraphDialogWindow() {
-    val selectedGraphID = remember { mutableStateOf(0) }
-    val closeDialog = remember { mutableStateOf(false) }
-    val expanded = remember { mutableStateOf(false) }
-    val importFromDBRequired = remember { mutableStateOf(false) }
-    val selectedGraphName = remember { mutableStateOf("") }
+    var selectedGraphID by remember { mutableStateOf(0) }
+    var closeDialog by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+    var importFromDBRequired by remember { mutableStateOf(false) }
+    var selectedGraphName by remember { mutableStateOf("") }
     val graphs = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
 
     SQLDatabaseModule.getGraphNames(graphs)
 
-    if (!closeDialog.value) {
+    if (!closeDialog) {
         Dialog(
             onDismissRequest = {},
             properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -49,30 +47,30 @@ fun SQLiteImportGraphDialogWindow() {
                     horizontalArrangement = Arrangement.spacedBy(30.dp)
                 ) {
                     ExposedDropdownMenuBox(
-                        expanded = expanded.value,
+                        expanded = expanded,
                         onExpandedChange = {
-                            expanded.value = !expanded.value
+                            expanded = !expanded
                         },
                         modifier = Modifier.fillMaxWidth().fillMaxHeight()
                     ) {
                         TextField(
-                            value = selectedGraphName.value,
+                            value = selectedGraphName,
                             onValueChange = {},
                             readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             modifier = Modifier.fillMaxWidth().fillMaxHeight(),
                         )
                         ExposedDropdownMenu(
-                            expanded = expanded.value,
-                            onDismissRequest = { expanded.value = false }
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
                         ) {
                             graphs.value.forEach { graphName ->
                                 // TODO: fix its layout
                                 DropdownMenuItem(
                                     onClick = {
-                                        selectedGraphName.value = graphName.second
-                                        selectedGraphID.value = graphName.first
-                                        expanded.value = false
+                                        selectedGraphName = graphName.second
+                                        selectedGraphID = graphName.first
+                                        expanded = false
                                     }
                                 ) {
                                     Text(text = graphName.second)
@@ -91,9 +89,9 @@ fun SQLiteImportGraphDialogWindow() {
                         modifier = Modifier.width(145.dp).height(50.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
                         onClick = {
-                            importFromDBRequired.value = true
-                            expanded.value = false
-                            closeDialog.value = true
+                            importFromDBRequired = true
+                            expanded = false
+                            closeDialog = true
                         }
                     ) {
                         Text("Import", color = Color.White)
@@ -102,7 +100,7 @@ fun SQLiteImportGraphDialogWindow() {
             }
         }
     }
-    if (importFromDBRequired.value) {
-        return SQLDatabaseModule.importGraph<Any>(selectedGraphID.value)
+    if (importFromDBRequired) {
+        return SQLDatabaseModule.importGraph<Any>(selectedGraphID)
     }
 }
