@@ -28,7 +28,7 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
             }
         }
         // Hoverable box over the existing Surface
-        FAQBox(interactionSource, viewmodel)
+        FAQBox(interactionSource, viewmodel.graphType.value)
         ToolBox(viewmodel.graphViewModel, scale)
     }
 }

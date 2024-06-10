@@ -29,7 +29,7 @@ class IntegrationTest {
         val viewmodel = MainScreenViewModel(UndirectedGraph<Int>(),"UndirectedGraph")
 
         composeTestRule.setContent {
-            FAQBox(interactionSource, viewmodel)
+            FAQBox(interactionSource, viewmodel.graphType.value)
         }
 
         // UI TEST
