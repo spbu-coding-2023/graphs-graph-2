@@ -2,7 +2,6 @@ val neo4jDriverVersion: String by settings
 val composeVersion: String by settings
 val kotlinVersion: String by settings
 val junitVersion: String by settings
-val koinVersion: String by settings
 
 pluginManagement {
     repositories {
@@ -21,7 +20,6 @@ dependencyResolutionManagement {
         create("libs") {
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").version(kotlinVersion)
             plugin("compose", "org.jetbrains.compose").version(composeVersion)
-            library("koin-core", "io.insert-koin:koin-core:$koinVersion")
             library("junit-jupiter", "org.junit.jupiter:junit-jupiter:$junitVersion")
         }
     }

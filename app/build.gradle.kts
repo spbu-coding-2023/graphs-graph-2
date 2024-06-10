@@ -2,25 +2,15 @@ val kotlinxCoroutinesVersion: String by project
 val neo4jDriverVersion: String by project
 val composeVersion: String by project
 val junitVersion: String by project
-val koinVersion: String by project
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compose)
 }
 
-repositories {
-    google() // to ensure dependencies like androidx.annotation can be resolved.
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-}
-
 dependencies {
     implementation(compose.desktop.currentOs)
     testImplementation("org.jetbrains.compose.ui:ui-test-junit4:$composeVersion")
-
-    implementation("io.insert-koin:koin-core:$koinVersion")
-    implementation(libs.koin.core)
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxCoroutinesVersion")
