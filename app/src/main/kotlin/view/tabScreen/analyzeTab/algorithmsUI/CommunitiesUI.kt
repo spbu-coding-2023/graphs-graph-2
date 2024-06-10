@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import view.tabScreen.analyzeTab.borderPadding
 import view.tabScreen.analyzeTab.horizontalGap
 import view.tabScreen.analyzeTab.rowHeight
-import view.utils.ErrorWindow
+import view.utils.dialogWindows.ErrorWindow
 import viewmodel.graph.GraphViewModel
 
 @Composable

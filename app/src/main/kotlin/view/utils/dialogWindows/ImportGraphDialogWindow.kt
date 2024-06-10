@@ -1,24 +1,20 @@
-package view.utils
+package view.utils.dialogWindows
 
 import JSON
 import MyAppTheme
 import NEO4J
 import SQLITE
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import model.io.neo4j.Neo4jRepositoryHandler
 
 @Composable
 fun ImportGraphDialogWindow() {

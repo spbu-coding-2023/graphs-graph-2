@@ -4,7 +4,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import model.graphs.abstractGraph.Graph
 import view.MainScreen
-import view.utils.ErrorWindow
+import view.utils.dialogWindows.ErrorWindow
 import viewmodel.MainScreenViewModel
 import viewmodel.graph.GraphViewModel
 import viewmodel.graph.SetupGraphViewModel

@@ -1,4 +1,4 @@
-package view.utils
+package view.utils.dialogWindows
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button

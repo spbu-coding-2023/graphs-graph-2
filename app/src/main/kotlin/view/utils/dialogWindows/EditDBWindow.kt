@@ -1,4 +1,4 @@
-package view.utils
+package view.utils.dialogWindows
 
 import SQLITE
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package view.utils
+package view.utils.dialogWindows
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import model.io.neo4j.Neo4jRepositoryHandler
-import model.io.sql.SQLDatabaseModule
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
