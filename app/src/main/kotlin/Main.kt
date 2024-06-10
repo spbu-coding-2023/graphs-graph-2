@@ -11,7 +11,7 @@ import view.utils.SelectInitDialogWindow
 
 @Composable
 @Preview
-fun App() {
+private fun App() {
     MaterialTheme {
         SelectInitDialogWindow(true).GraphInitDialogWindow(true)
     }
