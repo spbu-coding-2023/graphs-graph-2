@@ -13,6 +13,7 @@ import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
+import viewmodel.TFDPLayout
 
 
 class GraphViewModel<D>(

@@ -25,7 +25,7 @@ object SQLDatabaseModule {
         return fileContent.trim()  // Trim any leading/trailing whitespace
     }
 
-    private val insertQueries = readQueriesFromFile()
+    val insertQueries = readQueriesFromFile()
 
     init {
         createDatabaseDirectory()
@@ -52,6 +52,29 @@ object SQLDatabaseModule {
                 statement.executeUpdate(createTableSQL)
             }
         }
+    }
+
+    fun <D> importGraph(
+        graphId: Int, currentGraphSetup: Pair<Triple<GraphViewModelFactory.GraphType,
+                GraphViewModelFactory.GraphStructure, GraphViewModelFactory.Weight>, String>?
+    ): Pair<Triple<GraphViewModelFactory.GraphType, GraphViewModelFactory.GraphStructure, GraphViewModelFactory.Weight>, String>? {
+        var currentGS = currentGraphSetup
+        val connection = SQLDatabaseModule.getConnection()
+        connection.use {
+            val selectGraphSQL = SQLDatabaseModule.insertQueries.split(":")[6]
+            it.prepareStatement(selectGraphSQL).use { statement ->
+                statement.setInt(1, graphId)
+                val resultSet = statement.executeQuery()
+
+                if (resultSet.next()) {
+                    currentGS = SQLDatabaseModule.importGraphInfo(graphId)
+                } else {
+                    currentGS = null
+                    throw SQLException("Graph with ID $graphId not found.")
+                }
+            }
+        }
+        return currentGS
     }
 
 
@@ -107,11 +130,10 @@ object SQLDatabaseModule {
         }
     }
 
-    @Composable
-    fun getGraphNames(graphNames: MutableState<ArrayList<Pair<Int, String>>>) {
+    fun getGraphNames(graphNames: MutableState<ArrayList<Pair<Int, String>>>): String? {
         val selectNamesSQL = insertQueries.split(":")[3]
-        var showErrorMessage by remember { mutableStateOf(false) }
-        var errorMessage by remember { mutableStateOf("") }
+        var showErrorMessage = false
+        var errorMessage = ""
         graphNames.value = arrayListOf()
 
         try {
@@ -128,77 +150,9 @@ object SQLDatabaseModule {
             errorMessage = e.message.toString()
         }
         if (showErrorMessage) {
-            ErrorWindow(errorMessage) { exitProcess(-1) }
+            return errorMessage
         }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    @Composable
-    fun <D> importGraph(graphId: Int) {
-        val graphVMState = remember { mutableStateOf<GraphViewModel<D>?>(null) }
-        var showErrorMessage by remember { mutableStateOf(false) }
-        var updateIsRequired by remember { mutableStateOf(false) }
-        var currentGraphSetup: Pair<Triple<GraphViewModelFactory.GraphType,
-                GraphViewModelFactory.GraphStructure, GraphViewModelFactory.Weight>, String>? = null
-
-        try {
-            val connection = getConnection()
-            connection.use {
-                val selectGraphSQL = insertQueries.split(":")[6]
-                it.prepareStatement(selectGraphSQL).use { statement ->
-                    statement.setInt(1, graphId)
-                    val resultSet = statement.executeQuery()
-
-                    if (resultSet.next()) {
-                        currentGraphSetup = importGraphInfo(graphId)
-                    } else {
-                        showErrorMessage = true
-                        throw SQLException("Graph with ID $graphId not found.")
-                    }
-                }
-            }
-
-
-            // Execute side-effect to create graph object
-            GraphViewModelFactory.createGraphObject(
-                currentGraphSetup?.first?.first as GraphViewModelFactory.GraphType,
-                currentGraphSetup?.first?.second as GraphViewModelFactory.GraphStructure,
-                currentGraphSetup?.first?.third as GraphViewModelFactory.Weight,
-                graphId,
-                graphVMState as MutableState<GraphViewModel<out Comparable<*>>?>
-            )
-            updateIsRequired = true
-
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            showErrorMessage = true
-        }
-
-        if (updateIsRequired) return importGraphUI(showErrorMessage, graphVMState, graphId)
-    }
-
-    @Composable
-    fun <D> importGraphUI(
-        showErrorMessage: Boolean,
-        graphVMState: MutableState<GraphViewModel<D>?>,
-        graphId: Int
-    ) {
-        if (showErrorMessage) {
-            ErrorWindow("Graph with ID $graphId not found.") { exitProcess(-1) }
-            exitProcess(-1)
-        }
-        if (graphVMState.value != null) {
-            graphVMState.value?.updateIsRequired?.value = true
-
-            MainScreen(
-                MainScreenViewModel(
-                    graphVMState.value?.graph as Graph<D>,
-                    graphVMState.value?.graphType as String,
-                    graphVMState.value
-                )
-            )
-
-        } else CircularProgressIndicator()
+        return null
     }
 
     fun <D> updateImportedGraphVM(

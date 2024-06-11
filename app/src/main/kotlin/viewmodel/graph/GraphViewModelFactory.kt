@@ -1,15 +1,19 @@
 package viewmodel.graph
 
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.*
 import model.io.sql.SQLDatabaseModule
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import model.graphs.DirectedGraph
 import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Graph
+import model.io.sql.SQLDatabaseModule.importGraph
 import view.MainScreen
+import view.components.dialogWindows.ErrorWindow
 import viewmodel.MainScreenViewModel
+import java.sql.SQLException
+import kotlin.system.exitProcess
 
 object GraphViewModelFactory {
     sealed class GraphType {
@@ -70,7 +74,11 @@ object GraphViewModelFactory {
         graphVMState: MutableState<GraphViewModel<out Comparable<*>>?>
     ) {
         val graph = createGraphViewModel(storedData, graphStructure, weight) as Graph<Comparable<Any>>
-        graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(graph, graphId, graphVMState as MutableState<GraphViewModel<Comparable<Any>>?>)
+        graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
+            graph,
+            graphId,
+            graphVMState as MutableState<GraphViewModel<Comparable<Any>>?>
+        )
     }
 }
 
@@ -112,3 +120,8 @@ fun createGraphFromTypesIndices(
     val (storedData, graphStructure, weight) = getGraphVMParameter(storedDataIndex, orientationIndex, weightnessIndex)
     viewModel.createGraphAndApplyScreen(storedData, graphStructure, weight)
 }
+
+
+
+
+

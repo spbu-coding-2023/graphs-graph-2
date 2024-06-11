@@ -187,7 +187,8 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
     if (showSaveDialog) {
         if (selectedDatabase == DatabaseTypes.SQLite) {
             val existingGraphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
-            SQLDatabaseModule.getGraphNames(existingGraphNamesSQL)
+            val sqlErrorMessage = SQLDatabaseModule.getGraphNames(existingGraphNamesSQL)
+            if (sqlErrorMessage != null) ErrorWindow(sqlErrorMessage) {}
 
             if (existingGraphNamesSQL.value.any { it.second == graphName }) {
                 showErrorWindow = true

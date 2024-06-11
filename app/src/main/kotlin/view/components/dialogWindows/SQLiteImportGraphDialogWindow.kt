@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import viewmodel.importGraphAndRender
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -24,7 +25,8 @@ fun SQLiteImportGraphDialogWindow() {
     var selectedGraphName by remember { mutableStateOf("") }
     val graphs = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
 
-    SQLDatabaseModule.getGraphNames(graphs)
+    val errorMessage = SQLDatabaseModule.getGraphNames(graphs)
+    if (errorMessage != null) ErrorWindow(errorMessage) {}
 
     if (!closeDialog) {
         Dialog(
@@ -101,6 +103,6 @@ fun SQLiteImportGraphDialogWindow() {
         }
     }
     if (importFromDBRequired) {
-        return SQLDatabaseModule.importGraph<Any>(selectedGraphID)
+        return importGraphAndRender<Any>(selectedGraphID)
     }
 }

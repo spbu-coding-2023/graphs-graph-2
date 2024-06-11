@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS edges (
     vertex1_id INTEGER NOT NULL,
     vertex2_id INTEGER NOT NULL,
     weight INTEGER,
-    FOREIGN KEY (graph_id) REFERENCES graphs(id)
+    FOREIGN KEY (graph_id) REFERENCES graphs(id),
+    FOREIGN KEY (vertex1_id) REFERENCES vertices(id),
+    FOREIGN KEY (vertex2_id) REFERENCES vertices(id)
 );
 
 CREATE TABLE IF NOT EXISTS vertices (

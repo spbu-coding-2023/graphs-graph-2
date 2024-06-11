@@ -1,6 +1,7 @@
-package viewmodel.graph
+package viewmodel
 
 import androidx.compose.ui.unit.dp
+import viewmodel.graph.VertexViewModel
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random

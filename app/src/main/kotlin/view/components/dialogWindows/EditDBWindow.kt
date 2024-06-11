@@ -32,7 +32,9 @@ fun EditDBWindow(DBType: DatabaseTypes, onDismiss: () -> Unit) {
     var graphNameToReplaceWith by remember { mutableStateOf("")}
 
     if (DBType == DatabaseTypes.SQLite) {
-        SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        val errorMessage = SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        if (errorMessage != null) ErrorWindow(errorMessage) {}
+
         if (graphNamesSQL.value.isNotEmpty()) showDialog = true
         else ErrorWindow("Database doesn't have any Graphs", {})
     } else if (DBType == DatabaseTypes.NEO4J) {
@@ -166,7 +168,8 @@ fun EditDBWindow(DBType: DatabaseTypes, onDismiss: () -> Unit) {
         }
     }
     if (updateGraphNames) {
-        SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        val sqlErrorMessage = SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        if (sqlErrorMessage != null) ErrorWindow(sqlErrorMessage) {}
         updateGraphNames = false
     }
 }
