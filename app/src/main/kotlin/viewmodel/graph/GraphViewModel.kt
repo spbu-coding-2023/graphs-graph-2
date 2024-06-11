@@ -19,9 +19,9 @@ class GraphViewModel<D>(
     private val currentGraph: Graph<D>,
     private val showVerticesData: State<Boolean>,
     var showVerticesID: MutableState<Boolean>,
-    val graphType: MutableState<String>,
-    val isDirected: MutableState<Boolean>,
-    val isWeighted: MutableState<Boolean>
+    val graphType: String,
+    val isDirected: Boolean,
+    val isWeighted: Boolean
 ) {
 
     val updateIsRequired = mutableStateOf(false)
@@ -81,8 +81,20 @@ class GraphViewModel<D>(
         updateEdgeViewModels(newEdge)
     }
 
-    fun applyForceDirectedLayout(width: Double, height: Double, a: Double, b: Double, c: Double) {
-        TFDPLayout.place(width, height, verticesVM, 128, a, b, c)
+    fun applyForceDirectedLayout(
+        width: Double, height: Double, longRangeAttractionConstant: Double,
+        nearAttractionConstant: Double,
+        repulsiveConstant: Double
+    ) {
+        TFDPLayout.place(
+            width,
+            height,
+            verticesVM,
+            128,
+            longRangeAttractionConstant,
+            nearAttractionConstant,
+            repulsiveConstant
+        )
     }
 
     fun randomize(width: Double, height: Double) {
@@ -170,8 +182,7 @@ class GraphViewModel<D>(
             if (shortestPath?.isEmpty() == true) return false
 
             return highlightPath(shortestPath)
-        }
-        else if (graph is WeightedUndirectedGraph) {
+        } else if (graph is WeightedUndirectedGraph) {
             val shortestPath = shortestPathFinder.findShortestPath(graph as WeightedUndirectedGraph, src, dest)
             if (shortestPath?.isEmpty() == true) return false
 
@@ -234,7 +245,7 @@ class GraphViewModel<D>(
             Color(0x8334eb),
             Color(0xd834eb),
             Color(0xeb34a1),
-            )
+        )
 
         var i = 0
         for (verticesSet in verticesSets) {

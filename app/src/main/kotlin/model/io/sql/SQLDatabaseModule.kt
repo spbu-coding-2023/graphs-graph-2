@@ -193,7 +193,7 @@ object SQLDatabaseModule {
             MainScreen(
                 MainScreenViewModel(
                     graphVMState.value?.graph as Graph<D>,
-                    graphVMState.value?.graphType?.value as String,
+                    graphVMState.value?.graphType as String,
                     graphVMState.value
                 )
             )
@@ -216,16 +216,16 @@ object SQLDatabaseModule {
                     val resultSet = statement.executeQuery()
                     if (resultSet.next()) {
                         val currentGraphSetup = importGraphInfo(graphId)
-                        val graphVMType =
-                            mutableStateOf(currentGraphSetup.first.second.toString() + "Graph" + " " + currentGraphSetup.first.first.toString())
+                        val graphVMType = currentGraphSetup.first.second.toString() +
+                                "Graph" + " " + currentGraphSetup.first.first.toString()
 
                         val graphVM = GraphViewModel(
                             graph,
                             mutableStateOf(false),
                             mutableStateOf(false),
                             graphVMType,
-                            mutableStateOf(currentGraphSetup.first.second.toString().contains("Directed")),
-                            mutableStateOf(currentGraphSetup.first.second.toString().contains("Weighted"))
+                            currentGraphSetup.first.second.toString().contains("Directed"),
+                            currentGraphSetup.first.second.toString().contains("Weighted")
                         )
 
                         // Fetch vertices

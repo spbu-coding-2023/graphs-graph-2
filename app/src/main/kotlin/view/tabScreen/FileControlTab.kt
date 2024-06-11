@@ -195,7 +195,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 graphName = ""
                 showSaveDialog = false
             } else {
-                SQLDatabaseModule.insertGraph(graphVM, graphName, graphVM.graphType.value)
+                SQLDatabaseModule.insertGraph(graphVM, graphName, graphVM.graphType)
                 Dialog(
                     onDismissRequest = {
                         showSaveDialog = false
@@ -229,7 +229,7 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                 errorMessage = "$graphName is an invalid name."
                 graphName = ""
             } else {
-                Neo4jRepositoryHandler.saveOrReplace(graphVM.graph, graphName, graphVM.isDirected.value, graphVM.isWeighted.value)
+                Neo4jRepositoryHandler.saveOrReplace(graphVM.graph, graphName, graphVM.isDirected, graphVM.isWeighted)
 
                 Dialog(
                     onDismissRequest = {
