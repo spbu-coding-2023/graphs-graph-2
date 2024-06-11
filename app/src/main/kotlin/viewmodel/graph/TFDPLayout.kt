@@ -7,15 +7,9 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-class TFDPLayout() {
-    /**
-     * longRangeAttractionConstant - strength of attractive force (long-range) - B
-     * nearAttractionConstant - strength of attractive t-force (near) - A
-     * repulsiveConstant - extent and magnitude of the repulsive t-force that
-    controls the longest distance of neighbors in the layout - Y
-     **/
+object TFDPLayout {
 
-    fun fft2D(input: Array<Array<Complex>>): Array<Array<Complex>> {
+    private fun fft2D(input: Array<Array<Complex>>): Array<Array<Complex>> {
         val rows = input.size
         val cols = input[0].size
         val output = Array(rows) { Array(cols) { Complex(0.0, 0.0) } }
@@ -45,7 +39,7 @@ class TFDPLayout() {
         return output
     }
 
-    fun ifft2D(input: Array<Array<Complex>>): Array<Array<Complex>> {
+    private fun ifft2D(input: Array<Array<Complex>>): Array<Array<Complex>> {
         val rows = input.size
         val cols = input[0].size
         val output = Array(rows) { Array(cols) { Complex() } }
@@ -83,7 +77,22 @@ class TFDPLayout() {
         return output
     }
 
-    fun <D> place(width: Double, height: Double, vertices: Collection<VertexViewModel<D>>, gridSize: Int = 128, longRangeAttractionConstant: Double, nearAttractionConstant: Double, repulsiveConstant: Double) {
+    /**
+     * longRangeAttractionConstant - strength of attractive force (long-range) - B
+     * nearAttractionConstant - strength of attractive t-force (near) - A
+     * repulsiveConstant - extent and magnitude of the repulsive t-force that
+    controls the longest distance of neighbors in the layout - Y
+     **/
+
+    fun <D> place(
+        width: Double,
+        height: Double,
+        vertices: Collection<VertexViewModel<D>>,
+        gridSize: Int = 128,
+        longRangeAttractionConstant: Double,
+        nearAttractionConstant: Double,
+        repulsiveConstant: Double
+    ) {
         val forces = Array(vertices.size) { Pair(0.0, 0.0) }
         val grid = Array(gridSize) { Array(gridSize) { Complex(0.0, 0.0) } }
         val deltaX = width / gridSize

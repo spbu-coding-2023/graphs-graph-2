@@ -58,6 +58,7 @@ class GraphViewModel<D>(
         return _verticesViewModels.keys.any { it.id == id }
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun addVertex(data: String): Int {
         val newVertex = graph.addVertex(data as D)
 
@@ -81,13 +82,11 @@ class GraphViewModel<D>(
     }
 
     fun applyForceDirectedLayout(width: Double, height: Double, a: Double, b: Double, c: Double) {
-        val layout = TFDPLayout()
-        layout.place(width, height, verticesVM, 128, a, b, c)
+        TFDPLayout.place(width, height, verticesVM, 128, a, b, c)
     }
 
     fun randomize(width: Double, height: Double) {
-        val layout = TFDPLayout()
-        layout.randomize(width, height, verticesVM)
+        TFDPLayout.randomize(width, height, verticesVM)
     }
 
     fun findCommunities(): Boolean {
