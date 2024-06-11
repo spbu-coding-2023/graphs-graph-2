@@ -6,7 +6,7 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import java.awt.Dimension
-import view.utils.dialogWindows.SelectInitDialogWindow
+import view.components.dialogWindows.SelectInitDialogWindow
 
 @Composable
 @Preview

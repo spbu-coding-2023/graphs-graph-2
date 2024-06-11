@@ -1,4 +1,4 @@
-package view.utils
+package view.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

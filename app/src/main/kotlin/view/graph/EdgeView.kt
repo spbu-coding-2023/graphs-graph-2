@@ -11,7 +11,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.zIndex
-import viewmodel.WindowViewModel
 import viewmodel.graph.EdgeViewModel
 
 const val MAX_EDGE_STROKE_WIDTH = 12f
@@ -19,8 +18,6 @@ const val MIN_EDGE_STROKE_WIDTH = 4f
 
 @Composable
 fun <D> EdgeView(viewModel: EdgeViewModel<D>, scale: Float) {
-    val windowVM = WindowViewModel()
-    windowVM.SetCurrentDimensions()
 
     val (firstVertexCenterX, firstVertexCenterY) = viewModel.calculateFirstVertexCenter(scale)
     val (secondVertexCenterX, secondVertexCenterY) = viewModel.calculateSecondVertexCenter(scale)

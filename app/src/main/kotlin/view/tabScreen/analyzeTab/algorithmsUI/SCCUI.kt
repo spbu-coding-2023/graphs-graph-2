@@ -1,7 +1,7 @@
 package view.tabScreen.analyzeTab.algorithmsUI
 
 import androidx.compose.runtime.Composable
-import view.utils.RunAlgoButton
+import view.components.RunAlgoButton
 import viewmodel.graph.GraphViewModel
 
 @Composable

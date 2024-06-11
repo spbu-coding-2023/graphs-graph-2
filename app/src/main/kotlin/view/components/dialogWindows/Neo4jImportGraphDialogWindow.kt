@@ -1,4 +1,4 @@
-package view.utils.dialogWindows
+package view.components.dialogWindows
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

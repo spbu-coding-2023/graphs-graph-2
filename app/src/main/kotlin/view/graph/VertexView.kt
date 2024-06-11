@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import viewmodel.WindowViewModel
 import viewmodel.graph.VertexViewModel
 
 val MAX_VERTEX_RADIUS = 35.dp
@@ -32,8 +31,6 @@ val MIN_VERTEX_RADIUS = 7.dp
 @Composable
 fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
     val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
-    val windowVM = WindowViewModel()
-    windowVM.SetCurrentDimensions()
 
     val adjustedX = viewModel.x.value
     val adjustedY = viewModel.y.value

@@ -1,6 +1,5 @@
-package view.utils.dialogWindows
+package view.components.dialogWindows
 
-import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

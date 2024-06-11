@@ -1,4 +1,4 @@
-package view.utils
+package view.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import view.tabScreen.analyzeTab.borderPadding
 import view.tabScreen.analyzeTab.horizontalGap
 import view.tabScreen.analyzeTab.rowHeight
-import view.utils.dialogWindows.ErrorWindow
+import view.components.dialogWindows.ErrorWindow
 
 @Composable
 fun RunAlgoButton(errorText: String, algoToRun: () -> Boolean) {

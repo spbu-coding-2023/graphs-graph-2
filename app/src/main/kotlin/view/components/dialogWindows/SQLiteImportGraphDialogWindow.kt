@@ -1,4 +1,4 @@
-package view.utils.dialogWindows
+package view.components.dialogWindows
 
 import model.io.sql.SQLDatabaseModule
 import androidx.compose.foundation.background

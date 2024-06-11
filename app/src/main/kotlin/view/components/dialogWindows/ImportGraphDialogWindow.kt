@@ -1,4 +1,4 @@
-package view.utils.dialogWindows
+package view.components.dialogWindows
 
 import JSON
 import MyAppTheme

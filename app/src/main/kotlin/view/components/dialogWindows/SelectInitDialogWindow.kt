@@ -1,4 +1,4 @@
-package view.utils.dialogWindows
+package view.components.dialogWindows
 
 import MyAppTheme
 import androidx.compose.foundation.background
@@ -15,8 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import view.utils.dialogWindows.CreateGraphDialogWindow
-import view.utils.dialogWindows.ImportGraphDialogWindow
 import viewmodel.graph.SetupGraphViewModel
 
 

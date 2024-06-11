@@ -10,8 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import view.graph.GraphView
 import view.tabScreen.TabHandler
-import view.utils.FAQBox
-import view.utils.ToolBox
+import view.components.FAQBox
+import view.components.ToolBox
 import viewmodel.MainScreenViewModel
 
 @Composable
