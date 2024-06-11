@@ -1,4 +1,4 @@
-package model
+package viewmodel.graph
 
 /**
  *  Copyright (C) 2021 José Alexandre Nalon
