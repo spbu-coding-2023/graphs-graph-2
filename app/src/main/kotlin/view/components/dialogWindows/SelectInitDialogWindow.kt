@@ -15,15 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import viewmodel.graph.SetupGraphViewModel
+import viewmodel.graph.GraphViewModelFactory
 
 
-class SelectInitDialogWindow(
-    private val showDialog: Boolean,
-) {
-    var showGraphDialog by mutableStateOf(false)
-    var showCreateGraphDialog by mutableStateOf(false)
-    var showImportTab by mutableStateOf(false)
+class SelectInitDialogWindow {
+    private var showGraphDialog by mutableStateOf(false)
+    private var showCreateGraphDialog by mutableStateOf(false)
+    private var showImportTab by mutableStateOf(false)
 
     @Composable
     fun GraphInitDialogWindow(
@@ -81,7 +79,7 @@ class SelectInitDialogWindow(
             }
 
             if (showCreateGraphDialog) {
-                CreateGraphDialogWindow(SetupGraphViewModel())
+                CreateGraphDialogWindow(GraphViewModelFactory)
             }
 
             if (showImportTab) {

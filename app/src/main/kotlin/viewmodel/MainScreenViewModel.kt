@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import model.graphs.abstractGraph.Graph
 import viewmodel.graph.GraphViewModel
-import viewmodel.graph.SetupGraphViewModel
 
 class MainScreenViewModel<D>(
     graph: Graph<D>,

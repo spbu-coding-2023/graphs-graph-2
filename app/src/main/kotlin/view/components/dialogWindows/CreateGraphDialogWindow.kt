@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import view.components.RadioColumn
-import viewmodel.graph.SetupGraphViewModel
+import viewmodel.graph.GraphViewModelFactory
 import viewmodel.graph.createGraphFromTypesIndices
 
 @Composable
-fun CreateGraphDialogWindow(viewModel: SetupGraphViewModel) {
+fun CreateGraphDialogWindow(viewModel: GraphViewModelFactory) {
     var closeDialog by remember { mutableStateOf(false) }
     val selectedStoredDataIndex = remember { mutableStateOf(0) }
     val selectedOrientationIndex = remember { mutableStateOf(0) }

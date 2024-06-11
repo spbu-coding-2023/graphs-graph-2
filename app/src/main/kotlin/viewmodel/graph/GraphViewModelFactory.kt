@@ -11,7 +11,7 @@ import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import viewmodel.MainScreenViewModel
 
-class SetupGraphViewModel {
+object GraphViewModelFactory {
     sealed class GraphType {
         data object Integer : GraphType()
         data object UInteger : GraphType()
@@ -79,24 +79,24 @@ fun getGraphVMParameter(
     storedDataType: Int,
     structureType: Int,
     weightType: Int
-): Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight> {
+): Triple<GraphViewModelFactory.GraphType, GraphViewModelFactory.GraphStructure, GraphViewModelFactory.Weight> {
     val storedData = when (storedDataType) {
-        0 -> SetupGraphViewModel.GraphType.Integer
-        1 -> SetupGraphViewModel.GraphType.UInteger
-        2 -> SetupGraphViewModel.GraphType.String
-        else -> SetupGraphViewModel.GraphType.Integer // default to integer
+        0 -> GraphViewModelFactory.GraphType.Integer
+        1 -> GraphViewModelFactory.GraphType.UInteger
+        2 -> GraphViewModelFactory.GraphType.String
+        else -> GraphViewModelFactory.GraphType.Integer // default to integer
     }
 
     val graphStructure = when (structureType) {
-        0 -> SetupGraphViewModel.GraphStructure.Undirected
-        1 -> SetupGraphViewModel.GraphStructure.Directed
-        else -> SetupGraphViewModel.GraphStructure.Undirected // default to directed
+        0 -> GraphViewModelFactory.GraphStructure.Undirected
+        1 -> GraphViewModelFactory.GraphStructure.Directed
+        else -> GraphViewModelFactory.GraphStructure.Undirected // default to directed
     }
 
     val weight = when (weightType) {
-        0 -> SetupGraphViewModel.Weight.Unweighted
-        1 -> SetupGraphViewModel.Weight.Weighted
-        else -> SetupGraphViewModel.Weight.Unweighted // default to weighted
+        0 -> GraphViewModelFactory.Weight.Unweighted
+        1 -> GraphViewModelFactory.Weight.Weighted
+        else -> GraphViewModelFactory.Weight.Unweighted // default to weighted
     }
 
     return Triple(storedData, graphStructure, weight)
@@ -104,7 +104,7 @@ fun getGraphVMParameter(
 
 @Composable
 fun createGraphFromTypesIndices(
-    viewModel: SetupGraphViewModel,
+    viewModel: GraphViewModelFactory,
     storedDataIndex: Int,
     orientationIndex: Int,
     weightnessIndex: Int

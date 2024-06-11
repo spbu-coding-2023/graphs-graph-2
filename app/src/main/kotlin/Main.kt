@@ -12,7 +12,7 @@ import view.components.dialogWindows.SelectInitDialogWindow
 @Preview
 private fun App() {
      MyAppTheme {
-        SelectInitDialogWindow(true).GraphInitDialogWindow(true)
+        SelectInitDialogWindow().GraphInitDialogWindow(true)
     }
 }
 

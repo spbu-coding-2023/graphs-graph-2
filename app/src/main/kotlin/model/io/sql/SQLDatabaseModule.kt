@@ -7,7 +7,7 @@ import view.MainScreen
 import view.components.dialogWindows.ErrorWindow
 import viewmodel.MainScreenViewModel
 import viewmodel.graph.GraphViewModel
-import viewmodel.graph.SetupGraphViewModel
+import viewmodel.graph.GraphViewModelFactory
 import viewmodel.graph.getGraphVMParameter
 import java.io.File
 import java.sql.*
@@ -138,8 +138,8 @@ object SQLDatabaseModule {
         val graphVMState = remember { mutableStateOf<GraphViewModel<D>?>(null) }
         var showErrorMessage by remember { mutableStateOf(false) }
         var updateIsRequired by remember { mutableStateOf(false) }
-        var currentGraphSetup: Pair<Triple<SetupGraphViewModel.GraphType,
-                SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight>, String>? = null
+        var currentGraphSetup: Pair<Triple<GraphViewModelFactory.GraphType,
+                GraphViewModelFactory.GraphStructure, GraphViewModelFactory.Weight>, String>? = null
 
         try {
             val connection = getConnection()
@@ -160,10 +160,10 @@ object SQLDatabaseModule {
 
 
             // Execute side-effect to create graph object
-            SetupGraphViewModel().createGraphObject(
-                currentGraphSetup?.first?.first as SetupGraphViewModel.GraphType,
-                currentGraphSetup?.first?.second as SetupGraphViewModel.GraphStructure,
-                currentGraphSetup?.first?.third as SetupGraphViewModel.Weight,
+            GraphViewModelFactory.createGraphObject(
+                currentGraphSetup?.first?.first as GraphViewModelFactory.GraphType,
+                currentGraphSetup?.first?.second as GraphViewModelFactory.GraphStructure,
+                currentGraphSetup?.first?.third as GraphViewModelFactory.Weight,
                 graphId,
                 graphVMState as MutableState<GraphViewModel<out Comparable<*>>?>
             )
@@ -264,7 +264,7 @@ object SQLDatabaseModule {
     }
 
 
-    private fun importGraphInfo(graphId: Int): Pair<Triple<SetupGraphViewModel.GraphType, SetupGraphViewModel.GraphStructure, SetupGraphViewModel.Weight>, String> {
+    private fun importGraphInfo(graphId: Int): Pair<Triple<GraphViewModelFactory.GraphType, GraphViewModelFactory.GraphStructure, GraphViewModelFactory.Weight>, String> {
         val selectGraphSQL = insertQueries.split(":")[6]
         var graphStructure: Int?
         var graphWeight: Int?
