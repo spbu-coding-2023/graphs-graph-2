@@ -51,7 +51,7 @@ fun FAQBox(interactionSource: MutableInteractionSource, currentGraphType: String
                     .testTag("FAQBoxHovered")
             ) {
                 Text(
-                    text = currentGraphType.replace(" ", "\nData type: "),
+                    text = currentGraphType,
                     fontSize = 16.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Center,

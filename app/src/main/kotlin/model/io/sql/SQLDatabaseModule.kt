@@ -132,7 +132,7 @@ object SQLDatabaseModule {
         }
     }
 
-
+    @Suppress("UNCHECKED_CAST")
     @Composable
     fun <D> importGraph(graphId: Int) {
         val graphVMState = remember { mutableStateOf<GraphViewModel<D>?>(null) }
@@ -165,7 +165,7 @@ object SQLDatabaseModule {
                 currentGraphSetup?.first?.second as SetupGraphViewModel.GraphStructure,
                 currentGraphSetup?.first?.third as SetupGraphViewModel.Weight,
                 graphId,
-                graphVMState
+                graphVMState as MutableState<GraphViewModel<out Comparable<*>>?>
             )
             updateIsRequired = true
 

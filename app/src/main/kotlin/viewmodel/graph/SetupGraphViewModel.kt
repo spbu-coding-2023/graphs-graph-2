@@ -7,6 +7,7 @@ import model.graphs.DirectedGraph
 import model.graphs.UndirectedGraph
 import model.graphs.WeightedDirectedGraph
 import model.graphs.WeightedUndirectedGraph
+import model.graphs.abstractGraph.Graph
 import view.MainScreen
 import viewmodel.MainScreenViewModel
 
@@ -27,272 +28,53 @@ class SetupGraphViewModel {
         data object Unweighted : Weight()
     }
 
+    // Simplified function to create a GraphViewModel based on the graph type
+    fun createGraphViewModel(
+        storedData: GraphType,
+        graphStructure: GraphStructure,
+        weight: Weight
+    ): Graph<out Comparable<*>> {
+        return when {
+            weight is Weight.Weighted && graphStructure is GraphStructure.Directed && storedData is GraphType.Integer -> WeightedDirectedGraph<Int>()
+            weight is Weight.Weighted && graphStructure is GraphStructure.Directed && storedData is GraphType.UInteger -> WeightedDirectedGraph<UInt>()
+            weight is Weight.Weighted && graphStructure is GraphStructure.Directed && storedData is GraphType.String -> WeightedDirectedGraph<String>()
+            weight is Weight.Weighted && graphStructure is GraphStructure.Undirected && storedData is GraphType.Integer -> WeightedUndirectedGraph<Int>()
+            weight is Weight.Weighted && graphStructure is GraphStructure.Undirected && storedData is GraphType.UInteger -> WeightedUndirectedGraph<UInt>()
+            weight is Weight.Weighted && graphStructure is GraphStructure.Undirected && storedData is GraphType.String -> WeightedUndirectedGraph<String>()
+            weight is Weight.Unweighted && graphStructure is GraphStructure.Directed && storedData is GraphType.Integer -> DirectedGraph<Int>()
+            weight is Weight.Unweighted && graphStructure is GraphStructure.Directed && storedData is GraphType.UInteger -> DirectedGraph<UInt>()
+            weight is Weight.Unweighted && graphStructure is GraphStructure.Directed && storedData is GraphType.String -> DirectedGraph<String>()
+            weight is Weight.Unweighted && graphStructure is GraphStructure.Undirected && storedData is GraphType.Integer -> UndirectedGraph<Int>()
+            weight is Weight.Unweighted && graphStructure is GraphStructure.Undirected && storedData is GraphType.UInteger -> UndirectedGraph<UInt>()
+            weight is Weight.Unweighted && graphStructure is GraphStructure.Undirected && storedData is GraphType.String -> UndirectedGraph<String>()
+            else -> throw IllegalArgumentException("Invalid combination of parameters")
+        }
+    }
+
     @Composable
     fun createGraphAndApplyScreen(
         storedData: GraphType,
         graphStructure: GraphStructure,
         weight: Weight
-    ) { // TODO looks too shitty (((((((((( + mb any could be changed
-        return when (weight) {
-            is Weight.Weighted -> {
-                when (graphStructure) {
-                    is GraphStructure.Directed -> {
-                        when (storedData) {
-                            is GraphType.Integer -> MainScreen(
-                                MainScreenViewModel(
-                                    WeightedDirectedGraph<Int>(),
-                                    "WeightedDirectedGraph Int"
-                                )
-                            )
-
-                            is GraphType.UInteger -> MainScreen(
-                                MainScreenViewModel(
-                                    WeightedDirectedGraph<UInt>(),
-                                    "WeightedDirectedGraph UInt"
-                                )
-                            )
-
-                            is GraphType.String -> MainScreen(
-                                MainScreenViewModel(
-                                    WeightedDirectedGraph<String>(),
-                                    "WeightedDirectedGraph String"
-                                )
-                            )
-                        }
-                    }
-
-                    is GraphStructure.Undirected -> {
-                        when (storedData) {
-                            is GraphType.Integer -> MainScreen(
-                                MainScreenViewModel(
-                                    WeightedUndirectedGraph<Int>(),
-                                    "WeightedUndirectedGraph Int"
-                                )
-                            )
-
-                            is GraphType.UInteger -> MainScreen(
-                                MainScreenViewModel(
-                                    WeightedUndirectedGraph<UInt>(),
-                                    "WeightedUndirectedGraph UInt"
-                                )
-                            )
-
-                            is GraphType.String -> MainScreen(
-                                MainScreenViewModel(
-                                    WeightedUndirectedGraph<String>(),
-                                    "WeightedUndirectedGraph String"
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-
-            is Weight.Unweighted -> {
-                when (graphStructure) {
-                    is GraphStructure.Directed -> {
-                        when (storedData) {
-                            is GraphType.Integer -> MainScreen(
-                                MainScreenViewModel(
-                                    DirectedGraph<Int>(),
-                                    "DirectedGraph Int"
-                                )
-                            )
-
-                            is GraphType.UInteger -> MainScreen(
-                                MainScreenViewModel(
-                                    DirectedGraph<UInt>(),
-                                    "DirectedGraph UInt"
-                                )
-                            )
-
-                            is GraphType.String -> MainScreen(
-                                MainScreenViewModel(
-                                    DirectedGraph<String>(),
-                                    "DirectedGraph String"
-                                )
-                            )
-                        }
-                    }
-
-                    is GraphStructure.Undirected -> {
-                        when (storedData) {
-                            is GraphType.Integer -> MainScreen(
-                                MainScreenViewModel(
-                                    UndirectedGraph<Int>(),
-                                    "UndirectedGraph Int"
-                                )
-                            )
-
-                            is GraphType.UInteger -> MainScreen(
-                                MainScreenViewModel(
-                                    UndirectedGraph<UInt>(),
-                                    "UndirectedGraph UInt"
-                                )
-                            )
-
-                            is GraphType.String ->
-                                MainScreen(
-                                    MainScreenViewModel(
-                                        UndirectedGraph<String>(),
-                                        "UndirectedGraph String"
-                                    )
-                                )
-                        }
-                    }
-                }
-            }
-        }
+    ) {
+        val graph = createGraphViewModel(storedData, graphStructure, weight)
+        MainScreen(MainScreenViewModel(graph, storedData.toString()))
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <D> createGraphObject(
+    fun createGraphObject(
         storedData: GraphType,
         graphStructure: GraphStructure,
         weight: Weight,
         graphId: Int,
-        graphVMState: MutableState<GraphViewModel<D>?>
-    ) = when (weight) {
-        is Weight.Weighted -> {
-            when (graphStructure) {
-                is GraphStructure.Directed -> {
-                    when (storedData) {
-                        is GraphType.Integer -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                WeightedDirectedGraph(),
-                                graphId, graphVMState as MutableState<GraphViewModel<Int>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.UInteger -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                WeightedDirectedGraph(),
-                                graphId, graphVMState as MutableState<GraphViewModel<UInt>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.String -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                WeightedDirectedGraph(),
-                                graphId, graphVMState as MutableState<GraphViewModel<String>?>
-                            ) as GraphViewModel<D>?
-                        }
-                    }
-                }
-
-                is GraphStructure.Undirected -> {
-                    when (storedData) {
-                        is GraphType.Integer -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                WeightedUndirectedGraph(),
-                                graphId, graphVMState as MutableState<GraphViewModel<Int>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.UInteger -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                WeightedUndirectedGraph(),
-                                graphId, graphVMState as MutableState<GraphViewModel<UInt>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.String -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                WeightedUndirectedGraph(),
-                                graphId, graphVMState as MutableState<GraphViewModel<String>?>
-                            ) as GraphViewModel<D>?
-                        }
-                    }
-                }
-            }
-        }
-
-        is Weight.Unweighted -> {
-            when (graphStructure) {
-                is GraphStructure.Directed -> {
-                    when (storedData) {
-                        is GraphType.Integer -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                DirectedGraph(), graphId,
-                                graphVMState as MutableState<GraphViewModel<Int>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.UInteger -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                DirectedGraph(), graphId,
-                                graphVMState as MutableState<GraphViewModel<UInt>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.String -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                DirectedGraph(), graphId,
-                                graphVMState as MutableState<GraphViewModel<String>?>
-                            ) as GraphViewModel<D>?
-                        }
-                    }
-                }
-
-                is GraphStructure.Undirected -> {
-                    when (storedData) {
-                        is GraphType.Integer -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                UndirectedGraph(), graphId,
-                                graphVMState as MutableState<GraphViewModel<Int>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.UInteger -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                UndirectedGraph(), graphId,
-                                graphVMState as MutableState<GraphViewModel<UInt>?>
-                            ) as GraphViewModel<D>?
-                        }
-
-                        is GraphType.String -> {
-                            graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(
-                                UndirectedGraph(), graphId,
-                                graphVMState as MutableState<GraphViewModel<String>?>
-                            ) as GraphViewModel<D>?
-                        }
-                    }
-                }
-            }
-        }
+        graphVMState: MutableState<GraphViewModel<out Comparable<*>>?>
+    ) {
+        val graph = createGraphViewModel(storedData, graphStructure, weight) as Graph<Comparable<Any>>
+        graphVMState.value = SQLDatabaseModule.updateImportedGraphVM(graph, graphId, graphVMState as MutableState<GraphViewModel<Comparable<Any>>?>)
     }
 }
 
-// TODO: REFACTOR
-@Composable
-fun createGraphFromTypesIndices(
-    viewModel: SetupGraphViewModel,
-    storedDataIndex: Int,
-    orientationIndex: Int,
-    weightnessIndex: Int
-) {
-    val storedData = when (storedDataIndex) {
-        0 -> SetupGraphViewModel.GraphType.Integer
-        1 -> SetupGraphViewModel.GraphType.UInteger
-        2 -> SetupGraphViewModel.GraphType.String
-        else -> SetupGraphViewModel.GraphType.Integer // default to integer
-    }
-
-    val graphStructure = when (orientationIndex) {
-        0 -> SetupGraphViewModel.GraphStructure.Undirected
-        1 -> SetupGraphViewModel.GraphStructure.Directed
-        else -> SetupGraphViewModel.GraphStructure.Undirected // default to undirected
-    }
-
-    val weight = when (weightnessIndex) {
-        0 -> SetupGraphViewModel.Weight.Unweighted
-        1 -> SetupGraphViewModel.Weight.Weighted
-        else -> SetupGraphViewModel.Weight.Unweighted // default to unweighted
-    }
-
-    return viewModel.createGraphAndApplyScreen(storedData, graphStructure, weight)
-}
-
+// Utility function to get the graph parameters
 fun getGraphVMParameter(
     storedDataType: Int,
     structureType: Int,
@@ -318,4 +100,15 @@ fun getGraphVMParameter(
     }
 
     return Triple(storedData, graphStructure, weight)
+}
+
+@Composable
+fun createGraphFromTypesIndices(
+    viewModel: SetupGraphViewModel,
+    storedDataIndex: Int,
+    orientationIndex: Int,
+    weightnessIndex: Int
+) {
+    val (storedData, graphStructure, weight) = getGraphVMParameter(storedDataIndex, orientationIndex, weightnessIndex)
+    viewModel.createGraphAndApplyScreen(storedData, graphStructure, weight)
 }
