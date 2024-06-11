@@ -1,15 +1,18 @@
-# WUDU*
+# WUDU
 
-Application that lets you create, save, visualise, analyse and modify 4 different types of graphs (see *) 
+#### - Weighted Unweighted Directed Undirected (or like a Vodoo doll ;) )
+
+Application that lets you create, save, visualise, analyse and modify 4 different types of graphs
+
 
 ## Features
 
-- Support 4 types of graphs (see *)
-- Use all in all - 9 algorithms
-- Store graphs anywhere you want: SQLite, Neo4J, JSON
+- Support 4 types of graphs
+- Use all in all - 9 algorithms (SCC, bridges, shortest paths, cycles, layout, communities, etc. see [wiki])
+- Store graphs anywhere you want: SQLite, Neo4J, JSON (WIP) (see [wiki])
 - Drag, zoom, replace nodes
 
-![mainscreen_screenshot](https://github.com/spbu-coding-2023/graphs-graph-2/assets/64466788/9c708a11-dc6e-4cf9-a848-44f21dec7a37)
+![alt text][main_screen_image]
 
 ## Usage
 
@@ -40,14 +43,14 @@ Distributed under the [GPL-3.0 License][repo_license_url].
 - [Gavrilenko Mike](https://github.com/qrutyy)
 - [Shakirov Karim](https://github.com/kar1mgh)
 - [Vlasenco Daniel](https://github.com/spisladqo)
-
-** - Weighted Unweighted Directed Undirected (or like a Vodoo doll ;) )
 _______________________________
 
 [*Java gnomik*][java_gnomik_url]
 
+[wiki]: https://github.com/spbu-coding-2023/graphs-graph-2/wiki
 [Conventional Commits]: https://www.conventionalcommits.org/en/v1.0.0/
 [repo_license_url]: https://github.com/spbu-coding-2023/graphs-graph-2/blob/main/LICENSE.md
 [contribute_rules_url]: https://github.com/spbu-coding-2023/graphs-graph-2/blob/main/CONTRIBUTING.md
 
 [java_gnomik_url]: https://ibb.co/54hJVd2
+[main_screen_image]: https://github.com/spbu-coding-2023/graphs-graph-2/assets/64466788/9c708a11-dc6e-4cf9-a848-44f21dec7a37
