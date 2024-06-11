@@ -10,7 +10,7 @@ data class ColorPalette(
     val surface: Color,
     val secondaryVariant: Color,
 )
-
+// Make theme switchable
 @Composable
 fun MyAppTheme(content: @Composable () -> Unit) {
     val mycolors = ColorPalette(

@@ -1,6 +1,5 @@
-package view.utils
+package view.components.dialogWindows
 
-import SQLITE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,10 +18,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import model.io.sql.SQLDatabaseModule
+import view.tabScreen.DatabaseTypes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EditDBWindow(DBType: String, onDismiss: () -> Unit) {
+fun EditDBWindow(DBType: DatabaseTypes, onDismiss: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     val graphNamesSQL = remember { mutableStateOf(arrayListOf<Pair<Int, String>>()) }
     var expanded by remember { mutableStateOf(false) }
@@ -31,10 +31,18 @@ fun EditDBWindow(DBType: String, onDismiss: () -> Unit) {
     var updateGraphNames by remember { mutableStateOf(false) }
     var graphNameToReplaceWith by remember { mutableStateOf("")}
 
-    if (DBType == SQLITE) {
-        SQLDatabaseModule.getGraphNames(graphNamesSQL)
+    if (DBType == DatabaseTypes.SQLite) {
+        val errorMessage = SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        if (errorMessage != null) ErrorWindow(errorMessage) {}
+
         if (graphNamesSQL.value.isNotEmpty()) showDialog = true
         else ErrorWindow("Database doesn't have any Graphs", {})
+    } else if (DBType == DatabaseTypes.NEO4J) {
+        ErrorWindow("Sorry! This feature will be implemented in future release") {}
+        // TODO
+    } else {
+        ErrorWindow("Sorry! This feature will be implemented in future release") {}
+        // TODO
     }
 
 
@@ -160,7 +168,8 @@ fun EditDBWindow(DBType: String, onDismiss: () -> Unit) {
         }
     }
     if (updateGraphNames) {
-        SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        val sqlErrorMessage = SQLDatabaseModule.getGraphNames(graphNamesSQL)
+        if (sqlErrorMessage != null) ErrorWindow(sqlErrorMessage) {}
         updateGraphNames = false
     }
 }

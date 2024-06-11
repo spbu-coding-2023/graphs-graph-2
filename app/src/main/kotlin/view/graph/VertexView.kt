@@ -23,20 +23,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import maxVertexRadius
-import minVertexRadius
-import viewmodel.WindowViewModel
 import viewmodel.graph.VertexViewModel
+
+val MAX_VERTEX_RADIUS = 35.dp
+val MIN_VERTEX_RADIUS = 7.dp
 
 @Composable
 fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
     val coroutineScope = rememberCoroutineScope { Dispatchers.Default }
-    val windowVM = WindowViewModel()
-    windowVM.SetCurrentDimensions()
 
     val adjustedX = viewModel.x.value
     val adjustedY = viewModel.y.value
-    var adjustedRadius = (viewModel.radius * scale).coerceIn(minVertexRadius, maxVertexRadius)
+    val adjustedRadius = (viewModel.radius * scale).coerceIn(MIN_VERTEX_RADIUS, MAX_VERTEX_RADIUS)
 
     val highlightColor by remember { derivedStateOf { viewModel.highlightColor } }
     val borderColor = highlightColor.value
@@ -61,7 +59,7 @@ fun <D> VertexView(viewModel: VertexViewModel<D>, scale: Float) {
                     }
                 }
                 detectTapGestures(
-                    onTap = { viewModel.isSelected.value = !viewModel.isSelected.value }
+                    onTap = { viewModel.switchSelection() }
                 )
             },
         contentAlignment = Alignment.Center

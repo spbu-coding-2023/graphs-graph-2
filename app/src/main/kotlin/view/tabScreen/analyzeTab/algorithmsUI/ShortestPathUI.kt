@@ -13,15 +13,15 @@ import androidx.compose.ui.unit.sp
 import view.tabScreen.analyzeTab.borderPadding
 import view.tabScreen.analyzeTab.horizontalGap
 import view.tabScreen.analyzeTab.rowHeight
-import view.utils.ErrorWindow
+import view.components.dialogWindows.ErrorWindow
 import viewmodel.graph.GraphViewModel
 
 @Composable
 fun <D> ShortestPathUI(graphVM: GraphViewModel<D>) {
     var sourceVertexId by remember { mutableStateOf("") }
     var destVertexId by remember { mutableStateOf("") }
-    val showErrorWindow = remember { mutableStateOf(false) }
-    val errorMessage = remember { mutableStateOf("") }
+    var showErrorWindow by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
     Row(
         modifier = Modifier.height(rowHeight).padding(borderPadding),
@@ -79,30 +79,30 @@ fun <D> ShortestPathUI(graphVM: GraphViewModel<D>) {
                 modifier = Modifier.fillMaxSize(),
                 onClick = {
                     if (sourceVertexId.isEmpty() || destVertexId.isEmpty()) {
-                        errorMessage.value = "Enter vertices' IDs"
-                        showErrorWindow.value = true
+                        errorMessage = "Enter vertices' IDs"
+                        showErrorWindow = true
                     }
                     else if (
                         !sourceVertexId.all { char -> char.isDigit() } ||
                         !destVertexId.all { char -> char.isDigit() }
                         ) {
-                        errorMessage.value = "ID should be a number"
-                        showErrorWindow.value = true
+                        errorMessage = "ID should be a number"
+                        showErrorWindow = true
                     }
                     else if (sourceVertexId == destVertexId) {
-                        errorMessage.value = "Vertices' IDs should be different"
-                        showErrorWindow.value = true
+                        errorMessage = "Vertices' IDs should be different"
+                        showErrorWindow = true
                     }
                     else if (
                         sourceVertexId.toInt() > graphVM.graph.getVertices().size - 1 ||
                         destVertexId.toInt() > graphVM.graph.getVertices().size - 1
                         ) {
-                        errorMessage.value = "No vertex with such ID"
-                        showErrorWindow.value = true
+                        errorMessage = "No vertex with such ID"
+                        showErrorWindow = true
                     }
                     else if (!graphVM.findShortestPath(sourceVertexId.toInt(), destVertexId.toInt())) {
-                        errorMessage.value = "Shortest path doesn't exist"
-                        showErrorWindow.value = true
+                        errorMessage = "Shortest path doesn't exist"
+                        showErrorWindow = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
@@ -112,7 +112,7 @@ fun <D> ShortestPathUI(graphVM: GraphViewModel<D>) {
         }
     }
 
-    if (showErrorWindow.value) {
-        ErrorWindow(errorMessage.value, { showErrorWindow.value = false })
+    if (showErrorWindow) {
+        ErrorWindow(errorMessage) { showErrorWindow = false }
     }
 }

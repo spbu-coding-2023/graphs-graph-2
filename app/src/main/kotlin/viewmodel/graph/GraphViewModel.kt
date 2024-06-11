@@ -3,29 +3,31 @@ package viewmodel.graph
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import model.algorithms.*
+import model.algorithms.clustering.CommunitiesFinder
+import model.graphs.DirectedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.WeightedDirectedGraph
+import model.graphs.WeightedUndirectedGraph
 import model.graphs.abstractGraph.Edge
 import model.graphs.abstractGraph.Graph
 import model.graphs.abstractGraph.Vertex
-import model.io.neo4j.Neo4jRepository
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
-import model.graphs.*
-import model.graphs.abstractGraph.*
-import model.algorithms.*
-import model.algorithms.clustering.CommunitiesFinder
+import viewmodel.TFDPLayout
+
 
 class GraphViewModel<D>(
-    val currentGraph: Graph<D>,
+    private val currentGraph: Graph<D>,
     private val showVerticesData: State<Boolean>,
     var showVerticesID: MutableState<Boolean>,
-    val graphType: MutableState<String>,
-    val isDirected: MutableState<Boolean>,
-    val isWeighted: MutableState<Boolean>
+    val graphType: String,
+    val isDirected: Boolean,
+    val isWeighted: Boolean
 ) {
 
     val updateIsRequired = mutableStateOf(false)
 
-    var _verticesViewModels = mutableMapOf<Vertex<D>, VertexViewModel<D>>()
+    private var _verticesViewModels = mutableMapOf<Vertex<D>, VertexViewModel<D>>()
     var _edgeViewModels = mutableMapOf<Edge<D>, EdgeViewModel<D>>()
 
     val verticesVM: List<VertexViewModel<D>> get() = _verticesViewModels.values.toList()
@@ -33,7 +35,7 @@ class GraphViewModel<D>(
 
     val graph: Graph<D> get() = currentGraph
 
-    fun updateEdgeViewModels(edge: Edge<D>) {
+    private fun updateEdgeViewModels(edge: Edge<D>) {
         val firstVertex: VertexViewModel<D> =
             _verticesViewModels[edge.vertex1]
                 ?: throw NoSuchElementException("No such View Model, with mentioned edges")
@@ -45,7 +47,7 @@ class GraphViewModel<D>(
         _edgeViewModels[edge] = EdgeViewModel(firstVertex, secondVertex, isDirected)
     }
 
-    fun updateVertexViewModels(vertex: Vertex<D>) {
+    private fun updateVertexViewModels(vertex: Vertex<D>) {
         _verticesViewModels[vertex] = VertexViewModel(
             dataVisible = showVerticesData,
             idVisible = showVerticesID,
@@ -57,6 +59,7 @@ class GraphViewModel<D>(
         return _verticesViewModels.keys.any { it.id == id }
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun addVertex(data: String): Int {
         val newVertex = graph.addVertex(data as D)
 
@@ -79,14 +82,24 @@ class GraphViewModel<D>(
         updateEdgeViewModels(newEdge)
     }
 
-    fun applyForceDirectedLayout(width: Double, height: Double, a: Double, b: Double, c: Double) {
-        val layout = TFDPLayout()
-        layout.place(width, height, verticesVM, 128, a, b, c)
+    fun applyForceDirectedLayout(
+        width: Double, height: Double, longRangeAttractionConstant: Double,
+        nearAttractionConstant: Double,
+        repulsiveConstant: Double
+    ) {
+        TFDPLayout.place(
+            width,
+            height,
+            verticesVM,
+            128,
+            longRangeAttractionConstant,
+            nearAttractionConstant,
+            repulsiveConstant
+        )
     }
 
     fun randomize(width: Double, height: Double) {
-        val layout = TFDPLayout()
-        layout.randomize(width, height, verticesVM)
+        TFDPLayout.randomize(width, height, verticesVM)
     }
 
     fun findCommunities(): Boolean {
@@ -100,7 +113,7 @@ class GraphViewModel<D>(
     fun findKeyVertices(): Boolean {
         val keyVerticesFinder = KeyVerticesFinder()
         val keyVertices = keyVerticesFinder.findKeyVertices(graph)
-        if (keyVertices?.isEmpty() ?: false) return false
+        if (keyVertices?.isEmpty() == true) return false
 
         return highlightVertices(keyVertices)
     }
@@ -117,8 +130,8 @@ class GraphViewModel<D>(
         return false
     }
 
-    var cycles: List<List<Pair<Edge<D>, Vertex<D>>>>? = null
-    var currentCycleIndex = 0
+    private var cycles: List<List<Pair<Edge<D>, Vertex<D>>>>? = null
+    private var currentCycleIndex = 0
 
     fun findCycles(srcVertexId: Int): Boolean {
         val cyclesFinder = CyclesFinder()
@@ -148,9 +161,9 @@ class GraphViewModel<D>(
     }
 
     fun findSCCs(): Boolean {
-        val SCCFinder = SCCFinder()
+        val sccFinder = SCCFinder()
         if (graph is DirectedGraph) {
-            val SCCs = SCCFinder.findSCC(graph as DirectedGraph)
+            val SCCs = sccFinder.findSCC(graph as DirectedGraph)
             if (SCCs.isEmpty()) return false
 
             return highlightVerticesSets(SCCs)
@@ -167,13 +180,12 @@ class GraphViewModel<D>(
 
         if (graph is WeightedDirectedGraph) {
             val shortestPath = shortestPathFinder.findShortestPath(graph as WeightedDirectedGraph, src, dest)
-            if (shortestPath?.isEmpty() ?: false) return false
+            if (shortestPath?.isEmpty() == true) return false
 
             return highlightPath(shortestPath)
-        }
-        else if (graph is WeightedUndirectedGraph) {
+        } else if (graph is WeightedUndirectedGraph) {
             val shortestPath = shortestPathFinder.findShortestPath(graph as WeightedUndirectedGraph, src, dest)
-            if (shortestPath?.isEmpty() ?: false) return false
+            if (shortestPath?.isEmpty() == true) return false
 
             return highlightPath(shortestPath)
         }
@@ -234,7 +246,7 @@ class GraphViewModel<D>(
             Color(0x8334eb),
             Color(0xd834eb),
             Color(0xeb34a1),
-            )
+        )
 
         var i = 0
         for (verticesSet in verticesSets) {
@@ -270,8 +282,7 @@ class GraphViewModel<D>(
     }
 
     fun highlighNextCycle(): Boolean {
-        var returnValue = false
-        returnValue = highlightPath(cycles?.get(currentCycleIndex))
+        val returnValue: Boolean = highlightPath(cycles?.get(currentCycleIndex))
 
         val size = cycles?.size
             ?: return false
@@ -288,5 +299,57 @@ class GraphViewModel<D>(
         for (edge in graph.getEdges()) {
             _edgeViewModels[edge]?.highlightColor?.value = Color.LightGray
         }
+    }
+
+    fun getAvailableAlgorithms(): List<Algorithm> {
+        val algorithms = mutableListOf(
+            Algorithm.LAYOUT,
+            Algorithm.FIND_COMMUNITIES,
+            Algorithm.FIND_KEY_VERTICES
+        )
+
+        if (graph is DirectedGraph) {
+            algorithms += Algorithm.FIND_SCCS
+            algorithms += Algorithm.FIND_CYCLES
+        }
+
+        if (graph is UndirectedGraph) {
+            algorithms += Algorithm.FIND_BRIDGES
+        }
+
+        if (graph is WeightedUndirectedGraph) {
+            algorithms += Algorithm.MIN_SPANNING_TREE
+            algorithms += Algorithm.FIND_SHORTEST_PATH
+        }
+
+        if (graph is WeightedDirectedGraph) {
+            algorithms += Algorithm.FIND_SHORTEST_PATH
+        }
+
+        return algorithms
+    }
+}
+
+enum class Algorithm {
+    LAYOUT,
+    FIND_COMMUNITIES,
+    FIND_KEY_VERTICES,
+    FIND_SCCS,
+    FIND_CYCLES,
+    FIND_BRIDGES,
+    MIN_SPANNING_TREE,
+    FIND_SHORTEST_PATH
+}
+
+fun getAlgorithmDisplayName(algorithm: Algorithm): String {
+    return when (algorithm) {
+        Algorithm.LAYOUT -> "Layout"
+        Algorithm.FIND_COMMUNITIES -> "Find communities"
+        Algorithm.FIND_KEY_VERTICES -> "Find key vertices"
+        Algorithm.FIND_SCCS -> "Find SCCs"
+        Algorithm.FIND_CYCLES -> "Find cycles"
+        Algorithm.FIND_BRIDGES -> "Find bridges"
+        Algorithm.MIN_SPANNING_TREE -> "Min spanning tree"
+        Algorithm.FIND_SHORTEST_PATH -> "Find shortest path"
     }
 }

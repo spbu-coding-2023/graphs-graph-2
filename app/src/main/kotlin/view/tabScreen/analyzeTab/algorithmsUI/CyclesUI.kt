@@ -13,14 +13,14 @@ import androidx.compose.ui.unit.sp
 import view.tabScreen.analyzeTab.borderPadding
 import view.tabScreen.analyzeTab.horizontalGap
 import view.tabScreen.analyzeTab.rowHeight
-import view.utils.ErrorWindow
+import view.components.dialogWindows.ErrorWindow
 import viewmodel.graph.GraphViewModel
 
 @Composable
 fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
     var vertexId by remember { mutableStateOf("") }
-    val showErrorWindow = remember { mutableStateOf(false) }
-    val errorMessage = remember { mutableStateOf("") }
+    var showErrorWindow by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
     Row(
         modifier = Modifier.height(rowHeight).padding(borderPadding),
@@ -57,20 +57,20 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
                 modifier = Modifier.fillMaxSize(),
                 onClick = {
                     if (vertexId.isEmpty()) {
-                        errorMessage.value = "Enter vertex's ID"
-                        showErrorWindow.value = true
+                        errorMessage = "Enter vertex's ID"
+                        showErrorWindow = true
                     }
                     else if (!vertexId.all { char -> char.isDigit() }) {
-                        errorMessage.value = "ID should be a number"
-                        showErrorWindow.value = true
+                        errorMessage = "ID should be a number"
+                        showErrorWindow = true
                     }
                     else if (vertexId.toInt() > graphVM.graph.getVertices().size - 1) {
-                        errorMessage.value = "No vertex with ID $vertexId"
-                        showErrorWindow.value = true
+                        errorMessage = "No vertex with ID $vertexId"
+                        showErrorWindow = true
                     }
                     else if (!graphVM.findCycles(vertexId.toInt())) {
-                        errorMessage.value = "No cycles were found"
-                        showErrorWindow.value = true
+                        errorMessage = "No cycles were found"
+                        showErrorWindow = true
                     }
                     else {
                         graphVM.highlighNextCycle()
@@ -91,8 +91,8 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
                 modifier = Modifier.fillMaxSize(),
                 onClick = {
                     if (!graphVM.highlighNextCycle()) {
-                        errorMessage.value = "Please run algorithm first"
-                        showErrorWindow.value = true
+                        errorMessage = "Please run algorithm first"
+                        showErrorWindow = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
@@ -102,7 +102,7 @@ fun <D> CyclesUI(graphVM: GraphViewModel<D>) {
         }
     }
 
-    if (showErrorWindow.value) {
-        ErrorWindow(errorMessage.value, { showErrorWindow.value = false })
+    if (showErrorWindow) {
+        ErrorWindow(errorMessage) { showErrorWindow = false }
     }
 }

@@ -1,4 +1,4 @@
 plugins {
-   kotlin("jvm") version "1.9.22"
-   id("org.jetbrains.compose") version "1.6.2"
+   alias(libs.plugins.kotlin.jvm) apply false
+   alias(libs.plugins.compose) apply false
 }

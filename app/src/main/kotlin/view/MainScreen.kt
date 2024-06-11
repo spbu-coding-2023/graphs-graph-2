@@ -10,8 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import view.graph.GraphView
 import view.tabScreen.TabHandler
-import view.utils.FAQBox
-import view.utils.ToolBox
+import view.components.FAQBox
+import view.components.ToolBox
 import viewmodel.MainScreenViewModel
 
 @Composable
@@ -28,7 +28,7 @@ fun <D> MainScreen(viewmodel: MainScreenViewModel<D>) {
             }
         }
         // Hoverable box over the existing Surface
-        FAQBox(interactionSource, viewmodel)
+        FAQBox(interactionSource, viewmodel.graphType)
         ToolBox(viewmodel.graphViewModel, scale)
     }
 }

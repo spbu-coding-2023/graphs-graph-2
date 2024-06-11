@@ -1,4 +1,4 @@
-package view.utils
+package view.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,10 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import viewmodel.MainScreenViewModel
 
 @Composable
-fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScreenViewModel<D>) {
+fun FAQBox(interactionSource: MutableInteractionSource, currentGraphType: String) {
     var isHovered by remember { mutableStateOf(false) }
 
     Box(
@@ -52,7 +51,7 @@ fun <D> FAQBox(interactionSource: MutableInteractionSource, viewmodel: MainScree
                     .testTag("FAQBoxHovered")
             ) {
                 Text(
-                    text = viewmodel.graphViewModel.graphType.value.replace(" ", "\nData type: "),
+                    text = currentGraphType,
                     fontSize = 16.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Center,

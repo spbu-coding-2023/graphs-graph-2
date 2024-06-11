@@ -1,17 +1,3 @@
-import androidx.compose.ui.unit.dp
-
-const val scaleFactor: Float = 1.1f
-
-const val ARROW_SIZE = 20f
-const val ARROW_DEPTH = 2.5f
-const val SQRT_3 = 1.732f
-
-val maxVertexRadius = 35.dp
-val minVertexRadius = 7.dp
-
-val maxEdgeStrokeWidth = 12f
-val minEdgeStrokeWidth = 4f
-
-val SQLITE = "SQLite"
-val NEO4J = "Neo4j"
-val JSON = "JSON"
+const val SQLITE = "SQLite"
+const val NEO4J = "Neo4j"
+const val JSON = "JSON"

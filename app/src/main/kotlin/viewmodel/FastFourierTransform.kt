@@ -1,4 +1,4 @@
-package model
+package viewmodel
 
 /**
  *  Copyright (C) 2021 José Alexandre Nalon

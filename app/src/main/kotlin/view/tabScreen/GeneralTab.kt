@@ -11,12 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import view.utils.ErrorWindow
-import viewmodel.WindowViewModel
+import view.components.dialogWindows.ErrorWindow
 import viewmodel.graph.GraphViewModel
 
 @Composable
@@ -28,8 +26,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
     var firstVertexId by remember { mutableStateOf("") }
     var secondVertexId by remember { mutableStateOf("") }
     var secondVertexData by remember { mutableStateOf("") }
-    var changesWereMade by remember { mutableStateOf(false) }
-    val showErrorWindow = remember { mutableStateOf(false) }
+    var showErrorWindow by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -126,7 +123,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                             secondVertexId = ""
                             firstVertexId = ""
                         } else {
-                            showErrorWindow.value = true
+                            showErrorWindow = true
                         }
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
@@ -167,7 +164,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
         ) {
             Column(
                 modifier =
-                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(200.dp)
+                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(150.dp)
             ) {
                 if (graphVM.verticesVM.isEmpty()) {
                     Text("Input data of second vertex to create and connect with")
@@ -261,7 +258,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
             }
         }
     }
-    if (showErrorWindow.value) {
-        ErrorWindow("No such Vertex", { showErrorWindow.value = false })
+    if (showErrorWindow) {
+        ErrorWindow("No such Vertex") { showErrorWindow = false }
     }
 }
