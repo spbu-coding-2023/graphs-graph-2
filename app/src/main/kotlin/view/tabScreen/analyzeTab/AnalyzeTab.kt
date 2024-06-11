@@ -7,12 +7,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import model.graphs.DirectedGraph
-import model.graphs.UndirectedGraph
-import model.graphs.WeightedDirectedGraph
-import model.graphs.WeightedUndirectedGraph
 import view.tabScreen.analyzeTab.algorithmsUI.*
+import viewmodel.graph.Algorithm
 import viewmodel.graph.GraphViewModel
+import viewmodel.graph.getAlgorithmDisplayName
 
 val rowHeight = 75.dp
 val borderPadding = 10.dp
@@ -21,31 +19,8 @@ val horizontalGap = 20.dp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
-    val algorithms = mutableListOf(
-        "Layout",
-        "Find communities",
-        "Find key vertices"
-    )
-
-    if (graphVM.graph is DirectedGraph) {
-        algorithms += "Find SCCs"
-        algorithms += "Find cycles"
-    }
-
-    if (graphVM.graph is UndirectedGraph) {
-        algorithms += "Find bridges"
-    }
-
-    if (graphVM.graph is WeightedUndirectedGraph) {
-        algorithms += "Min spanning tree"
-        algorithms += "Find shortest path"
-    }
-
-    if (graphVM.graph is WeightedDirectedGraph) {
-        algorithms += "Find shortest path"
-    }
-
-    var selectedAlgorithm by remember { mutableStateOf(algorithms[0]) }
+    val algorithms = graphVM.getAvailableAlgorithms()
+    var selectedAlgorithm by remember { mutableStateOf(algorithms.first()) }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         Row(modifier = Modifier.height(0.dp)) {}
@@ -75,7 +50,7 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
                     modifier = Modifier.width(225.dp).fillMaxHeight()
                 ) {
                     TextField(
-                        value = selectedAlgorithm,
+                        value = getAlgorithmDisplayName(selectedAlgorithm),
                         onValueChange = {},
                         readOnly = true,
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -99,7 +74,7 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
                                     expanded = false
                                 }
                             ) {
-                                Text(text = algorithm)
+                                Text(text = getAlgorithmDisplayName(algorithm))
                             }
                         }
                     }
@@ -108,14 +83,15 @@ fun <D> AnalyzeTab(graphVM: GraphViewModel<D>) {
         }
 
         when (selectedAlgorithm) {
-            "Layout" -> { LayoutUI(graphVM) }
-            "Find communities" -> { CommunitiesUI(graphVM) }
-            "Find key vertices" -> { KeyVerticesUI(graphVM) }
-            "Find shortest path" -> { ShortestPathUI(graphVM) }
-            "Find cycles" -> { CyclesUI(graphVM) }
-            "Find bridges" -> { BridgesUI(graphVM) }
-            "Find SCCs" -> { SCCUI(graphVM) }
-            "Min spanning tree" -> { MinSpanningTreeUI(graphVM) }
+            Algorithm.LAYOUT -> { LayoutUI(graphVM) }
+            Algorithm.FIND_COMMUNITIES -> { CommunitiesUI(graphVM) }
+            Algorithm.FIND_KEY_VERTICES -> { KeyVerticesUI(graphVM) }
+            Algorithm.FIND_SHORTEST_PATH -> { ShortestPathUI(graphVM) }
+            Algorithm.FIND_CYCLES -> { CyclesUI(graphVM) }
+            Algorithm.FIND_BRIDGES -> { BridgesUI(graphVM) }
+            Algorithm.FIND_SCCS -> { SCCUI(graphVM) }
+            Algorithm.MIN_SPANNING_TREE -> { MinSpanningTreeUI(graphVM) }
         }
     }
 }
+
