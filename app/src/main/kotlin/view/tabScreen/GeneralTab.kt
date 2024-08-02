@@ -164,7 +164,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
         ) {
             Column(
                 modifier =
-                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(150.dp)
+                Modifier.background(Color.White).padding(16.dp).width(350.dp).height(180.dp)
             ) {
                 if (graphVM.verticesVM.isEmpty()) {
                     Text("Input data of second vertex to create and connect with")
@@ -185,7 +185,7 @@ fun <D> GeneralTab(graphVM: GraphViewModel<D>) {
                     }
 
                     Button(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(vertical = 16.dp),
                         onClick = {
                             secondVertexData = secondVertexData.replace("\n", "")
 
