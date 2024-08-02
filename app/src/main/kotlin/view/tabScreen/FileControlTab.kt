@@ -207,8 +207,8 @@ fun <D> FileControlTab(graphVM: GraphViewModel<D>) {
                         modifier = Modifier
                             .background(Color.White)
                             .padding(16.dp)
-                            .width(300.dp)
-                            .height(100.dp)
+                            .width(250.dp)
+                            .height(30.dp)
                     ) {
                         Text("Graph '$graphName' saved successfully!")
                     }

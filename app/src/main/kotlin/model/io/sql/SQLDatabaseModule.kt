@@ -17,7 +17,7 @@ object SQLDatabaseModule {
     private const val DB_DIRECTORY = "database"
     private const val DB_NAME = "my_graph_database.db"
     private const val QUERY_NAME = "queries.txt"
-    private const val QUERY_DIRECTORY = "src/main/kotlin/model/io/sql/"
+    private const val QUERY_DIRECTORY = "app/src/main/kotlin/model/io/sql/"
     private val DB_URL = "jdbc:sqlite:${File(DB_DIRECTORY, DB_NAME).absolutePath}"
 
     private fun readQueriesFromFile(): String {
