@@ -1,0 +1,60 @@
+-- Insert graph query
+INSERT INTO graphs(name, graph_type, stored_value_type) VALUES (?, ?, ?):
+
+-- Insert edges query
+INSERT INTO edges(graph_id, vertex1_id, vertex2_id, weight) VALUES (?, ?, ?, ?):
+
+-- Insert vertices query
+INSERT INTO vertices(graph_id, data) VALUES (?, ?):
+
+-- Select names query
+SELECT id, name FROM graphs:
+
+-- Select vertices query
+SELECT id, data FROM vertices WHERE graph_id = ?:
+
+-- Select edges query
+SELECT id, vertex1_id, vertex2_id, weight FROM edges WHERE graph_id = ?:
+
+-- Select graph query
+SELECT id, name, graph_type, stored_value_type FROM graphs WHERE id = ?:
+
+-- Create all graph tables query
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS graphs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    graph_type TEXT NOT NULL,
+    stored_value_type TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS edges (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    graph_id INTEGER NOT NULL,
+    vertex1_id INTEGER NOT NULL,
+    vertex2_id INTEGER NOT NULL,
+    weight INTEGER,
+    FOREIGN KEY (graph_id) REFERENCES graphs(id),
+    FOREIGN KEY (vertex1_id) REFERENCES vertices(id),
+    FOREIGN KEY (vertex2_id) REFERENCES vertices(id)
+);
+
+CREATE TABLE IF NOT EXISTS vertices (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    graph_id INTEGER NOT NULL,
+    data TEXT,
+    FOREIGN KEY (graph_id) REFERENCES graphs(id)
+);:
+
+-- Delete from graphs table
+DELETE FROM graphs WHERE id = ?:
+
+-- Delete from edges table
+DELETE FROM edges WHERE graph_id = ?:
+
+-- Delete from vertices table
+DELETE FROM vertices WHERE graph_id = ?:
+
+-- Rename graph in graph table
+UPDATE graphs SET name = ? WHERE id = ?:
